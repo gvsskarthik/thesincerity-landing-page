@@ -3,217 +3,2172 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TheSincerity Technologies</title>
-  <meta name="description" content="TheSincerity Technologies builds SaaS platforms, WhatsApp automation systems, cloud software, web solutions, and future technology products." />
+  <meta name="description" content="TheSincerity Technologies builds WhatsApp automation platforms, SaaS products, AI systems, cloud software, DevOps infrastructure, and modern web and app solutions." />
+  <meta name="theme-color" content="#ffffff" />
+  <title>TheSincerity Technologies | SaaS, WhatsApp Automation & AI Systems</title>
   <style>
+    :root {
+      --bg: #f8fbff;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: #ffffff;
+      --text: #0f172a;
+      --muted: #5b667a;
+      --muted-2: #738096;
+      --line: rgba(15, 23, 42, 0.09);
+      --primary: #1769ff;
+      --primary-2: #06b6d4;
+      --primary-3: #7c3aed;
+      --green: #10b981;
+      --orange: #f59e0b;
+      --shadow: 0 24px 70px rgba(17, 24, 39, 0.10);
+      --shadow-soft: 0 12px 40px rgba(17, 24, 39, 0.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+    }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      background: #0f172a;
-      color: #ffffff;
-      line-height: 1.6;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(23, 105, 255, 0.14), transparent 32%),
+        radial-gradient(circle at 88% 10%, rgba(6, 182, 212, 0.14), transparent 32%),
+        radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.08), transparent 36%),
+        linear-gradient(180deg, #ffffff 0%, #f8fbff 42%, #f3f7ff 100%);
+      overflow-x: hidden;
     }
 
-    header {
-      padding: 80px 20px;
-      text-align: center;
-      background: linear-gradient(135deg, #111827, #1e293b);
-    }
-
-    header h1 {
-      font-size: 48px;
-      margin-bottom: 15px;
-    }
-
-    header p {
-      max-width: 800px;
-      margin: auto;
-      color: #cbd5e1;
-      font-size: 18px;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 14px 28px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    section {
-      padding: 70px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    h2 {
-      font-size: 34px;
-      margin-bottom: 25px;
-      text-align: center;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 40px;
-    }
-
-    .card {
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 16px;
-      border: 1px solid #334155;
-    }
-
-    .card h3 {
-      margin-bottom: 12px;
-      color: #60a5fa;
-    }
-
-    .about,
-    .contact,
-    .privacy,
-    .terms {
-      background: #111827;
-      border-radius: 18px;
-      padding: 35px;
-      margin-top: 30px;
-      border: 1px solid #1e293b;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #94a3b8;
-      border-top: 1px solid #1e293b;
+    body.menu-open {
+      overflow: hidden;
     }
 
     a {
-      color: #60a5fa;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, textarea {
+      font: inherit;
+    }
+
+    .page-shell {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -4;
+      background-image:
+        linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 74%);
+      pointer-events: none;
+    }
+
+    .orb {
+      position: fixed;
+      width: 440px;
+      height: 440px;
+      border-radius: 999px;
+      filter: blur(45px);
+      opacity: 0.28;
+      z-index: -3;
+      animation: floatOrb 13s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .orb.one {
+      top: 10%;
+      left: -170px;
+      background: #60a5fa;
+    }
+
+    .orb.two {
+      top: 22%;
+      right: -180px;
+      background: #22d3ee;
+      animation-delay: -5s;
+    }
+
+    .orb.three {
+      bottom: 10%;
+      left: 34%;
+      background: #c4b5fd;
+      animation-delay: -8s;
+    }
+
+    @keyframes floatOrb {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(28px, -32px, 0) scale(1.08); }
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .top-banner {
+      background: linear-gradient(90deg, rgba(23, 105, 255, 0.10), rgba(6, 182, 212, 0.10), rgba(124, 58, 237, 0.08));
+      border-bottom: 1px solid var(--line);
+      color: #334155;
+      font-size: 13px;
+    }
+
+    .top-banner .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 40px;
+      text-align: center;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--green);
+      box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.12);
+      animation: pulse 1.8s ease-in-out infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: .68; }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.78);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .navbar {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 15px 32px rgba(23, 105, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.46), transparent);
+      transform: rotate(18deg) translateX(-90%);
+      animation: shimmer 4.2s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 60% { transform: rotate(18deg) translateX(-90%); }
+      78%, 100% { transform: rotate(18deg) translateX(90%); }
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+    }
+
+    .brand-text strong {
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text span {
+      font-size: 12px;
+      color: var(--muted-2);
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.66);
+      box-shadow: 0 8px 24px rgba(17, 24, 39, 0.04);
+    }
+
+    .nav-links a {
+      padding: 10px 13px;
+      border-radius: 999px;
+      color: #475569;
+      font-size: 14px;
+      font-weight: 650;
+      transition: 0.22s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+      background: #f1f5ff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu-btn {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      margin: 4px auto;
+      border-radius: 99px;
+      background: var(--text);
+      transition: 0.2s ease;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 750;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0ea5e9);
+      color: #ffffff;
+      box-shadow: 0 18px 36px rgba(23, 105, 255, 0.24);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 24px 48px rgba(23, 105, 255, 0.31);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--text);
+      border-color: rgba(15, 23, 42, 0.11);
+      box-shadow: 0 12px 30px rgba(17, 24, 39, 0.07);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--text);
+      border-color: rgba(15, 23, 42, 0.09);
+    }
+
+    section {
+      padding: 96px 0;
+      position: relative;
+    }
+
+    .hero {
+      padding: 88px 0 76px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(23, 105, 255, 0.14);
+      background: rgba(255, 255, 255, 0.72);
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(23, 105, 255, 0.07);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero h1 {
+      margin-top: 22px;
+      font-size: clamp(42px, 6.5vw, 76px);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      color: #071327;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #1769ff 0%, #06b6d4 48%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin-top: 24px;
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      margin-top: 34px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .trust-row {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 13px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: #334155;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+    }
+
+    .dashboard-card {
+      width: min(100%, 530px);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      border-radius: 34px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+      backdrop-filter: blur(28px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform-style: preserve-3d;
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+      50% { transform: translateY(-12px) rotateX(1.2deg) rotateY(-1.6deg); }
+    }
+
+    .card-toolbar {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(248, 251, 255, 0.8);
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .window-dots i {
+      width: 11px;
+      height: 11px;
+      border-radius: 99px;
+      background: #cbd5e1;
+    }
+
+    .window-dots i:nth-child(1) { background: #fb7185; }
+    .window-dots i:nth-child(2) { background: #fbbf24; }
+    .window-dots i:nth-child(3) { background: #34d399; }
+
+    .toolbar-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #0f766e;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(20, 184, 166, 0.10);
+    }
+
+    .dashboard-inner {
+      padding: 22px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(17, 24, 39, 0.05);
+    }
+
+    .metric small {
+      display: block;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 26px;
+      letter-spacing: -0.05em;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 4px;
+      color: #059669;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .conversation-panel {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 14px;
+    }
+
+    .phone-preview {
+      border-radius: 26px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      min-height: 304px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    }
+
+    .phone-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #14b8a6);
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .phone-top strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .phone-top span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted-2);
+      margin-top: 2px;
+    }
+
+    .bubble {
+      max-width: 92%;
+      padding: 10px 12px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      animation: messagePop 5s ease-in-out infinite;
+    }
+
+    .bubble.in {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      color: #334155;
+    }
+
+    .bubble.out {
+      margin-left: auto;
+      background: #dcfce7;
+      color: #14532d;
+      animation-delay: -1.8s;
+    }
+
+    @keyframes messagePop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .flow-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .flow-item {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.84);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flow-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: #eff6ff;
+      color: var(--primary);
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .flow-item strong {
+      display: block;
+      font-size: 13px;
+      color: #1e293b;
+    }
+
+    .flow-item span {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted-2);
+      line-height: 1.35;
+    }
+
+    .floating-card {
+      position: absolute;
+      z-index: 2;
+      padding: 16px 17px;
+      border-radius: 22px;
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow-soft);
+      animation: floatSmall 5.4s ease-in-out infinite;
+    }
+
+    .floating-card.left {
+      left: 0;
+      top: 90px;
+    }
+
+    .floating-card.right {
+      right: -4px;
+      bottom: 82px;
+      animation-delay: -2.3s;
+    }
+
+    @keyframes floatSmall {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .floating-card small {
+      display: block;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .floating-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 38px;
+    }
+
+    .section-head.center {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      color: #071327;
+    }
+
+    .section-head p {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .about-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      padding: 22px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(22px);
+    }
+
+    .about-story {
+      padding: 28px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .about-story h3 {
+      font-size: 24px;
+      letter-spacing: -0.035em;
+      margin-bottom: 14px;
+    }
+
+    .about-story p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .about-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 15px;
+      border-radius: 18px;
+      background: rgba(248, 251, 255, 0.88);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .check-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .check-item span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stats-strip {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card {
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      padding: 24px;
+      box-shadow: 0 14px 34px rgba(17, 24, 39, 0.06);
+      transition: 0.25s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 31px;
+      letter-spacing: -0.055em;
+      color: #071327;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .glass-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 270px;
+      padding: 26px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(15, 23, 42, 0.09);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 14px 36px rgba(17, 24, 39, 0.06);
+      backdrop-filter: blur(20px);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 0%, rgba(23, 105, 255, 0.12), transparent 32%);
+      opacity: 0;
+      transition: 0.28s ease;
+      pointer-events: none;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 26px 70px rgba(17, 24, 39, 0.12);
+      border-color: rgba(23, 105, 255, 0.20);
+    }
+
+    .glass-card:hover::before {
+      opacity: 1;
+    }
+
+    .icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      background: linear-gradient(135deg, rgba(23, 105, 255, 0.12), rgba(6, 182, 212, 0.12));
+      color: var(--primary);
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .glass-card h3 {
+      font-size: 21px;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .glass-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14.5px;
+      position: relative;
+    }
+
+    .mini-tags {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: relative;
+    }
+
+    .mini-tags span {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #f1f5ff;
+      color: #315ca8;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .products-wrap {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .product-feature {
+      padding: 32px;
+      border-radius: var(--radius-xl);
+      color: #ffffff;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.23), transparent 28%),
+        linear-gradient(135deg, #1769ff, #0ea5e9 55%, #14b8a6);
+      box-shadow: 0 28px 74px rgba(23, 105, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-feature::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      right: -80px;
+      bottom: -80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .product-feature h3 {
+      font-size: 34px;
+      line-height: 1.08;
+      letter-spacing: -0.055em;
+      max-width: 430px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .product-feature p {
+      margin-top: 16px;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.75;
+      position: relative;
+      z-index: 2;
+    }
+
+    .product-feature ul {
+      margin-top: 28px;
+      display: grid;
+      gap: 12px;
+      list-style: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .product-feature li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.94);
+      font-weight: 750;
+    }
+
+    .product-list {
+      display: grid;
+      gap: 15px;
+    }
+
+    .product-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 19px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 12px 30px rgba(17, 24, 39, 0.055);
+      transition: 0.25s ease;
+    }
+
+    .product-card:hover {
+      transform: translateX(8px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .product-card .icon-box {
+      margin: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      font-size: 20px;
+    }
+
+    .product-card h4 {
+      font-size: 17px;
+      letter-spacing: -0.025em;
+    }
+
+    .product-card p {
+      margin-top: 5px;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .status-label {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.12);
+      color: #b45309;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status-label.live {
+      background: rgba(16, 185, 129, 0.12);
+      color: #047857;
+    }
+
+    .why-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .why-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .why-item {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 12px 32px rgba(17, 24, 39, 0.055);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .why-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #eff6ff;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+
+    .why-item h3 {
+      font-size: 17px;
+      letter-spacing: -0.025em;
+    }
+
+    .why-item p {
+      margin-top: 6px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .trust-panel {
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 251, 255, 0.78));
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 100px;
+    }
+
+    .trust-panel h3 {
+      font-size: 26px;
+      letter-spacing: -0.045em;
+    }
+
+    .trust-panel p {
+      margin-top: 12px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .compliance-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .compliance-item {
+      padding: 16px;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .compliance-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .compliance-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .contact-info,
+    .contact-form {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow-soft);
+      padding: 28px;
+    }
+
+    .contact-info h3,
+    .contact-form h3 {
+      font-size: 25px;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 22px;
+    }
+
+    .contact-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .contact-row:first-of-type {
+      border-top: 0;
+    }
+
+    .contact-row .icon-box {
+      margin: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      font-size: 18px;
+    }
+
+    .contact-row strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .contact-row span,
+    .contact-row a {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 13px;
+      color: #334155;
+      font-weight: 800;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid rgba(15, 23, 42, 0.11);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 15px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .field textarea {
+      min-height: 126px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(23, 105, 255, 0.55);
+      box-shadow: 0 0 0 5px rgba(23, 105, 255, 0.10);
+    }
+
+    .form-note {
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.55;
+      margin-top: 14px;
+    }
+
+    .legal-section {
+      padding-top: 76px;
+    }
+
+    .legal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .legal-card {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(22px);
+      padding: 30px;
+    }
+
+    .legal-card h2 {
+      font-size: 30px;
+      letter-spacing: -0.045em;
+      margin-bottom: 12px;
+    }
+
+    .legal-card p,
+    .legal-card li {
+      color: var(--muted);
+      line-height: 1.72;
+      font-size: 14px;
+    }
+
+    .legal-card h3 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .legal-card ul {
+      margin-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .cta-band {
+      padding: 54px;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.30), transparent 28%),
+        linear-gradient(135deg, #071327, #17345f 58%, #0f766e);
+      color: #ffffff;
+      box-shadow: 0 28px 90px rgba(7, 19, 39, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cta-band::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -90px;
+      top: -120px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .cta-band h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-band p {
+      margin-top: 12px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.7;
+      max-width: 610px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-band .btn {
+      position: relative;
+      z-index: 2;
+      background: #ffffff;
+      color: #071327;
+      box-shadow: 0 20px 46px rgba(0, 0, 0, 0.18);
+    }
+
+    footer {
+      padding: 54px 0 36px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.52);
+      backdrop-filter: blur(18px);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.3fr repeat(3, 1fr);
+      gap: 34px;
+    }
+
+    .footer-grid p {
+      margin-top: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 420px;
+    }
+
+    .footer-col h4 {
+      font-size: 14px;
+      margin-bottom: 13px;
+      letter-spacing: -0.01em;
+    }
+
+    .footer-col a,
+    .footer-col span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted-2);
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: .08s; }
+    .delay-2 { transition-delay: .16s; }
+    .delay-3 { transition-delay: .24s; }
+
+    @media (max-width: 1080px) {
+      .nav-links {
+        gap: 2px;
+      }
+
+      .nav-links a {
+        padding: 9px 9px;
+        font-size: 13px;
+      }
+
+      .hero-grid,
+      .products-wrap,
+      .why-layout,
+      .contact-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 520px;
+      }
+
+      .trust-panel {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .container {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .navbar {
+        height: 70px;
+      }
+
+      .menu-btn {
+        display: inline-block;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 111px;
+        left: 14px;
+        right: 14px;
+        display: grid;
+        padding: 12px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 28px 80px rgba(17, 24, 39, 0.18);
+        opacity: 0;
+        transform: translateY(-14px);
+        pointer-events: none;
+        transition: 0.22s ease;
+      }
+
+      .nav-links.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 13px 15px;
+      }
+
+      .nav-actions .btn {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 56px;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .floating-card {
+        display: none;
+      }
+
+      .about-card,
+      .stats-strip,
+      .service-grid,
+      .legal-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .conversation-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-band {
+        padding: 32px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .top-banner .container {
+        font-size: 12px;
+        min-height: 46px;
+      }
+
+      .brand-text span {
+        display: none;
+      }
+
+      .brand-text strong {
+        font-size: 14px;
+      }
+
+      .hero h1 {
+        font-size: 43px;
+      }
+
+      .hero p,
+      .section-head p {
+        font-size: 16px;
+      }
+
+      .hero-actions,
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .metric-grid,
+      .stats-strip,
+      .compliance-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-card {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .status-label {
+        width: max-content;
+      }
+
+      .contact-info,
+      .contact-form,
+      .legal-card,
+      .about-story,
+      .glass-card,
+      .trust-panel {
+        padding: 22px;
+      }
+
+      .dashboard-inner {
+        padding: 16px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="page-shell">
+    <div class="grid-bg"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
 
-  <header>
-    <h1>TheSincerity Technologies</h1>
-    <p>
-      Building SaaS platforms, WhatsApp automation systems, cloud solutions,
-      software products, DevOps infrastructure, web applications, and future technology innovations.
-    </p>
-    <a href="#contact" class="btn">Contact Us</a>
-  </header>
-
-  <section>
-    <h2>Our Services</h2>
-
-    <div class="cards">
-      <div class="card">
-        <h3>WhatsApp Automation</h3>
-        <p>
-          Business messaging platforms, automation systems, API integrations,
-          and customer communication solutions.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>SaaS Development</h3>
-        <p>
-          Subscription-based cloud software platforms for businesses,
-          laboratories, healthcare systems, and enterprise solutions.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Web & App Development</h3>
-        <p>
-          Responsive websites, mobile applications, backend systems,
-          dashboards, and modern user interfaces.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Cloud & DevOps</h3>
-        <p>
-          VPS deployment, hosting, server management, monitoring,
-          database systems, and scalable infrastructure.
-        </p>
+    <div class="top-banner">
+      <div class="container">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>Independent SaaS technology company building secure automation, cloud platforms, and AI-powered business systems.</span>
       </div>
     </div>
-  </section>
 
-  <section>
-    <div class="about">
-      <h2>About Us</h2>
-      <p>
-        TheSincerity Technologies is a startup technology company focused on
-        software platforms, SaaS products, automation systems, cloud infrastructure,
-        and future technology innovations.
-      </p>
-      <br>
-      <p>
-        We are building scalable digital products and services designed for
-        businesses, healthcare systems, communication platforms, and enterprise solutions.
-      </p>
-    </div>
-  </section>
+    <header>
+      <nav class="navbar container" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="TheSincerity Technologies home">
+          <span class="brand-mark">TS</span>
+          <span class="brand-text">
+            <strong>TheSincerity Technologies</strong>
+            <span>Automation • SaaS • AI</span>
+          </span>
+        </a>
 
-  <section>
-    <div class="privacy">
-      <h2>Privacy Policy</h2>
-      <p>
-        TheSincerity Technologies respects user privacy and protects customer data.
-        We may collect limited information required for providing software services,
-        authentication, communication, analytics, and platform functionality.
-      </p>
-      <br>
-      <p>
-        We do not sell personal information to third parties. Data may be processed
-        securely for service delivery, support, and platform improvements.
-      </p>
-    </div>
-  </section>
+        <div class="nav-links" id="navLinks">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#products">Products</a>
+          <a href="#why">Why Us</a>
+          <a href="#contact">Contact</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+        </div>
 
-  <section>
-    <div class="terms">
-      <h2>Terms & Conditions</h2>
-      <p>
-        By using services provided by TheSincerity Technologies,
-        users agree to comply with applicable laws and platform usage policies.
-      </p>
-      <br>
-      <p>
-        Unauthorized usage, spam activity, abuse, or illegal activities are prohibited.
-        Service availability and features may change as products evolve.
-      </p>
-    </div>
-  </section>
+        <div class="nav-actions">
+          <a class="btn btn-primary" href="#contact">Start a Project</a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+    </header>
 
-  <section id="contact">
-    <div class="contact">
-      <h2>Contact</h2>
-      <p>Email: thesincerity.tech@gmail.com</p>
-      <p>Website: https://thesincerity.in</p>
-      <br>
-      <p>
-        For business inquiries, software services, SaaS platforms,
-        automation solutions, and partnerships, contact us through email.
-      </p>
-    </div>
-  </section>
+    <main id="home">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-content reveal visible">
+            <div class="eyebrow"><span class="pulse-dot"></span> Future-ready WhatsApp SaaS & cloud systems</div>
+            <h1>Build trusted digital products with <span class="gradient-text">automation-first engineering.</span></h1>
+            <p>
+              TheSincerity Technologies designs and develops professional SaaS platforms, WhatsApp automation workflows,
+              AI systems, DevOps infrastructure, and modern web and mobile applications for growing businesses.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#contact">Discuss Your Platform</a>
+              <a class="btn btn-secondary" href="#products">Explore SaaS Products</a>
+            </div>
+            <div class="trust-row">
+              <span class="trust-pill">✓ Secure API integrations</span>
+              <span class="trust-pill">✓ Cloud-ready architecture</span>
+              <span class="trust-pill">✓ Business-grade documentation</span>
+            </div>
+          </div>
 
-  <footer>
-    <p>© 2026 TheSincerity Technologies. All rights reserved.</p>
-  </footer>
+          <div class="hero-visual reveal delay-1 visible" aria-label="SaaS automation dashboard preview">
+            <div class="floating-card left">
+              <small>Automation uptime</small>
+              <strong>99.9%</strong>
+            </div>
+            <div class="dashboard-card">
+              <div class="card-toolbar">
+                <div class="window-dots"><i></i><i></i><i></i></div>
+                <div class="toolbar-status"><span class="pulse-dot"></span> Workflow active</div>
+              </div>
+              <div class="dashboard-inner">
+                <div class="metric-grid">
+                  <div class="metric">
+                    <small>Messages</small>
+                    <strong data-count="48240">0</strong>
+                    <span>+18.4%</span>
+                  </div>
+                  <div class="metric">
+                    <small>Leads</small>
+                    <strong data-count="3680">0</strong>
+                    <span>+11.2%</span>
+                  </div>
+                  <div class="metric">
+                    <small>Flows</small>
+                    <strong data-count="128">0</strong>
+                    <span>Live</span>
+                  </div>
+                </div>
 
+                <div class="conversation-panel">
+                  <div class="phone-preview">
+                    <div class="phone-top">
+                      <div class="avatar">W</div>
+                      <div>
+                        <strong>WhatsApp Assistant</strong>
+                        <span>Customer support flow</span>
+                      </div>
+                    </div>
+                    <div class="bubble in">Hi, I want to know the pricing for your service.</div>
+                    <div class="bubble out">Sure. I can help you choose the right plan. What type of business do you run?</div>
+                    <div class="bubble in">We need lead follow-up and appointment reminders.</div>
+                    <div class="bubble out">Great. I will share the recommended workflow and connect you with the team.</div>
+                  </div>
+                  <div class="flow-panel">
+                    <div class="flow-item">
+                      <div class="flow-icon">1</div>
+                      <div><strong>Lead capture</strong><span>Collect user interest from website, ads, or WhatsApp entry points.</span></div>
+                    </div>
+                    <div class="flow-item">
+                      <div class="flow-icon">2</div>
+                      <div><strong>Smart routing</strong><span>Route conversations based on enquiry type, priority, and team availability.</span></div>
+                    </div>
+                    <div class="flow-item">
+                      <div class="flow-icon">3</div>
+                      <div><strong>Follow-up automation</strong><span>Send reminders, updates, and support messages with controlled workflows.</span></div>
+                    </div>
+                    <div class="flow-item">
+                      <div class="flow-icon">4</div>
+                      <div><strong>Analytics</strong><span>Track engagement, response quality, and conversion performance.</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="floating-card right">
+              <small>Response speed</small>
+              <strong>&lt; 3 sec</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
+        <div class="container">
+          <div class="section-head center reveal">
+            <div class="section-kicker">About Company</div>
+            <h2>Technology built with sincerity, security, and long-term scale in mind.</h2>
+            <p>
+              We help businesses turn manual operations into reliable digital systems using SaaS engineering,
+              workflow automation, cloud deployment, and practical AI integration.
+            </p>
+          </div>
+
+          <div class="about-card reveal delay-1">
+            <div class="about-story">
+              <h3>Who we are</h3>
+              <p>
+                TheSincerity Technologies is a software and automation company focused on building dependable platforms
+                for customer communication, operations, analytics, and digital service delivery.
+              </p>
+              <p>
+                Our work combines product design, backend engineering, API integrations, DevOps, and AI-assisted systems,
+                helping businesses launch reliable tools without unnecessary complexity.
+              </p>
+              <a class="btn btn-ghost" href="https://thesincerity.in" target="_blank" rel="noopener">Visit thesincerity.in</a>
+            </div>
+            <div class="about-list">
+              <div class="check-item">
+                <span class="check">✓</span>
+                <div><strong>Professional business presence</strong><span>Clear company information, contact details, service descriptions, privacy policy, and terms for transparency.</span></div>
+              </div>
+              <div class="check-item">
+                <span class="check">✓</span>
+                <div><strong>WhatsApp platform focus</strong><span>Automation workflows, API-based integrations, templates, routing, CRM-style dashboards, and analytics.</span></div>
+              </div>
+              <div class="check-item">
+                <span class="check">✓</span>
+                <div><strong>Cloud-native development</strong><span>Scalable SaaS architecture, secure backend APIs, databases, monitoring, deployment pipelines, and infrastructure support.</span></div>
+              </div>
+              <div class="check-item">
+                <span class="check">✓</span>
+                <div><strong>Responsible data handling</strong><span>Privacy-first communication, limited data collection, access controls, and customer-controlled automation workflows.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-strip reveal delay-2">
+            <div class="stat-card"><strong>6+</strong><span>Core technology service areas</span></div>
+            <div class="stat-card"><strong>24/7</strong><span>Automation-ready platform direction</span></div>
+            <div class="stat-card"><strong>API</strong><span>Integration-first product approach</span></div>
+            <div class="stat-card"><strong>Cloud</strong><span>Deployment and DevOps support</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services">
+        <div class="container">
+          <div class="section-head reveal">
+            <div class="section-kicker">Services</div>
+            <h2>Everything needed to launch modern automation and SaaS products.</h2>
+            <p>
+              From idea to deployment, we create stable digital systems that are easy to operate, secure to scale,
+              and built for real business use cases.
+            </p>
+          </div>
+
+          <div class="service-grid">
+            <article class="glass-card reveal">
+              <div class="icon-box">💬</div>
+              <h3>WhatsApp Automation Platforms</h3>
+              <p>Customer messaging workflows, bot journeys, lead routing, reminders, template messaging, dashboards, and WhatsApp Cloud API integrations.</p>
+              <div class="mini-tags"><span>Cloud API</span><span>Templates</span><span>Routing</span></div>
+            </article>
+            <article class="glass-card reveal delay-1">
+              <div class="icon-box">⚙️</div>
+              <h3>SaaS Development</h3>
+              <p>Multi-tenant dashboards, subscription-ready platforms, admin panels, secure APIs, user management, analytics, and scalable product modules.</p>
+              <div class="mini-tags"><span>Dashboards</span><span>APIs</span><span>Multi-tenant</span></div>
+            </article>
+            <article class="glass-card reveal delay-2">
+              <div class="icon-box">☁️</div>
+              <h3>Cloud Software</h3>
+              <p>Backend systems, databases, server deployment, cloud hosting setup, storage, monitoring, and performance-focused infrastructure planning.</p>
+              <div class="mini-tags"><span>Backend</span><span>Databases</span><span>Hosting</span></div>
+            </article>
+            <article class="glass-card reveal">
+              <div class="icon-box">🚀</div>
+              <h3>DevOps Infrastructure</h3>
+              <p>CI/CD pipelines, server hardening, Nginx reverse proxy setup, SSL, monitoring, backups, deployment automation, and release workflows.</p>
+              <div class="mini-tags"><span>CI/CD</span><span>SSL</span><span>Monitoring</span></div>
+            </article>
+            <article class="glass-card reveal delay-1">
+              <div class="icon-box">🤖</div>
+              <h3>AI Systems</h3>
+              <p>AI assistants, semantic search, document intelligence, workflow recommendations, analytics automation, and practical AI integrations.</p>
+              <div class="mini-tags"><span>AI Agents</span><span>RAG</span><span>Analytics</span></div>
+            </article>
+            <article class="glass-card reveal delay-2">
+              <div class="icon-box">📱</div>
+              <h3>Web & App Development</h3>
+              <p>Responsive websites, customer portals, mobile app interfaces, admin systems, product landing pages, and business verification-ready sites.</p>
+              <div class="mini-tags"><span>Web</span><span>Mobile</span><span>UX</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="products">
+        <div class="container">
+          <div class="section-head center reveal">
+            <div class="section-kicker">SaaS Products</div>
+            <h2>Product roadmap for communication, operations, and business automation.</h2>
+            <p>
+              We are building a suite of SaaS products designed to help businesses manage customer conversations,
+              automate routine work, and track operational performance from one clean dashboard.
+            </p>
+          </div>
+
+          <div class="products-wrap reveal delay-1">
+            <div class="product-feature">
+              <h3>WhatsApp Business Automation Suite</h3>
+              <p>
+                A future platform for businesses to manage WhatsApp conversations, automate customer journeys,
+                track leads, and support teams with structured workflows.
+              </p>
+              <ul>
+                <li>✓ WhatsApp Cloud API workflow management</li>
+                <li>✓ Team inbox and customer conversation routing</li>
+                <li>✓ Template management and campaign planning</li>
+                <li>✓ Analytics for response time and lead conversion</li>
+              </ul>
+            </div>
+
+            <div class="product-list">
+              <div class="product-card">
+                <div class="icon-box">💬</div>
+                <div><h4>ConversationOS</h4><p>Shared team inbox, labels, lead stages, assignment rules, and conversation history.</p></div>
+                <span class="status-label">Roadmap</span>
+              </div>
+              <div class="product-card">
+                <div class="icon-box">🧩</div>
+                <div><h4>FlowBuilder</h4><p>Visual automation builder for follow-ups, reminders, FAQs, and customer qualification.</p></div>
+                <span class="status-label">Roadmap</span>
+              </div>
+              <div class="product-card">
+                <div class="icon-box">📊</div>
+                <div><h4>InsightDesk</h4><p>Business analytics dashboard for message performance, conversions, response quality, and team productivity.</p></div>
+                <span class="status-label">Planned</span>
+              </div>
+              <div class="product-card">
+                <div class="icon-box">🛡️</div>
+                <div><h4>CloudOps Console</h4><p>Deployment, monitoring, uptime, backups, and secure infrastructure management for SaaS applications.</p></div>
+                <span class="status-label live">Service</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why">
+        <div class="container why-layout">
+          <div>
+            <div class="section-head reveal">
+              <div class="section-kicker">Why Choose Us</div>
+              <h2>Professional delivery with a verification-friendly business presence.</h2>
+              <p>
+                For communication platforms and API-based SaaS products, trust matters. We focus on clean information,
+                secure architecture, responsible data handling, and transparent support channels.
+              </p>
+            </div>
+            <div class="why-list">
+              <div class="why-item reveal"><span class="why-number">01</span><div><h3>Business-first product thinking</h3><p>We design software around practical business workflows, not just technical features.</p></div></div>
+              <div class="why-item reveal delay-1"><span class="why-number">02</span><div><h3>Secure integration approach</h3><p>API keys, webhooks, customer data, and role-based access are handled with security-conscious architecture.</p></div></div>
+              <div class="why-item reveal delay-2"><span class="why-number">03</span><div><h3>Clear documentation and policies</h3><p>We maintain clear service descriptions, privacy information, terms, and support contact details for transparency.</p></div></div>
+              <div class="why-item reveal delay-3"><span class="why-number">04</span><div><h3>Modern, scalable implementation</h3><p>Our platforms are built with responsive UI, stable backend design, cloud readiness, and maintainable code structure.</p></div></div>
+            </div>
+          </div>
+
+          <aside class="trust-panel reveal delay-1">
+            <h3>Built for trust and compliance readiness</h3>
+            <p>
+              TheSincerity Technologies aims to provide clear ownership, responsible messaging workflows, customer consent awareness,
+              transparent policies, and secure technical implementation for communication-based products.
+            </p>
+            <div class="compliance-grid">
+              <div class="compliance-item"><strong>Consent-aware flows</strong><span>Designed for opted-in business communication use cases.</span></div>
+              <div class="compliance-item"><strong>Data minimisation</strong><span>Collect only information needed to provide the service.</span></div>
+              <div class="compliance-item"><strong>Secure access</strong><span>Role-based dashboards, protected APIs, and controlled admin access.</span></div>
+              <div class="compliance-item"><strong>Support channel</strong><span>Reachable business email and website contact information.</span></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="container">
+          <div class="section-head center reveal">
+            <div class="section-kicker">Contact</div>
+            <h2>Let’s build your automation platform.</h2>
+            <p>
+              Contact us for WhatsApp automation, SaaS development, AI systems, cloud infrastructure, and modern business software.
+            </p>
+          </div>
+
+          <div class="contact-wrap reveal delay-1">
+            <div class="contact-info">
+              <h3>Company details</h3>
+              <p>Use the official contact information below for business enquiries, support, partnership discussions, and verification-related communication.</p>
+              <div class="contact-row">
+                <div class="icon-box">🏢</div>
+                <div><strong>Company Name</strong><span>TheSincerity Technologies</span></div>
+              </div>
+              <div class="contact-row">
+                <div class="icon-box">🌐</div>
+                <div><strong>Website</strong><a href="https://thesincerity.in" target="_blank" rel="noopener">https://thesincerity.in</a></div>
+              </div>
+              <div class="contact-row">
+                <div class="icon-box">✉️</div>
+                <div><strong>Email</strong><a href="mailto:thesincerity.tech@gmail.com">thesincerity.tech@gmail.com</a></div>
+              </div>
+              <div class="contact-row">
+                <div class="icon-box">🕘</div>
+                <div><strong>Business Support</strong><span>For product enquiries, technical support, API integrations, and SaaS project discussions.</span></div>
+              </div>
+            </div>
+
+            <form class="contact-form" id="contactForm">
+              <h3>Send an enquiry</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" placeholder="Your name" required />
+                </div>
+                <div class="field">
+                  <label for="company">Company</label>
+                  <input id="company" name="company" type="text" placeholder="Company name" />
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" placeholder="you@example.com" required />
+                </div>
+                <div class="field">
+                  <label for="service">Service needed</label>
+                  <input id="service" name="service" type="text" placeholder="WhatsApp automation / SaaS / AI" />
+                </div>
+                <div class="field full">
+                  <label for="message">Message</label>
+                  <textarea id="message" name="message" placeholder="Tell us about your project or business requirement" required></textarea>
+                </div>
+              </div>
+              <button class="btn btn-primary" type="submit" style="margin-top: 16px;">Open Email Draft</button>
+              <p class="form-note">This static website does not store form data. Submitting opens your email client with the message prepared.</p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="cta-band reveal">
+            <div>
+              <h2>Ready to create a trusted SaaS platform?</h2>
+              <p>Start with a clean product strategy, professional landing page, secure backend plan, and scalable automation workflow.</p>
+            </div>
+            <a class="btn" href="mailto:thesincerity.tech@gmail.com?subject=Project%20Enquiry%20-%20TheSincerity%20Technologies">Contact Us</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="privacy" class="legal-section">
+        <div class="container legal-grid">
+          <article class="legal-card reveal">
+            <h2>Privacy Policy</h2>
+            <p><strong>Last updated:</strong> May 2026</p>
+            <p>
+              TheSincerity Technologies respects user privacy and aims to handle business and customer information responsibly.
+              This Privacy Policy explains how we may collect, use, and protect information when users visit our website,
+              contact us, or use our software services.
+            </p>
+
+            <h3>Information we may collect</h3>
+            <ul>
+              <li>Contact details such as name, email address, company name, and enquiry information.</li>
+              <li>Technical information needed to operate websites, dashboards, APIs, and automation services.</li>
+              <li>Business communication data processed only for requested support, integration, or service delivery.</li>
+            </ul>
+
+            <h3>How we use information</h3>
+            <ul>
+              <li>To respond to enquiries, provide support, and deliver requested services.</li>
+              <li>To develop, maintain, secure, and improve our SaaS platforms and automation systems.</li>
+              <li>To manage API integrations, customer workflows, and business communication features.</li>
+            </ul>
+
+            <h3>Data protection</h3>
+            <p>
+              We aim to apply reasonable technical and organisational safeguards, including access controls, secure deployment practices,
+              and limited data processing based on service requirements. We do not sell customer data.
+            </p>
+
+            <h3>Contact</h3>
+            <p>For privacy-related requests, contact us at <a href="mailto:thesincerity.tech@gmail.com">thesincerity.tech@gmail.com</a>.</p>
+          </article>
+
+          <article id="terms" class="legal-card reveal delay-1">
+            <h2>Terms & Conditions</h2>
+            <p><strong>Last updated:</strong> May 2026</p>
+            <p>
+              These Terms & Conditions describe the general terms for using TheSincerity Technologies website,
+              software services, automation platforms, and related technology solutions.
+            </p>
+
+            <h3>Use of services</h3>
+            <ul>
+              <li>Users must use our services lawfully and must not misuse APIs, automation workflows, or communication tools.</li>
+              <li>Customers are responsible for ensuring that their messaging use cases follow applicable laws and platform rules.</li>
+              <li>Automation services should be used for legitimate business communication and opted-in customer engagement.</li>
+            </ul>
+
+            <h3>Software and availability</h3>
+            <p>
+              We aim to provide reliable software and infrastructure, but service availability may depend on hosting providers,
+              third-party APIs, internet connectivity, and planned maintenance.
+            </p>
+
+            <h3>Third-party integrations</h3>
+            <p>
+              Some services may integrate with third-party platforms, APIs, or cloud providers. Their own terms, policies,
+              and availability may apply. TheSincerity Technologies is an independent technology company and is not affiliated with Meta.
+            </p>
+
+            <h3>Limitation of liability</h3>
+            <p>
+              Services are provided with reasonable care. To the maximum extent permitted by law, TheSincerity Technologies
+              is not liable for indirect losses, third-party service failures, or misuse of automation systems by customers.
+            </p>
+
+            <h3>Contact</h3>
+            <p>For service or terms-related questions, contact <a href="mailto:thesincerity.tech@gmail.com">thesincerity.tech@gmail.com</a>.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <a class="brand" href="#home">
+              <span class="brand-mark">TS</span>
+              <span class="brand-text">
+                <strong>TheSincerity Technologies</strong>
+                <span>Professional SaaS & automation company</span>
+              </span>
+            </a>
+            <p>
+              Building trustworthy WhatsApp automation platforms, SaaS products, AI systems,
+              cloud software, DevOps infrastructure, and web/app solutions.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <a href="#about">About</a>
+            <a href="#why">Why Choose Us</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <a href="#services">WhatsApp Automation</a>
+            <a href="#services">SaaS Development</a>
+            <a href="#services">Cloud & DevOps</a>
+            <a href="#services">AI Systems</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms & Conditions</a>
+            <span>thesincerity.tech@gmail.com</span>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© <span id="year"></span> TheSincerity Technologies. All rights reserved.</span>
+          <span>Website: https://thesincerity.in</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    const body = document.body;
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      body.classList.toggle('menu-open', isOpen);
+      menuBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const countElements = document.querySelectorAll('[data-count]');
+    const countObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = Number(el.dataset.count || 0);
+        const duration = 1350;
+        const start = performance.now();
+
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const value = Math.floor(target * eased);
+          el.textContent = value.toLocaleString();
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+        countObserver.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+
+    countElements.forEach(el => countObserver.observe(el));
+
+    const sections = document.querySelectorAll('main section[id]');
+    const navItems = document.querySelectorAll('.nav-links a');
+
+    const activeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navItems.forEach(item => item.classList.toggle('active', item.getAttribute('href') === '#' + id));
+        }
+      });
+    }, { rootMargin: '-38% 0px -55% 0px', threshold: 0.01 });
+
+    sections.forEach(section => activeObserver.observe(section));
+
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const form = new FormData(this);
+      const name = form.get('name') || '';
+      const company = form.get('company') || '';
+      const email = form.get('email') || '';
+      const service = form.get('service') || '';
+      const message = form.get('message') || '';
+
+      const subject = encodeURIComponent('Project Enquiry - TheSincerity Technologies');
+      const body = encodeURIComponent(
+        `Name: ${name}\nCompany: ${company}\nEmail: ${email}\nService Needed: ${service}\n\nMessage:\n${message}`
+      );
+
+      window.location.href = `mailto:thesincerity.tech@gmail.com?subject=${subject}&body=${body}`;
+    });
+  </script>
 </body>
 </html>
