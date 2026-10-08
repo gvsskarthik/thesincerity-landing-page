@@ -115,31 +115,29 @@
       letter-spacing: -0.011em;
     }
 
+    /* Full-screen Dynamic Scroll-Driven Animation Canvas */
+    #scrollCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
     /* Scroll Progress Laser Beam at top of viewport */
     #scrollProgress {
       position: fixed;
       top: 0;
       left: 0;
-      height: 2.5px;
+      height: 3px;
       width: 0%;
-      background: linear-gradient(90deg, #0284c7, #4f46e5);
+      background: linear-gradient(90deg, #0284c7, #6366f1);
       z-index: 999;
-      transition: width 0.08s ease-out;
+      transition: width 0.05s ease-out;
       pointer-events: none;
-    }
-
-    /* Dynamic Parallax Background Grid */
-    #parallaxBgGrid {
-      position: fixed;
-      inset: -40px 0 -40px 0;
-      height: calc(100vh + 80px);
-      background-image: 
-        radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.065) 1px, transparent 0);
-      background-size: 32px 32px;
-      mask-image: radial-gradient(circle at 50% 40%, black 40%, transparent 85%);
-      pointer-events: none;
-      z-index: 0;
-      will-change: transform;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
     }
 
     /* Dynamic Scroll-Tracking Ambient Aura */
@@ -148,15 +146,28 @@
       top: 0;
       left: 50%;
       transform: translate(-50%, 0);
-      width: 800px;
-      height: 600px;
+      width: 900px;
+      height: 650px;
       border-radius: 50%;
-      background: radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, rgba(79, 70, 229, 0.04) 50%, transparent 75%);
-      filter: blur(80px);
+      background: radial-gradient(circle at center, rgba(2, 132, 199, 0.09) 0%, rgba(99, 102, 241, 0.05) 50%, transparent 75%);
+      filter: blur(90px);
       pointer-events: none;
       z-index: 0;
-      will-change: transform, opacity;
-      transition: background 0.6s ease;
+      will-change: transform;
+      transition: background 0.4s ease;
+    }
+
+    /* Visible Card & Section Reveal Animations */
+    .reveal-card {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-card.revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .container {
@@ -1110,8 +1121,8 @@
   <!-- Top Scroll Progress Laser Bar -->
   <div id="scrollProgress"></div>
 
-  <!-- Subtle Scroll Parallax Dot Matrix Grid -->
-  <div id="parallaxBgGrid"></div>
+  <!-- Dynamic 3D Wireframe & Particle Canvas (Scroll-Driven) -->
+  <canvas id="scrollCanvas"></canvas>
 
   <!-- Dynamic Scroll-Tracking Ambient Aura -->
   <div id="scrollAura"></div>
@@ -1651,69 +1662,255 @@
   </footer>
 
   <script>
-    // 1. Navigation Scroll Styling & Dynamic Background Scroll Animations
-    const mainNav = document.getElementById('mainNav');
-    const scrollProgress = document.getElementById('scrollProgress');
-    const parallaxBgGrid = document.getElementById('parallaxBgGrid');
-    const scrollAura = document.getElementById('scrollAura');
+    // --- 1. Dynamic 3D Wireframe & Particle Canvas Engine (Scroll-Driven) ---
+    (function initScrollCanvas() {
+      const canvas = document.getElementById('scrollCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
 
-    let currentScrollY = 0;
-    let targetScrollY = 0;
-    let ticking = false;
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
 
-    function onScroll() {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+      let scrollY = window.scrollY || 0;
+      let lastScrollY = scrollY;
+      let scrollVelocity = 0;
 
-      // Update top progress bar
-      if (scrollProgress) {
-        scrollProgress.style.width = `${progress}%`;
+      // Mouse coordinates for subtle parallax
+      let mouseX = width / 2;
+      let mouseY = height / 2;
+      let targetMouseX = mouseX;
+      let targetMouseY = mouseY;
+
+      window.addEventListener('mousemove', (e) => {
+        targetMouseX = e.clientX;
+        targetMouseY = e.clientY;
+      }, { passive: true });
+
+      // Create Particle Constellation
+      const particleCount = Math.min(Math.floor(width / 24), 55);
+      const particles = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 2 + 1.2,
+          alpha: Math.random() * 0.4 + 0.3
+        });
       }
 
-      // Update nav style
-      if (mainNav) {
-        if (scrollY > 20) {
-          mainNav.classList.add('scrolled');
-        } else {
-          mainNav.classList.remove('scrolled');
+      // 3D Isometric Wireframe Geometry definition
+      // Cube 3D vertices
+      const cubeSize = Math.min(width * 0.12, 110);
+      const cubeVertices = [
+        [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+        [-1, -1,  1], [1, -1,  1], [1, 1,  1], [-1, 1,  1]
+      ];
+      const cubeEdges = [
+        [0, 1], [1, 2], [2, 3], [3, 0],
+        [4, 5], [5, 6], [6, 7], [7, 4],
+        [0, 4], [1, 5], [2, 6], [3, 7]
+      ];
+
+      let angleX = 0.4;
+      let angleY = 0.6;
+      let angleZ = 0.2;
+
+      function project3D(x, y, z, cx, cy, fov) {
+        const factor = fov / (fov + z);
+        return {
+          x: x * factor + cx,
+          y: y * factor + cy
+        };
+      }
+
+      function rotateX(p, angle) {
+        const rad = angle;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        return [p[0], p[1] * cos - p[2] * sin, p[1] * sin + p[2] * cos];
+      }
+
+      function rotateY(p, angle) {
+        const rad = angle;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        return [p[0] * cos + p[2] * sin, p[1], -p[0] * sin + p[2] * cos];
+      }
+
+      function rotateZ(p, angle) {
+        const rad = angle;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        return [p[0] * cos - p[1] * sin, p[0] * sin + p[1] * cos, p[2]];
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Smooth mouse damping
+        mouseX += (targetMouseX - mouseX) * 0.05;
+        mouseY += (targetMouseY - mouseY) * 0.05;
+
+        // Dynamic 3D rotation driven by continuous time + scroll position
+        const scrollSpeedFactor = Math.abs(scrollVelocity) * 0.03;
+        angleX += 0.003 + scrollVelocity * 0.001;
+        angleY += 0.005 + scrollSpeedFactor * 0.002;
+        angleZ += 0.002;
+
+        // Position 3D objects in background (Right side & Left side)
+        const obj1X = width * 0.82 + (mouseX - width / 2) * 0.03;
+        const obj1Y = height * 0.35 + (mouseY - height / 2) * 0.03 - (scrollY * 0.12) % height;
+        const actualObj1Y = ((obj1Y % height) + height) % height;
+
+        const obj2X = width * 0.15 + (mouseX - width / 2) * 0.02;
+        const obj2Y = height * 0.75 - (scrollY * 0.18) % height;
+        const actualObj2Y = ((obj2Y % height) + height) % height;
+
+        // Draw 3D Cube 1 (Geometric Tech Core)
+        const transformedVerts = cubeVertices.map(v => {
+          let p = [v[0] * cubeSize, v[1] * cubeSize, v[2] * cubeSize];
+          p = rotateX(p, angleX);
+          p = rotateY(p, angleY);
+          p = rotateZ(p, angleZ);
+          return project3D(p[0], p[1], p[2], obj1X, actualObj1Y, 400);
+        });
+
+        // Draw Edges
+        ctx.strokeStyle = 'rgba(2, 132, 199, 0.28)';
+        ctx.lineWidth = 1.2;
+        cubeEdges.forEach(edge => {
+          const p1 = transformedVerts[edge[0]];
+          const p2 = transformedVerts[edge[1]];
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        });
+
+        // Draw Vertices
+        transformedVerts.forEach(v => {
+          ctx.fillStyle = 'rgba(2, 132, 199, 0.6)';
+          ctx.beginPath();
+          ctx.arc(v.x, v.y, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Draw Rotating Concentric Orbit Ring around Cube 2 (Left)
+        const ringRadius = cubeSize * 0.9;
+        ctx.strokeStyle = 'rgba(79, 70, 229, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(obj2X, actualObj2Y, ringRadius, ringRadius * 0.4, angleY * 0.8, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(2, 132, 199, 0.18)';
+        ctx.beginPath();
+        ctx.ellipse(obj2X, actualObj2Y, ringRadius * 1.3, ringRadius * 0.5, -angleX * 0.6, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Draw and update particle constellation
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
+          // Particle movement with scroll drift
+          p.x += p.vx;
+          p.y += p.vy - scrollVelocity * 0.15;
+
+          // Wrap edges
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          // Draw particle
+          ctx.fillStyle = `rgba(15, 23, 42, ${p.alpha * 0.45})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Connect nearby particles with refined lines
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 130) {
+              const lineAlpha = (1 - dist / 130) * 0.14;
+              ctx.strokeStyle = `rgba(2, 132, 199, ${lineAlpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
         }
+
+        // Decay scroll velocity smoothly
+        scrollVelocity *= 0.92;
+
+        requestAnimationFrame(render);
       }
+      render();
 
-      // Parallax background grid movement
-      if (parallaxBgGrid) {
-        parallaxBgGrid.style.transform = `translateY(${-(scrollY * 0.08)}px)`;
-      }
+      // Scroll listener tracking velocity and progress
+      const scrollProgress = document.getElementById('scrollProgress');
+      const mainNav = document.getElementById('mainNav');
+      const scrollAura = document.getElementById('scrollAura');
 
-      // Smooth ambient aura motion & color morphing based on scroll depth
-      if (scrollAura) {
-        const auraY = Math.min(scrollY * 0.45, 600);
-        scrollAura.style.transform = `translate(-50%, ${auraY}px)`;
+      window.addEventListener('scroll', () => {
+        const currentY = window.scrollY || window.pageYOffset;
+        scrollVelocity = currentY - lastScrollY;
+        lastScrollY = currentY;
 
-        // Subtly shift hue as you scroll down
-        if (progress < 25) {
-          scrollAura.style.background = 'radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, rgba(79, 70, 229, 0.04) 50%, transparent 75%)';
-        } else if (progress < 60) {
-          scrollAura.style.background = 'radial-gradient(circle at center, rgba(79, 70, 229, 0.08) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 75%)';
-        } else {
-          scrollAura.style.background = 'radial-gradient(circle at center, rgba(2, 132, 199, 0.07) 0%, rgba(15, 23, 42, 0.04) 50%, transparent 75%)';
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (currentY / docHeight) * 100 : 0;
+
+        if (scrollProgress) {
+          scrollProgress.style.width = `${progress}%`;
         }
-      }
 
-      ticking = false;
-    }
+        if (mainNav) {
+          if (currentY > 20) {
+            mainNav.classList.add('scrolled');
+          } else {
+            mainNav.classList.remove('scrolled');
+          }
+        }
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(onScroll);
-        ticking = true;
-      }
-    }, { passive: true });
+        if (scrollAura) {
+          const auraY = Math.min(currentY * 0.45, 700);
+          scrollAura.style.transform = `translate(-50%, ${auraY}px)`;
+        }
+      }, { passive: true });
 
-    // Initial trigger
-    onScroll();
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+    })();
 
-    // 2. Mobile Menu Toggle
+    // --- 2. Card Scroll Reveal Trigger ---
+    (function initCardReveals() {
+      const cards = document.querySelectorAll('.product-card, .tech-item, .principle-box, .journey-card, .vision-card-large, .split-box, .ecosystem-container');
+      cards.forEach(c => c.classList.add('reveal-card'));
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      }, { threshold: 0.08 });
+
+      cards.forEach(c => observer.observe(c));
+    })();
+
+    // --- 3. Mobile Menu Toggle ---
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
     if (menuToggle && navMenu) {
@@ -1725,7 +1922,7 @@
       });
     }
 
-    // 3. Interactive Hero Product Demo Tabs
+    // --- 4. Interactive Hero Product Demo Tabs ---
     const demoTabs = document.querySelectorAll('.demo-tab-btn');
     const viewSSDC = document.getElementById('viewSSDC');
     const viewWACentral = document.getElementById('viewWACentral');
@@ -1755,11 +1952,11 @@
       });
     });
 
-    // 4. Dynamic Year
+    // --- 5. Dynamic Year ---
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // 5. Contact Form Handler (Clean feedback)
+    // --- 6. Contact Form Handler (Clean feedback) ---
     const inquiryForm = document.getElementById('inquiryForm');
     if (inquiryForm) {
       inquiryForm.addEventListener('submit', function(e) {
