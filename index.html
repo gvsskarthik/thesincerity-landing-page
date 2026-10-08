@@ -115,18 +115,48 @@
       letter-spacing: -0.011em;
     }
 
-    /* Ambient architectural lighting - human crafted, non-cheesy */
-    .ambient-header-glow {
-      position: absolute;
+    /* Scroll Progress Laser Beam at top of viewport */
+    #scrollProgress {
+      position: fixed;
       top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 1200px;
-      height: 480px;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(2, 132, 199, 0.07), transparent 80%);
+      left: 0;
+      height: 2.5px;
+      width: 0%;
+      background: linear-gradient(90deg, #0284c7, #4f46e5);
+      z-index: 999;
+      transition: width 0.08s ease-out;
+      pointer-events: none;
+    }
+
+    /* Dynamic Parallax Background Grid */
+    #parallaxBgGrid {
+      position: fixed;
+      inset: -40px 0 -40px 0;
+      height: calc(100vh + 80px);
+      background-image: 
+        radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.065) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(circle at 50% 40%, black 40%, transparent 85%);
       pointer-events: none;
       z-index: 0;
+      will-change: transform;
+    }
+
+    /* Dynamic Scroll-Tracking Ambient Aura */
+    #scrollAura {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, 0);
+      width: 800px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, rgba(79, 70, 229, 0.04) 50%, transparent 75%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform, opacity;
+      transition: background 0.6s ease;
     }
 
     .container {
@@ -1077,7 +1107,14 @@
 </head>
 <body>
 
-  <div class="ambient-header-glow"></div>
+  <!-- Top Scroll Progress Laser Bar -->
+  <div id="scrollProgress"></div>
+
+  <!-- Subtle Scroll Parallax Dot Matrix Grid -->
+  <div id="parallaxBgGrid"></div>
+
+  <!-- Dynamic Scroll-Tracking Ambient Aura -->
+  <div id="scrollAura"></div>
 
   <!-- Main Navigation -->
   <header id="mainNav">
@@ -1614,15 +1651,67 @@
   </footer>
 
   <script>
-    // 1. Navigation Scroll Styling
+    // 1. Navigation Scroll Styling & Dynamic Background Scroll Animations
     const mainNav = document.getElementById('mainNav');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 20) {
-        mainNav.classList.add('scrolled');
-      } else {
-        mainNav.classList.remove('scrolled');
+    const scrollProgress = document.getElementById('scrollProgress');
+    const parallaxBgGrid = document.getElementById('parallaxBgGrid');
+    const scrollAura = document.getElementById('scrollAura');
+
+    let currentScrollY = 0;
+    let targetScrollY = 0;
+    let ticking = false;
+
+    function onScroll() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+
+      // Update top progress bar
+      if (scrollProgress) {
+        scrollProgress.style.width = `${progress}%`;
       }
-    });
+
+      // Update nav style
+      if (mainNav) {
+        if (scrollY > 20) {
+          mainNav.classList.add('scrolled');
+        } else {
+          mainNav.classList.remove('scrolled');
+        }
+      }
+
+      // Parallax background grid movement
+      if (parallaxBgGrid) {
+        parallaxBgGrid.style.transform = `translateY(${-(scrollY * 0.08)}px)`;
+      }
+
+      // Smooth ambient aura motion & color morphing based on scroll depth
+      if (scrollAura) {
+        const auraY = Math.min(scrollY * 0.45, 600);
+        scrollAura.style.transform = `translate(-50%, ${auraY}px)`;
+
+        // Subtly shift hue as you scroll down
+        if (progress < 25) {
+          scrollAura.style.background = 'radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, rgba(79, 70, 229, 0.04) 50%, transparent 75%)';
+        } else if (progress < 60) {
+          scrollAura.style.background = 'radial-gradient(circle at center, rgba(79, 70, 229, 0.08) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 75%)';
+        } else {
+          scrollAura.style.background = 'radial-gradient(circle at center, rgba(2, 132, 199, 0.07) 0%, rgba(15, 23, 42, 0.04) 50%, transparent 75%)';
+        }
+      }
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Initial trigger
+    onScroll();
 
     // 2. Mobile Menu Toggle
     const menuToggle = document.getElementById('menuToggle');
