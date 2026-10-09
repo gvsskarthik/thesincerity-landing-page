@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Activity, 
   Terminal, 
@@ -31,23 +31,34 @@ import {
   Lock,
   Mail,
   Sliders,
-  Award,
   Clock,
   Compass,
   FileText,
-  HelpCircle,
   PhoneCall,
-  UserCheck
+  Sun,
+  Moon,
+  Info,
+  CheckCircle,
+  AlertCircle
 } from 'lucide-react';
 
 export default function App() {
-  // Navigation State
+  // Theme State (Persisted in localStorage)
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('sincerity_theme') || 'light';
+  });
+
+  // Navigation & View State
   const [activeSection, setActiveSection] = useState('overview'); // 'overview' | 'products' | 'architecture' | 'telemetry' | 'corporate' | 'contact'
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Interactive Product Tab State
+  // Toast Notifications Stack
+  const [toasts, setToasts] = useState([]);
+
+  // Product Showcase Tab
   const [activeProductTab, setActiveProductTab] = useState('ssdc'); // 'ssdc' | 'wacentral' | 'waconnect'
 
   // SSDC Labs Diagnostic State
@@ -62,7 +73,6 @@ export default function App() {
   const [recipientNumber, setRecipientNumber] = useState('+91 98765 43210');
   const [dispatchStatus, setDispatchStatus] = useState('idle'); // 'idle' | 'sending' | 'delivered'
   const [apiLanguage, setApiLanguage] = useState('curl'); // 'curl' | 'node' | 'python'
-  const [copiedCode, setCopiedCode] = useState(false);
   const [gatewayLogs, setGatewayLogs] = useState([
     { id: 1, time: '23:30:12', method: 'POST', endpoint: '/v1/webhook/verify', status: '200 OK', latency: '12ms' },
     { id: 2, time: '23:31:05', method: 'POST', endpoint: '/v1/dispatch/template', status: '202 Accepted', latency: '19ms' },
@@ -74,13 +84,29 @@ export default function App() {
     { id: 1, name: 'Comprehensive Health Screening Matrix', price: 1499, qty: 1 },
     { id: 2, name: 'Glycated Hemoglobin (HbA1c) Profile', price: 650, qty: 1 }
   ]);
-  const [orderSent, setOrderSent] = useState(false);
 
   // Contact Form State
   const [contactForm, setContactForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Live Clock
+  // Toggle Theme Function
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('sincerity_theme', newTheme);
+    addToast('Theme Switched', `Switched to ${newTheme === 'dark' ? 'Dark' : 'Light'} Mode`, 'info');
+  };
+
+  // Toast Helper
+  const addToast = (title, message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, title, message, type }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, 3500);
+  };
+
+  // Live Clock & Keyboard Shortcut listener
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -88,14 +114,32 @@ export default function App() {
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchModalOpen(prev => !prev);
+      }
+      if (e.key === 'Escape') {
+        setSearchModalOpen(false);
+        setMobileSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleSimulateReport = () => {
     setIsCompilingReport(true);
     setTimeout(() => {
       setIsCompilingReport(false);
-      setReportTimestamp(new Date().toLocaleTimeString());
+      const timeStr = new Date().toLocaleTimeString();
+      setReportTimestamp(timeStr);
+      addToast('Diagnostic Verified', `Recalculated intervals for ${patientName}`, 'success');
     }, 600);
   };
 
@@ -116,6 +160,7 @@ export default function App() {
         },
         ...prev
       ]);
+      addToast('Message Dispatched', `Transmitted via WACentral Engine to ${recipientNumber}`, 'success');
       setTimeout(() => setDispatchStatus('idle'), 3500);
     }, 800);
   };
@@ -172,13 +217,13 @@ print(f"Message Status: {response.status}")`
 
   const copyCode = () => {
     navigator.clipboard.writeText(codeSnippets[apiLanguage]);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+    addToast('Code Copied', `${apiLanguage.toUpperCase()} snippet copied to clipboard`, 'success');
   };
 
   const handleContactSubmit = (e) => {
     e.preventDefault();
     setFormSubmitted(true);
+    addToast('Inquiry Transmitted', 'Your message was delivered to SINCERITY Engineering', 'success');
     setTimeout(() => {
       setFormSubmitted(false);
       setContactForm({ name: '', email: '', subject: '', message: '' });
@@ -187,8 +232,86 @@ print(f"Message Status: {response.status}")`
 
   const totalCart = cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
+  const searchItems = [
+    { name: 'Executive Overview', section: 'overview', desc: 'Company vision, SLA metrics & engineering philosophy' },
+    { name: 'SSDC Labs Diagnostic LIS', section: 'products', tab: 'ssdc', desc: 'Pathology lab software & report engine' },
+    { name: 'WACentral WhatsApp API', section: 'products', tab: 'wacentral', desc: 'Enterprise WhatsApp webhook & dispatch gateway' },
+    { name: 'WA Connect Storefront', section: 'products', tab: 'waconnect', desc: 'Conversational WhatsApp commerce & cart flow' },
+    { name: 'Architecture & Technology Stack', section: 'architecture', desc: 'L1 to L4 multi-tier infrastructure blueprint' },
+    { name: 'System Telemetry & Health', section: 'telemetry', desc: 'Live CPU, memory, and cryptographic checks' },
+    { name: 'Corporate Entity Information', section: 'corporate', desc: 'SINCERITY OPC Private Limited registration' },
+    { name: 'Contact & Support', section: 'contact', desc: 'Direct contact form and engineering inquiries' }
+  ];
+
+  const filteredSearch = searchItems.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="app-container light-theme">
+    <div className={`app-root ${theme}-theme`}>
+      {/* Toast Notification Stack */}
+      <div className="toast-container" aria-live="polite">
+        {toasts.map(t => (
+          <div key={t.id} className={`toast-card toast-${t.type} fade-in-up`}>
+            <div className="toast-icon">
+              {t.type === 'success' && <CheckCircle size={16} className="text-emerald" />}
+              {t.type === 'info' && <Info size={16} className="text-primary-blue" />}
+              {t.type === 'alert' && <AlertCircle size={16} className="text-gold-icon" />}
+            </div>
+            <div className="toast-content">
+              <div className="toast-title">{t.title}</div>
+              <div className="toast-message">{t.message}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Quick Search / Command Palette Modal */}
+      {searchModalOpen && (
+        <div className="modal-backdrop" onClick={() => setSearchModalOpen(false)}>
+          <div className="command-palette-card" onClick={e => e.stopPropagation()}>
+            <div className="palette-search-header">
+              <Search size={18} className="text-muted" />
+              <input 
+                type="text" 
+                placeholder="Search modules, APIs, products, corporate info... (ESC to close)"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                autoFocus
+                className="palette-input"
+              />
+              <button className="palette-close-btn" onClick={() => setSearchModalOpen(false)}>
+                <X size={16} />
+              </button>
+            </div>
+            <div className="palette-results-list">
+              {filteredSearch.length > 0 ? (
+                filteredSearch.map((item, idx) => (
+                  <div 
+                    key={idx} 
+                    className="palette-item"
+                    onClick={() => {
+                      setActiveSection(item.section);
+                      if (item.tab) setActiveProductTab(item.tab);
+                      setSearchModalOpen(false);
+                    }}
+                  >
+                    <div className="palette-item-main">
+                      <span className="palette-item-name">{item.name}</span>
+                      <span className="palette-item-desc">{item.desc}</span>
+                    </div>
+                    <ChevronRight size={14} className="palette-arrow" />
+                  </div>
+                ))
+              ) : (
+                <div className="palette-empty">No matching modules found</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Top Navbar */}
       <header className="navbar-top">
         <div className="navbar-container">
@@ -206,6 +329,8 @@ print(f"Message Status: {response.status}")`
                 src="/logo-icon.png" 
                 alt="SINCERITY Logo Icon" 
                 className="navbar-brand-icon"
+                fetchPriority="high"
+                loading="eager"
               />
               <div className="navbar-brand-titles">
                 <span className="brand-primary-name">SINCERITY</span>
@@ -215,17 +340,37 @@ print(f"Message Status: {response.status}")`
           </div>
 
           <div className="navbar-center">
+            <button 
+              className="navbar-search-bar" 
+              onClick={() => setSearchModalOpen(true)}
+              aria-label="Search site modules"
+            >
+              <Search size={14} className="text-muted" />
+              <span>Quick search modules...</span>
+              <kbd className="search-kbd">⌘K</kbd>
+            </button>
+
             <div className="navbar-status-pill">
               <span className="live-status-dot"></span>
-              <span className="status-text-bold">SYSTEMS OPERATIONAL</span>
+              <span className="status-text-bold">OPERATIONAL</span>
               <span className="status-sep">|</span>
-              <span className="status-meta">99.99% Uptime SLA</span>
+              <span className="status-meta">99.99% SLA</span>
             </div>
           </div>
 
           <div className="navbar-right">
+            {/* Theme Switcher */}
+            <button 
+              className="theme-toggle-btn" 
+              onClick={toggleTheme}
+              aria-label="Toggle Light/Dark Theme"
+              title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+            >
+              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} className="text-gold-icon" />}
+            </button>
+
             <div className="time-display-pill font-mono">
-              <Clock size={14} className="text-primary-blue" />
+              <Clock size={13} className="text-primary-blue" />
               <span>{currentTime || '00:00:00 IST'}</span>
             </div>
 
@@ -234,7 +379,7 @@ print(f"Message Status: {response.status}")`
               onClick={() => setActiveSection('contact')}
             >
               <Mail size={14} />
-              <span>Get in Touch</span>
+              <span>Contact</span>
             </button>
           </div>
         </div>
@@ -246,9 +391,9 @@ print(f"Message Status: {response.status}")`
         <aside className={`app-sidebar ${mobileSidebarOpen ? 'sidebar-open' : ''}`}>
           <div className="sidebar-scrollable-area">
             
-            {/* Quick Navigation Group */}
+            {/* Navigation Group */}
             <div className="sidebar-group">
-              <div className="sidebar-group-header">NAVIGATION</div>
+              <div className="sidebar-group-header">PLATFORM MODULES</div>
               <nav className="sidebar-nav-list">
                 <button 
                   className={`sidebar-nav-btn ${activeSection === 'overview' ? 'active' : ''}`}
@@ -290,14 +435,14 @@ print(f"Message Status: {response.status}")`
                   onClick={() => { setActiveSection('contact'); setMobileSidebarOpen(false); }}
                 >
                   <Mail size={17} />
-                  <span>Contact & Support</span>
+                  <span>Contact & Inquiries</span>
                 </button>
               </nav>
             </div>
 
             {/* Live Product Directory */}
             <div className="sidebar-group">
-              <div className="sidebar-group-header">DEPLOYED PLATFORMS</div>
+              <div className="sidebar-group-header">ACTIVE PRODUCTION SUITES</div>
               <div className="sidebar-links-list">
                 <a 
                   href="https://ssdclabs.online" 
@@ -333,6 +478,7 @@ print(f"Message Status: {response.status}")`
                 src="/sincerity-full-brand.png" 
                 alt="SINCERITY (OPC) PRIVATE LIMITED" 
                 className="sidebar-brand-mark"
+                loading="eager"
               />
               <div className="seal-caption font-mono">
                 CIN Registered • India<br />
@@ -361,11 +507,11 @@ print(f"Message Status: {response.status}")`
                   </div>
 
                   <h1 className="hero-main-title">
-                    Foundational Software Engineering Engineered with <span className="highlight-text">Sincerity</span>.
+                    Foundational Software Systems Engineered with <span className="highlight-text">Sincerity</span>.
                   </h1>
 
                   <p className="hero-lead-text">
-                    SINCERITY designs, constructs, and deploys high-reliability software products, automated clinical laboratory information systems, and high-throughput WhatsApp communication gateways built for mission-critical real-world operations.
+                    SINCERITY designs, constructs, and deploys high-reliability software products, automated clinical laboratory information systems, and high-throughput WhatsApp communication gateways built for mission-critical operations.
                   </p>
 
                   <div className="hero-actions-row">
@@ -393,11 +539,13 @@ print(f"Message Status: {response.status}")`
                       src="/logo-icon.png" 
                       alt="SINCERITY 3D Logo" 
                       className="showcase-3d-logo"
+                      loading="eager"
                     />
                     <img 
                       src="/sincerity-full-brand.png" 
                       alt="SINCERITY Wordmark" 
                       className="showcase-brand-mark"
+                      loading="eager"
                     />
                     <div className="showcase-metrics-badge font-mono">
                       <ShieldCheck size={14} className="text-emerald" />
@@ -407,7 +555,7 @@ print(f"Message Status: {response.status}")`
                 </div>
               </section>
 
-              {/* Verified Performance Metrics Strip */}
+              {/* Performance Metrics Strip */}
               <section className="metrics-strip-grid">
                 <div className="metric-strip-card">
                   <div className="metric-label font-mono">SYSTEM UPTIME SLA</div>
@@ -706,8 +854,8 @@ print(f"Message Status: {response.status}")`
                         <div className="code-block-header">
                           <span className="font-mono text-xs text-muted">POST /v1/dispatch/template</span>
                           <button className="copy-action-btn" onClick={copyCode}>
-                            {copiedCode ? <Check size={13} className="text-emerald" /> : <Copy size={13} />}
-                            <span>{copiedCode ? 'Copied' : 'Copy'}</span>
+                            <Copy size={13} />
+                            <span>Copy Code</span>
                           </button>
                         </div>
                         <pre className="code-snippet-box font-mono">
@@ -821,12 +969,11 @@ print(f"Message Status: {response.status}")`
                       <button 
                         className="btn-action-primary w-full mt-4"
                         onClick={() => {
-                          setOrderSent(true);
-                          setTimeout(() => setOrderSent(false), 3000);
+                          addToast('Checkout Dispatched', `Simulated booking sent to +91 98765 43210 for ₹${totalCart}`, 'success');
                         }}
                       >
                         <Send size={15} />
-                        <span>{orderSent ? '✓ Notification Dispatched to WhatsApp' : 'Simulate Customer Checkout Dispatch'}</span>
+                        <span>Simulate Customer Checkout Dispatch</span>
                       </button>
                     </div>
                   </div>
@@ -953,7 +1100,7 @@ print(f"Message Status: {response.status}")`
                       <span className="font-mono font-bold text-emerald">0 Pending</span>
                     </div>
                     <div className="bar-track-light">
-                      <div className="bar-progress-fill" style={{ width: '2%', background: '#10b981' }}></div>
+                      <div className="bar-progress-fill" style={{ width: '2%', background: 'var(--emerald-accent)' }}></div>
                     </div>
                   </div>
                 </div>
