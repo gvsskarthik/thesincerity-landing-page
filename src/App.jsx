@@ -745,18 +745,16 @@ export default function App() {
           <div className="footer-top">
             {/* Footer Brand */}
             <div className="footer-brand">
-              <a href="#home" className="brand-wrapper" style={{ marginBottom: '12px' }}>
+              <a href="#home" className="brand-wrapper" style={{ marginBottom: '16px' }}>
                 <img 
                   src="/logo-icon.png" 
                   alt="SINCERITY Logo" 
                   className="brand-logo-img"
-                  style={{ height: '36px' }}
                 />
                 <img 
                   src="/sincerity-full-brand.png" 
                   alt="SINCERITY (OPC) PRIVATE LIMITED" 
                   className="brand-wordmark-img"
-                  style={{ height: '32px' }}
                 />
               </a>
               <p>
