@@ -303,7 +303,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
                 Built with purpose.
               </h1>
               <p className="hero-subtitle">
-                We build digital products and technology solutions for healthcare, business, and everyday life.
+                We research, design, and build products across software, AI, chips, electronics, and connected devices.
               </p>
               <div className="hero-buttons">
                 <a href="#products" className="btn-dark-pill btn-lg">
