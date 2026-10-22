@@ -82,11 +82,34 @@ const services = [
   },
 ];
 
+const enquiryTopics = {
+  careers: {
+    title: "Careers at Sincerity",
+    intro:
+      "Tell us about your experience, interests, and the kind of role you’re looking for. Contact us to enquire about current opportunities.",
+  },
+  hiring: {
+    title: "Find technical help for your business.",
+    intro:
+      "Tell us about the skills, team support, or project expertise your business needs. We’ll discuss how Sincerity Services can help.",
+  },
+  support: {
+    title: "How can we help?",
+    intro:
+      "Tell us which product or service you need help with and describe the issue. Please don’t include passwords or other sensitive account details.",
+  },
+  media: {
+    title: "News & media enquiries",
+    intro:
+      "Contact Sincerity for company updates, press information, and media enquiries.",
+  },
+};
+
 const copyrightYear = new Date().getFullYear();
 
 type Enquiry =
   | { kind: "product"; product: Product }
-  | { kind: "business"; service?: string };
+  | { kind: "business"; service?: string; topic?: keyof typeof enquiryTopics };
 
 export default function ExplorePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -99,6 +122,10 @@ export default function ExplorePage() {
   const pendingRequest = useRef<AbortController | null>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const modalOpen = Boolean(detail || enquiry);
+  const enquiryTopic =
+    enquiry?.kind === "business" && enquiry.topic
+      ? enquiryTopics[enquiry.topic]
+      : null;
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -199,6 +226,10 @@ export default function ExplorePage() {
             name: form.get("name"),
             email: form.get("email"),
             company: form.get("company"),
+            topic:
+              enquiry?.kind === "business"
+                ? enquiry.topic || "general"
+                : "product",
             message: form.get("message"),
             product:
               enquiry?.kind === "product"
@@ -207,7 +238,9 @@ export default function ExplorePage() {
             _subject:
               enquiry?.kind === "product"
                 ? `Product enquiry: ${enquiry.product.name}`
-                : "Sincerity business enquiry",
+                : enquiryTopic
+                  ? `Sincerity enquiry: ${enquiryTopic.title}`
+                  : "Sincerity business enquiry",
             _honey: form.get("website"),
           }),
         },
@@ -528,10 +561,125 @@ export default function ExplorePage() {
               </a>
               <p>Technology. Built with purpose.</p>
             </div>
-            <nav aria-label="Footer navigation">
-              <a href="#technologies">Technologies</a>
-              <a href="#services">Services</a>
-              <a href="#company">Company</a>
+            <nav
+              className="footer-column"
+              aria-label="Products and technologies"
+            >
+              <h3>Technologies</h3>
+              <a href="#technologies">Our products</a>
+              {products.map((product) => (
+                <button key={product.name} onClick={() => setDetail(product)}>
+                  {product.name}
+                </button>
+              ))}
+              <button
+                onClick={() =>
+                  openEnquiry({ kind: "business", service: "AI & Research" })
+                }
+              >
+                AI &amp; Research
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({ kind: "business", service: "Cloud & SaaS" })
+                }
+              >
+                Cloud &amp; SaaS
+              </button>
+            </nav>
+            <nav className="footer-column" aria-label="Business services">
+              <h3>Services</h3>
+              <button
+                onClick={() =>
+                  openEnquiry({ kind: "business", service: "Web development" })
+                }
+              >
+                Web development
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({ kind: "business", service: "App development" })
+                }
+              >
+                App development
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({ kind: "business", service: "SaaS development" })
+                }
+              >
+                SaaS development
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({ kind: "business", service: "Data management" })
+                }
+              >
+                Data management
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({
+                    kind: "business",
+                    service: "Project support",
+                    topic: "support",
+                  })
+                }
+              >
+                Project support
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({
+                    kind: "business",
+                    service: "Hiring & dedicated teams",
+                    topic: "hiring",
+                  })
+                }
+              >
+                Hiring &amp; dedicated teams
+              </button>
+            </nav>
+            <nav className="footer-column" aria-label="Company and help">
+              <h3>Company &amp; help</h3>
+              <a href="#company">About Sincerity</a>
+              <button
+                onClick={() =>
+                  openEnquiry({
+                    kind: "business",
+                    service: "Career opportunities",
+                    topic: "careers",
+                  })
+                }
+              >
+                Careers at Sincerity
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({
+                    kind: "business",
+                    service: "News & media",
+                    topic: "media",
+                  })
+                }
+              >
+                News &amp; media
+              </button>
+              <button
+                onClick={() =>
+                  openEnquiry({
+                    kind: "business",
+                    service: "Customer support",
+                    topic: "support",
+                  })
+                }
+              >
+                Customer support
+              </button>
+              <a href="/privacy/">Privacy policy</a>
+              <button onClick={() => openEnquiry({ kind: "business" })}>
+                Contact us
+              </button>
             </nav>
             <div className="footer-contact">
               <span>Start a conversation</span>
@@ -542,7 +690,10 @@ export default function ExplorePage() {
           </div>
           <div className="footer-bottom">
             <span>© {copyrightYear} Sincerity (OPC) Private Limited</span>
-            <span>India</span>
+            <div className="footer-bottom-links">
+              <a href="/privacy/">Privacy policy</a>
+              <span>India</span>
+            </div>
           </div>
         </div>
       </footer>
@@ -622,17 +773,20 @@ export default function ExplorePage() {
               <p className="eyebrow">
                 {enquiry?.kind === "product"
                   ? "PRODUCT ENQUIRY"
-                  : "SINCERITY SERVICES & GENERAL ENQUIRIES"}
+                  : enquiry?.kind === "business" && enquiry.topic === "careers"
+                    ? "WORK WITH US"
+                    : "SINCERITY SERVICES & GENERAL ENQUIRIES"}
               </p>
               <h2 id="dialog-title" tabIndex={-1}>
                 {enquiry?.kind === "product"
                   ? `Let’s explore ${enquiry.product.name}.`
-                  : "Tell us what you have in mind."}
+                  : enquiryTopic?.title || "Tell us what you have in mind."}
               </h2>
               <p className="dialog-intro">
                 {enquiry?.kind === "product"
                   ? "Leave your details and we’ll get in touch to discuss the product."
-                  : "Share a little about your business or project. We’ll take it from there."}
+                  : enquiryTopic?.intro ||
+                    "Share a little about your business or project. We’ll take it from there."}
               </p>
               <form onSubmit={submit} aria-busy={sending}>
                 <div className="form-grid">
@@ -666,12 +820,20 @@ export default function ExplorePage() {
                 </div>
                 <div className="form-field">
                   <label htmlFor="enquiry-company">
-                    Company <span>(optional)</span>
+                    {enquiry?.kind === "business" && enquiry.topic === "careers"
+                      ? "Portfolio or profile link"
+                      : "Company"}{" "}
+                    <span>(optional)</span>
                   </label>
                   <input
                     id="enquiry-company"
                     name="company"
-                    autoComplete="organization"
+                    autoComplete={
+                      enquiry?.kind === "business" &&
+                      enquiry.topic === "careers"
+                        ? "url"
+                        : "organization"
+                    }
                     maxLength={160}
                     disabled={sending}
                   />
@@ -685,7 +847,10 @@ export default function ExplorePage() {
                   <label htmlFor="enquiry-message">
                     {enquiry?.kind === "product"
                       ? "What would you like to know?"
-                      : "How can we help?"}{" "}
+                      : enquiry?.kind === "business" &&
+                          enquiry.topic === "careers"
+                        ? "Tell us about yourself"
+                        : "How can we help?"}{" "}
                     <span>(required)</span>
                   </label>
                   <textarea
