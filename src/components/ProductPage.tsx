@@ -1,4 +1,5 @@
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import ProductScreens from "./ProductScreens";
 import type { Product } from "../data/products";
 
 type Props = { product: Product; onEnquire: () => void };
@@ -30,12 +31,26 @@ export default function ProductPage({ product, onEnquire }: Props) {
             <span>{product.headline}</span>
           </h1>
           <p className="product-page-description">{product.description}</p>
-          <button className="button button-dark" onClick={onEnquire}>
-            {product.status === "Beta"
-              ? "Explore beta access"
-              : "Arrange a walkthrough"}
-            <ArrowRight size={16} />
-          </button>
+          <div className="product-page-actions">
+            {" "}
+            <button className="button button-dark" onClick={onEnquire}>
+              {product.status === "Beta"
+                ? "Explore beta access"
+                : "Arrange a walkthrough"}
+              <ArrowRight size={16} />
+            </button>
+            {product.appUrl && (
+              <a
+                className="text-link"
+                href={product.appUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open {product.name}
+                <ArrowRight size={16} />
+              </a>
+            )}
+          </div>
           <p className="availability">
             <span
               className={
@@ -59,6 +74,9 @@ export default function ProductPage({ product, onEnquire }: Props) {
           />
         </div>
       </section>
+      {product.screens && (
+        <ProductScreens name={product.name} screens={product.screens} />
+      )}
       <section
         className="product-overview section-space"
         id="overview"
@@ -68,9 +86,11 @@ export default function ProductPage({ product, onEnquire }: Props) {
           <div className="product-overview-heading">
             <p className="eyebrow">THE PRODUCT, CONSIDERED</p>
             <h2 id="overview-title">
-              A clear purpose.
+              {product.screens ? "Built around real work." : "A clear purpose."}
               <br />
-              <span>A closer look.</span>
+              <span>
+                {product.screens ? "Connected in one place." : "A closer look."}
+              </span>
             </h2>
             <p>{product.detail}</p>
           </div>
@@ -122,6 +142,15 @@ export default function ProductPage({ product, onEnquire }: Props) {
             <h2 id="faq-title">Good questions.</h2>
           </div>
           <div className="faq-list">
+            {product.questions?.map((item) => (
+              <details key={item.question}>
+                <summary>
+                  {item.question}
+                  <Plus size={18} />
+                </summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
             <details>
               <summary>
                 Who is {product.name} for?

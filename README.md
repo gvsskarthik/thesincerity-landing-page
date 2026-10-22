@@ -24,14 +24,16 @@ The production output is `dist/`. GitHub Actions builds and deploys `main` to Gi
 - `src/components/ExplorePage.tsx`: homepage, shared navigation/footer, and enquiry handling.
 - `src/data/products.ts`: product content, images, availability, and paths.
 - `src/components/ProductPage.tsx`: dedicated product presentation and FAQs.
+- `src/components/ProductScreens.tsx`: accessible screenshot selector and full-size image links.
+- `public/product-screens/`: real application interface captures with synthetic demonstration data.
 - `scripts/build-product-pages.mjs`: generates static GitHub Pages entry points and metadata for each product.
 - `src/components/ExplorePage.css`: responsive page and dialog styles.
 - `src/index.css`: global styles and motion preferences.
 - `index.html`: metadata and font loading.
 
-Products currently retain the previously published availability labels: Optimedicate and WACentral are available, and WA Connect is in beta. Update the product list when availability changes. Product panels use the supplied Optimedicate illustration and matching generated artwork for the messaging products. Original assets are preserved; display assets use WebP for smaller downloads. Screenshots and videos can be added to individual product pages when authentic media is available.
+Products currently retain the previously published availability labels: OptiMediCare and WACentral are available, and WA Connect is in beta. Update the product list when availability changes. Product panels use the supplied Optimedicate illustration and matching generated artwork for the messaging products. Original assets are preserved; display assets use WebP for smaller downloads. OptiMediCare and WACentral have real interface screenshots, captured from their existing application builds with synthetic demonstration data. No production patient/customer data or credentials were used. See `docs/product-review.md` for provenance. Videos can be added when available.
 
-Dedicated pages: `/products/optimedicate/`, `/products/wacentral/`, and `/products/wa-connect/`. These work as direct entry URLs, including browser reloads. When adding a product, update `src/data/products.ts`, the build entry list, and both sitemaps.
+Dedicated pages: `/products/optimedicare/`, `/products/wacentral/`, and `/products/wa-connect/`. These work as direct entry URLs, including browser reloads. Previously published `/products/optimedicate/` links redirect to the correctly named OptiMediCare page. When adding a product, update `src/data/products.ts`, the build entry list, and both sitemaps.
 
 Artwork provenance and generation prompts are documented in `docs/artwork.md`.
 

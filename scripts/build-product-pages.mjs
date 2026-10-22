@@ -6,16 +6,16 @@ const template = await readFile(
 );
 const pages = [
   {
-    slug: "optimedicate",
-    name: "Optimedicate",
+    slug: "optimedicare",
+    name: "OptiMediCare",
     description:
-      "Discover Optimedicate, Sincerity’s medical laboratory management product. Explore the product and request a guided demonstration.",
+      "Explore OptiMediCare laboratory software: patient registration, tests, reporting, billing, and accounts. View real interface screenshots with demonstration data.",
   },
   {
     slug: "wacentral",
     name: "WACentral",
     description:
-      "Discover WACentral, Sincerity’s WhatsApp API gateway for business messaging. Discuss your integration requirements and request a walkthrough.",
+      "Explore WACentral: SaaS client management, WhatsApp phone routes, signed integrations, webhooks, and visual chatbot flows. See real product screenshots.",
   },
   {
     slug: "wa-connect",
@@ -47,3 +47,14 @@ for (const page of pages) {
   await writeFile(new URL("index.html", directory), html);
 }
 console.log("Built dedicated product entry pages.");
+
+// Keep previously published links working after correcting the product name.
+const legacyDirectory = new URL(
+  "../dist/products/optimedicate/",
+  import.meta.url,
+);
+await mkdir(legacyDirectory, { recursive: true });
+await writeFile(
+  new URL("index.html", legacyDirectory),
+  `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/products/optimedicare/"><link rel="canonical" href="https://thesincerity.in/products/optimedicare/"><title>OptiMediCare — Sincerity Technologies</title></head><body><p><a href="/products/optimedicare/">Continue to OptiMediCare</a></p></body></html>`,
+);
