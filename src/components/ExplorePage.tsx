@@ -13,7 +13,6 @@ import {
   Cpu,
   Cloud,
   Radio,
-  Zap,
   Code,
   Server,
   ShieldCheck,
@@ -29,11 +28,8 @@ import phoneSinkAppImg from '../assets/p2_phone_sinkapp.png';
 import cloudServersImg from '../assets/p2_cloud_servers.png';
 import iconAiImg from '../assets/p2_icon_ai.png';
 import iconCloudImg from '../assets/p2_icon_cloud.png';
-import iconElectronicsImg from '../assets/p2_icon_electronics.png';
 import iconIotImg from '../assets/p2_icon_iot.png';
-import iconSemiconductorsImg from '../assets/p2_icon_semiconductors.png';
 import iotDeviceImg from '../assets/p2_iot_device.png';
-import chipResearchImg from '../assets/p2_chip_research.png';
 import logoM4SpaceBlackSrc from '../assets/sincerity_logo_m4_space_black_v11.png';
 import SincerityLogo from './SincerityLogo';
 import SincerityWordmark from './SincerityWordmark';
@@ -109,9 +105,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
     'Products',
     'AI & Research',
     'Cloud',
-    'Electronics',
     'IoT',
-    'Semiconductors',
   ];
 
   const devProjects = [
@@ -151,15 +145,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
       badgeClass: 'badge-dev',
       img: iotDeviceImg,
     },
-    {
-      id: 'chipresearch',
-      title: 'Custom Chip Research',
-      subtitle: 'Semiconductor Research & Development',
-      category: 'Semiconductors',
-      badge: 'Research',
-      badgeClass: 'badge-research',
-      img: chipResearchImg,
-    },
   ];
 
   const filteredProjects =
@@ -168,7 +153,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
       : devProjects.filter((p) => {
           if (activeTab === 'Products') return p.category === 'Products';
           if (activeTab === 'IoT') return p.category === 'IoT';
-          if (activeTab === 'Semiconductors') return p.category === 'Semiconductors';
           return true;
         });
 
@@ -331,7 +315,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
           </div>
           <div className="stat-divider" />
           <div className="stat-item">
-            <div className="stat-number">5+</div>
+            <div className="stat-number">3</div>
             <div className="stat-label">Technology Domains</div>
           </div>
           <div className="stat-divider" />
@@ -407,19 +391,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
                     </div>
                     <ArrowRight size={12} className="widget-row-arrow" />
                   </div>
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Custom Chip Research')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon amber"><Zap size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">Semiconductors & Chips</span>
-                      <span className="widget-domain-sub">Custom Silicon & VLSI</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -666,7 +638,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
             </a>
           </div>
 
-          <div className="cards-scroll-grid">
+          <div className="cards-scroll-grid domains-grid">
             {/* Domain 1: AI */}
             <div
               className="domain-card"
@@ -707,27 +679,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
               </div>
             </div>
 
-            {/* Domain 3: Electronics */}
-            <div
-              className="domain-card"
-              onClick={() => openDemoModal('Electronics & Devices')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="domain-icon-wrap glow-electronics">
-                <img src={iconElectronicsImg} alt="Electronics & Devices" className="domain-icon-img" />
-              </div>
-              <h3 className="domain-card-title">Electronics &amp; Devices</h3>
-              <p className="domain-card-subtitle">Embedded Systems &amp; Hardware</p>
-              <div className="domain-card-footer">
-                <div className="domain-cta-pill">
-                  <span>Explore Domain</span>
-                  <ArrowRight size={11} className="cta-arrow" />
-                </div>
-              </div>
-            </div>
-
-            {/* Domain 4: IoT */}
+            {/* Domain 3: IoT */}
             <div
               className="domain-card"
               onClick={() => openDemoModal('IoT & Automation')}
@@ -747,25 +699,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
               </div>
             </div>
 
-            {/* Domain 5: Semiconductors */}
-            <div
-              className="domain-card"
-              onClick={() => openDemoModal('Semiconductors & Chips')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="domain-icon-wrap glow-semiconductors">
-                <img src={iconSemiconductorsImg} alt="Semiconductors & Chips" className="domain-icon-img" />
-              </div>
-              <h3 className="domain-card-title">Semiconductors &amp; Chips</h3>
-              <p className="domain-card-subtitle">Custom Silicon &amp; VLSI</p>
-              <div className="domain-card-footer">
-                <div className="domain-cta-pill">
-                  <span>Explore Domain</span>
-                  <ArrowRight size={11} className="cta-arrow" />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -873,7 +806,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
               </div>
               <div className="why-feature-content">
                 <h4 className="why-feature-title">Innovation Driven</h4>
-                <p className="why-feature-text">Continuous research and development in AI, cloud systems, and edge semiconductors.</p>
+                <p className="why-feature-text">Continuous research and development in AI, cloud systems, and connected technologies.</p>
               </div>
             </div>
 
@@ -884,7 +817,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
               </div>
               <div className="why-feature-content">
                 <h4 className="why-feature-title">End-to-End Capability</h4>
-                <p className="why-feature-text">Holistic stack execution spanning custom silicon, embedded IoT, cloud SaaS, and apps.</p>
+                <p className="why-feature-text">End-to-end development spanning connected devices, cloud SaaS, and apps.</p>
               </div>
             </div>
 
@@ -1013,10 +946,8 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
             <ul className="footer-links">
               <li><a href="#products">Products</a></li>
               <li><a href="#tech-domains">AI &amp; Research</a></li>
-              <li><a href="#tech-domains">Electronics</a></li>
               <li><a href="#tech-domains">Cloud &amp; SaaS</a></li>
               <li><a href="#tech-domains">IoT &amp; Automation</a></li>
-              <li><a href="#tech-domains">Semiconductors</a></li>
             </ul>
           </div>
 
@@ -1127,7 +1058,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
                       <option value="SinkApp">SinkApp — All-in-one Application</option>
                       <option value="SINCERITY Cloud">SINCERITY Cloud — Storage Platform</option>
                       <option value="IoT Lab Devices">IoT Lab Devices — Hardware & Edge</option>
-                      <option value="Custom Chip Research">Custom Chip Research — Silicon & VLSI</option>
                       <option value="Enterprise Services">Enterprise Software & Development Services</option>
                       <option value="General Inquiry">General Partnership & Inquiry</option>
                     </select>
@@ -1226,7 +1156,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
                   Sincerity Corporate Showcase Video
                 </p>
                 <p className="text-xs text-gray-500">
-                  Building next-generation software, semiconductors &amp; IoT solutions
+                  Building next-generation software, AI &amp; IoT solutions
                 </p>
               </div>
             </div>

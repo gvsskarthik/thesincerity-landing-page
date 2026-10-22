@@ -726,6 +726,10 @@
   gap: 18px;
 }
 
+.domains-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .products-section,
 .domains-section,
 .roadmap-section {
