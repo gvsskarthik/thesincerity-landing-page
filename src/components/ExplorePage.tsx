@@ -19,7 +19,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   Loader2,
-  Activity,
   Sparkles,
 } from 'lucide-react';
 
@@ -290,6 +289,13 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
       {/* 2. Hero Section */}
       <section className="hero-section">
         <div className="container hero-grid">
+          <div className="hero-media-col">
+            <div className="hero-brand">
+              <SincerityLogo size="var(--hero-logo-size)" />
+              <SincerityWordmark width="100%" className="hero-brand-wordmark" />
+            </div>
+          </div>
+
           <div className="hero-text-col">
             <div className="tag-overline">TECHNOLOGY &middot; INNOVATION &middot; POSSIBILITIES</div>
             <h1 className="hero-title">
@@ -314,72 +320,6 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
                 </span>
                 Watch Video
               </button>
-            </div>
-          </div>
-
-          <div className="hero-media-col">
-            <div className="hero-keynote-stage">
-              {/* Subtle ambient back aura */}
-              <div className="hero-stage-aura" />
-
-              {/* Top Keynote Platform Badge */}
-              <div className="hero-stage-header">
-                <div className="hero-stage-status">
-                  <span className="hero-pulse-dot" />
-                  <span className="hero-stage-status-text">SINCERITY CORE ECOSYSTEM</span>
-                </div>
-                <span className="hero-stage-version-pill">v2.4 Live</span>
-              </div>
-
-              {/* Center Emblem Visual with subtle glass pedestal */}
-              <div className="hero-stage-centerpiece">
-                <div className="hero-stage-emblem-wrap">
-                  <SincerityLogo size={200} />
-                </div>
-                <div className="hero-stage-pedestal" />
-              </div>
-
-              {/* Floating Glass Telemetry Micro-Cards */}
-              <div
-                className="hero-floating-card card-top-left"
-                onClick={() => openDemoModal('Optimedicate (SSDC)')}
-                role="button"
-                tabIndex={0}
-                title="Click to request demo"
-              >
-                <div className="floating-card-icon icon-medical">
-                  <Activity size={13} />
-                </div>
-                <div className="floating-card-content">
-                  <span className="floating-card-title">Optimedicate SSDC</span>
-                  <span className="floating-card-meta">Diagnostic Intelligence · Live</span>
-                </div>
-              </div>
-
-              <div
-                className="hero-floating-card card-bottom-right"
-                onClick={() => openDemoModal('WACentral')}
-                role="button"
-                tabIndex={0}
-                title="Click to request demo"
-              >
-                <div className="floating-card-icon icon-whatsapp">
-                  <Zap size={13} />
-                </div>
-                <div className="floating-card-content">
-                  <span className="floating-card-title">WACentral Gateway</span>
-                  <span className="floating-card-meta">&lt;45ms Cloud API Latency</span>
-                </div>
-              </div>
-
-              {/* Bottom platform capability ribbon */}
-              <div className="hero-stage-ribbon">
-                <span className="stage-ribbon-item">● 5 Tech Domains</span>
-                <span className="stage-ribbon-divider" />
-                <span className="stage-ribbon-item">● Distributed Cloud</span>
-                <span className="stage-ribbon-divider" />
-                <span className="stage-ribbon-item">● Silicon &amp; IoT</span>
-              </div>
             </div>
           </div>
         </div>

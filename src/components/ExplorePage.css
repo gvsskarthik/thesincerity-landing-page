@@ -257,17 +257,18 @@
    2. Hero Section
    ========================================================================== */
 .hero-section {
-  padding: 60px 0 50px;
+  padding: 72px 0;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(ellipse at 85% 30%, rgba(239, 246, 255, 0.8) 0%, rgba(250, 251, 252, 0) 65%);
+  background: #ffffff;
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: 40px;
+  gap: 80px;
+  min-height: 430px;
 }
 
 .tag-overline {
@@ -348,223 +349,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0;
 }
 
-.hero-keynote-stage {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 32px;
-  padding: 24px 28px 22px;
+.hero-brand {
+  --hero-logo-size: 330px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  box-shadow:
-    0 24px 48px -12px rgba(15, 23, 42, 0.08),
-    0 4px 16px -2px rgba(15, 23, 42, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-  overflow: hidden;
-}
-
-.hero-keynote-stage:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 30px 60px -12px rgba(15, 23, 42, 0.12),
-    0 8px 24px -2px rgba(15, 23, 42, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-}
-
-.hero-stage-aura {
-  position: absolute;
-  top: -25%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.hero-stage-header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(241, 245, 249, 0.95);
-  position: relative;
-  z-index: 2;
-}
-
-.hero-stage-status {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.hero-pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
-}
-
-.hero-stage-status-text {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #475569;
-  text-transform: uppercase;
-}
-
-.hero-stage-version-pill {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8.5px;
-  border-radius: 9999px;
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid rgba(37, 99, 235, 0.18);
-  letter-spacing: 0.02em;
-}
-
-.hero-stage-centerpiece {
-  position: relative;
-  padding: 16px 0 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.hero-stage-emblem-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.3s ease;
-  filter: drop-shadow(0 14px 28px rgba(7, 21, 36, 0.16));
-}
-
-.hero-keynote-stage:hover .hero-stage-emblem-wrap {
-  transform: scale(1.025);
-}
-
-.hero-stage-pedestal {
-  width: 220px;
-  height: 16px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(7, 21, 36, 0.3) 0%, rgba(7, 21, 36, 0.08) 48%, transparent 74%);
-  margin-top: -6px;
-}
-
-.hero-floating-card {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  border-radius: 14px;
-  padding: 8px 12px;
-  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 3;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.hero-floating-card:hover {
-  transform: translateY(-2px);
-  border-color: #2563eb;
-  box-shadow: 0 14px 28px -4px rgba(37, 99, 235, 0.2);
-}
-
-.card-top-left {
-  top: 56px;
-  left: 18px;
-}
-
-.card-bottom-right {
-  bottom: 54px;
-  right: 18px;
-}
-
-.floating-card-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.floating-card-icon.icon-medical {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.floating-card-icon.icon-whatsapp {
-  background: #f0fdf4;
-  color: #16a34a;
-}
-
-.floating-card-content {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
-.floating-card-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1.25;
-}
-
-.floating-card-meta {
-  font-size: 9.5px;
-  color: #64748b;
-  line-height: 1.2;
-  margin-top: 1px;
-}
-
-.hero-stage-ribbon {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(241, 245, 249, 0.95);
-  position: relative;
-  z-index: 2;
+  width: 100%;
+  max-width: 420px;
 }
 
-.stage-ribbon-item {
-  font-size: 11px;
-  font-weight: 600;
-  color: #475569;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-
-.stage-ribbon-divider {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #cbd5e1;
+.hero-text-col {
+  min-width: 0;
 }
 
 /* ==========================================================================
@@ -1935,14 +1734,13 @@
     justify-content: center;
   }
 
-  .hero-media-col {
-    order: -1;
+  .hero-section {
+    padding: 48px 0;
   }
 
-  .hero-keynote-stage {
-    max-width: 440px;
-    padding: 24px 22px 20px;
-    margin: 0 auto;
+  .hero-brand {
+    --hero-logo-size: 280px;
+    max-width: 360px;
   }
 
   .cards-scroll-grid {
@@ -2028,45 +1826,10 @@
 }
 
 @media (max-width: 480px) {
-  .hero-keynote-stage {
-    padding: 20px 14px 18px;
-    border-radius: 24px;
-  }
-
-  .hero-floating-card {
-    padding: 6px 10px;
-    gap: 7px;
-  }
-
-  .card-top-left {
-    top: 48px;
-    left: 8px;
-  }
-
-  .card-bottom-right {
-    bottom: 44px;
-    right: 8px;
-  }
-
-  .floating-card-icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  .floating-card-title {
-    font-size: 10px;
-  }
-
-  .floating-card-meta {
-    font-size: 8.5px;
-  }
-
-  .hero-stage-ribbon {
+  .hero-brand {
+    --hero-logo-size: 230px;
+    max-width: 290px;
     gap: 8px;
-  }
-
-  .stage-ribbon-item {
-    font-size: 9.5px;
   }
 
   .cards-scroll-grid {
