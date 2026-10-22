@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
-  ArrowDown,
   ArrowRight,
   Check,
   CheckCircle2,
@@ -361,12 +360,35 @@ export default function ExplorePage() {
                 </div>
               </div>
             </div>
-            <div className="hero-caption">
-              <span>Our products. Your possibilities.</span>
-              <a href="#technologies">
-                Discover Sincerity <ArrowDown size={14} />
+            <nav className="division-cards" aria-label="Explore Sincerity">
+              <a className="division-card" href="#technologies">
+                <span className="division-number" aria-hidden="true">
+                  01
+                </span>
+                <div className="division-copy">
+                  <h2>Sincerity Technologies</h2>
+                  <p>Explore our SaaS, AI, and communication products.</p>
+                  <span className="division-action">
+                    Explore Technologies <ArrowRight size={16} />
+                  </span>
+                </div>
               </a>
-            </div>
+              <a className="division-card" href="#services">
+                <span className="division-number" aria-hidden="true">
+                  02
+                </span>
+                <div className="division-copy">
+                  <h2>Sincerity Services</h2>
+                  <p>
+                    Technology services to help your business build, connect,
+                    and grow.
+                  </p>
+                  <span className="division-action">
+                    Explore Services <ArrowRight size={16} />
+                  </span>
+                </div>
+              </a>
+            </nav>
           </div>
         </section>
 
