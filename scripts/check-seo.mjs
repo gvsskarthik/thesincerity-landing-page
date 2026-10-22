@@ -40,6 +40,27 @@ for (const url of urls) {
     url + " still an empty JS shell",
   );
   assert(!/name="robots" content="noindex/.test(html));
+  if (path === "/products/optimedicare/") {
+    const visibleText = html
+      .split("<body>")[1]
+      .replace(/<script[\s\S]*?<\/script>/g, "")
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .toLowerCase();
+    for (const topic of [
+      "medical lab management software",
+      "pathology lab",
+      "blood test report management",
+      "health checkup packages",
+      "diagnostic centre",
+    ]) {
+      assert(
+        visibleText.includes(topic),
+        "OptiMediCare needs a visible explanation of " + topic,
+      );
+    }
+  }
+
   const json = JSON.parse(
     html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1],
   );

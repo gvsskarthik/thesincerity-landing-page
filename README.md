@@ -28,6 +28,11 @@ The production output is `dist/`. GitHub Actions builds and deploys `main` to Gi
 - `public/product-screens/`: real application interface captures with synthetic demonstration data.
 - `src/seo/pages.ts`: canonical SEO route catalogue and truthful structured data.
 - `src/data/serviceDetails.ts`: dedicated service page content.
+- `src/components/CapabilityStage.tsx`: manually controlled service explorer.
+- `src/components/DeliveryStory.tsx`: scroll-driven delivery chapters.
+- `src/components/AnimatedServiceIcon.tsx`: six SVG service marks with finite, accessible motion.
+- `src/components/ServiceScene.tsx`: illustrative SVG interface/system scenes.
+- `src/components/LabUseCases.tsx`: medical/pathology lab audiences, report workflows, and configured checkup packages.
 - `scripts/prerender.mjs`: renders complete static HTML, metadata, and the sitemap.
 - `scripts/check-seo.mjs`: validates built metadata, internal links, schema, and the sitemap.
 - `src/components/ExplorePage.css`: responsive page and dialog styles.
@@ -51,3 +56,5 @@ FormSubmit delivery depends on the mailbox's FormSubmit configuration and activa
 The build pre-renders twelve indexable pages and a noindex 404; interactive pages hydrate in the browser. Run `npm run check:seo` to recheck the built output. See `docs/seo.md` for search topic mapping, Google Search Console verification and sitemap submission, and host-specific redirect rules.
 
 Sincerity services target businesses in India and international clients. The public contact is `support@thesincerity.in`, telephone `+919988661683`. Forms use the corresponding FormSubmit destination; delivery requires that mailbox’s FormSubmit configuration/activation. No real test enquiries were sent.
+
+The expanded search-language audit is in `docs/search-intent-audit.md`. It records supported topics and excluded claims; it does not invent keyword volumes or rankings. Services motion can be paused on the overview page and respects system reduced-motion preferences.

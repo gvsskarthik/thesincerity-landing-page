@@ -1,0 +1,159 @@
+.animated-service-icon {
+  display: inline-block;
+  overflow: visible;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.animated-service-icon .asi-accent {
+  color: var(--icon-accent, currentColor);
+}
+.animated-service-icon .asi-paper {
+  fill: var(--icon-paper, #fff);
+}
+.animated-service-icon .asi-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.animated-service-icon .asi-layer,
+.animated-service-icon .asi-node,
+.animated-service-icon .asi-pulse,
+.animated-service-icon .asi-shift {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(
+      .animated-service-icon:hover,
+      a:hover .animated-service-icon,
+      button:hover .animated-service-icon,
+      a:focus-visible .animated-service-icon,
+      button:focus-visible .animated-service-icon,
+      .motion-active .animated-service-icon
+    )
+    .asi-draw {
+    animation: asi-line-arrive 2.8s ease-in-out both;
+  }
+  :is(
+      .animated-service-icon:hover,
+      a:hover .animated-service-icon,
+      button:hover .animated-service-icon,
+      a:focus-visible .animated-service-icon,
+      button:focus-visible .animated-service-icon,
+      .motion-active .animated-service-icon
+    )
+    .asi-shift {
+    animation: asi-lift 2.8s cubic-bezier(0.25, 0.7, 0.3, 1) both;
+  }
+  :is(
+      .animated-service-icon:hover,
+      a:hover .animated-service-icon,
+      button:hover .animated-service-icon,
+      a:focus-visible .animated-service-icon,
+      button:focus-visible .animated-service-icon,
+      .motion-active .animated-service-icon
+    )
+    .asi-pulse {
+    animation: asi-signal 2.8s ease-in-out both;
+  }
+  :is(
+      .animated-service-icon:hover,
+      a:hover .animated-service-icon,
+      button:hover .animated-service-icon,
+      a:focus-visible .animated-service-icon,
+      button:focus-visible .animated-service-icon,
+      .motion-active .animated-service-icon
+    )
+    .asi-node {
+    animation: asi-node-arrive 1.3s ease both;
+  }
+  :is(
+      .animated-service-icon:hover,
+      a:hover .animated-service-icon,
+      button:hover .animated-service-icon,
+      a:focus-visible .animated-service-icon,
+      button:focus-visible .animated-service-icon,
+      .motion-active .animated-service-icon
+    )
+    .asi-layer {
+    animation: asi-layer-separate 2.8s ease-in-out both;
+  }
+  .animated-service-icon .asi-node-two {
+    animation-delay: 0.12s;
+  }
+  .animated-service-icon .asi-node-three {
+    animation-delay: 0.24s;
+  }
+  .animated-service-icon .asi-layer-back {
+    --asi-layer-offset: 4px;
+  }
+  .animated-service-icon .asi-layer-middle {
+    --asi-layer-offset: 0px;
+  }
+  .animated-service-icon .asi-layer-front {
+    --asi-layer-offset: -4px;
+  }
+}
+
+@keyframes asi-line-arrive {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0.4;
+  }
+  45%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+@keyframes asi-lift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-3px);
+  }
+}
+@keyframes asi-signal {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  35% {
+    opacity: 0.35;
+    transform: scale(0.65);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+@keyframes asi-node-arrive {
+  0% {
+    opacity: 0.3;
+    transform: translateY(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes asi-layer-separate {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(var(--asi-layer-offset, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-service-icon *,
+  .animated-service-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}

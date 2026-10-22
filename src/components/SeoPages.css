@@ -250,3 +250,83 @@
   color: #656b66;
   margin: -8px 0 24px;
 }
+/* Dedicated services share the same crafted visual language as the overview. */
+.premium-service-detail {
+  background: #fff;
+}
+.premium-service-detail .service-detail-hero {
+  padding-block: 48px 88px;
+}
+.premium-service-detail .service-detail-hero h1 {
+  font-size: clamp(40px, 4.8vw, 66px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+.premium-service-detail .service-detail-overview {
+  background: #1d3426;
+  color: #f5f8ef;
+  border-color: #1d3426;
+}
+.premium-service-detail .service-detail-overview p {
+  color: #c1d0b6;
+}
+.premium-service-detail .service-detail-overview h2 {
+  font-weight: 450;
+}
+.premium-service-detail .service-detail-features {
+  gap: 0 64px;
+}
+.premium-service-detail .service-detail-features article {
+  padding-block: 26px 40px;
+}
+.detail-feature-mark {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #5c7e50;
+  --icon-accent: #a88d52;
+}
+.premium-service-detail .service-detail-features h3 {
+  font-size: 27px;
+  color: #2e492f;
+}
+.premium-service-detail .service-planning {
+  background: #f1f4ed;
+}
+.premium-service-detail .planning-card {
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 16px 48px -30px #18311e30;
+}
+.premium-service-detail .related-product {
+  background: #fff;
+}
+.premium-service-detail .related-product h2 {
+  color: #29472c;
+}
+@media (max-width: 800px) {
+  .premium-service-detail .service-detail-hero {
+    padding-block: 32px 64px;
+  }
+  .premium-service-detail .service-detail-hero h1 {
+    font-size: 48px;
+  }
+  .premium-service-detail .service-detail-features {
+    gap: 0 32px;
+  }
+}
+@media (max-width: 540px) {
+  .premium-service-detail .service-detail-hero {
+    padding-top: 22px;
+  }
+  .premium-service-detail .service-detail-hero h1 {
+    font-size: 38px;
+  }
+  .premium-service-detail .planning-card {
+    padding: 26px;
+  }
+  .premium-service-detail .service-detail-features h3 {
+    font-size: 24px;
+  }
+}

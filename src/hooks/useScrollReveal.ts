@@ -12,7 +12,7 @@ export default function useScrollReveal() {
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          entry.target.classList.add("is-revealed");
+          entry.target.classList.add("is-revealed", "motion-active");
           observer.unobserve(entry.target);
         }
       },

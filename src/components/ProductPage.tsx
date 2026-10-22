@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, Check, Plus } from "lucide-react";
 import ProductScreens from "./ProductScreens";
 import LabCapabilities from "./LabCapabilities";
+import LabUseCases from "./LabUseCases";
 import type { Product } from "../data/products";
 
 type Props = { product: Product; onEnquire: () => void };
@@ -144,6 +145,7 @@ export default function ProductPage({ product, onEnquire }: Props) {
       {product.screens && (
         <ProductScreens name={product.name} screens={product.screens} />
       )}
+      {lab && <LabUseCases />}
       {!beta && !lab && (
         <section
           className="connected-section section-space"

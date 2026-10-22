@@ -19,20 +19,20 @@ export const serviceDetails: ServiceDetail[] = [
   {
     path: "/services/web-development/",
     name: "Web development",
-    title: "Web Development Services | Sincerity",
+    title: "Website Design & Web Application Development | Sincerity",
     description:
-      "Website and web application development by Sincerity. Explore responsive business websites, customer portals, integrations, and ongoing improvements.",
+      "Website design and web application development for businesses: responsive company websites, landing pages, customer portals, website redesign, and integrations.",
     visual: "web-apps",
     headline: "Web development. Built around your users.",
     intro:
-      "Create a business website, customer portal, or web application that makes the next step clear. Sincerity brings design and development together around your requirements.",
+      "Website design and development for the way your business works. Create a responsive company website, product landing page, customer portal, or custom web application with a clear journey from the first visit to the next useful action.",
     overviewTitle: "Start with what the website needs to do.",
     overview:
       "A business website should help visitors understand your company and take a useful next step. A portal or web application needs to help users complete real tasks. We begin by discussing the audience, content, and workflows, then define an interface and development approach that fit. Your project might need a simple enquiry journey, account access, a dashboard, or connections to existing software. The scope comes from those needs rather than a fixed collection of template features.",
     includes: [
       {
-        title: "Business websites",
-        text: "Company, product, and service websites with a clear page structure, readable content, responsive layouts, and useful contact journeys.",
+        title: "Company websites & landing pages",
+        text: "Corporate websites, product landing pages, and service websites with a clear page structure, readable content, responsive layouts, and useful contact journeys.",
       },
       {
         title: "Web applications and portals",
@@ -59,6 +59,11 @@ export const serviceDetails: ServiceDetail[] = [
     ],
     questions: [
       {
+        question: "Can you create both the website design and the development?",
+        answer:
+          "Yes. We can discuss the page structure, user journeys, interface design, responsive development, forms, and integrations as one project. A new corporate website, a product landing page, and a custom web application each need a different scope.",
+      },
+      {
         question: "Can you redesign an existing website?",
         answer:
           "Yes. Share the current website and explain what is not working. We can discuss its content, layout, functionality, and technical setup before agreeing on the scope of a redesign.",
@@ -79,13 +84,13 @@ export const serviceDetails: ServiceDetail[] = [
   {
     path: "/services/app-development/",
     name: "App development",
-    title: "App Development Services | Sincerity",
+    title: "Mobile App Design & Development Services | Sincerity",
     description:
-      "Explore Sincerity app development services for business and customer workflows. Plan mobile applications, interface design, backend connections, and support.",
+      "Mobile app design and development for customer and business workflows. Discuss user journeys, application interfaces, backend development, APIs, and maintenance.",
     visual: "web-apps",
     headline: "App development. A useful experience, in hand.",
     intro:
-      "Turn a customer journey or business workflow into an application people can use with confidence. Start with the problem, then define the right screens, features, and connections.",
+      "Mobile app development starts with the job people need to do. Bring a customer-facing app, a staff workflow, or an existing application to improve; we help define the user experience, backend connections, and first release.",
     overviewTitle: "An application with a clear reason to exist.",
     overview:
       "A useful app gives people a straightforward way to complete a task. We help you think through who will use the application, where it will be used, and what information needs to move between the app and your business. Interface design, backend requirements, account access, and integrations all influence the development scope. Whether you have a new idea or an existing application to improve, we can discuss a practical first release and the work that should follow.",
@@ -99,8 +104,8 @@ export const serviceDetails: ServiceDetail[] = [
         text: "Organise the screens, navigation, forms, and feedback around how people use an application on a smaller screen.",
       },
       {
-        title: "Connected functionality",
-        text: "Develop the agreed application features and connect them to suitable backend services, APIs, or existing business systems.",
+        title: "Backend development & API integration",
+        text: "Develop the agreed application features and backend connections, including the APIs and existing business systems needed for the mobile workflow.",
       },
       {
         title: "Review and ongoing development",
@@ -118,6 +123,11 @@ export const serviceDetails: ServiceDetail[] = [
       "Account, data, backend, and integration requirements",
     ],
     questions: [
+      {
+        question: "Can we discuss Android and iOS app development?",
+        answer:
+          "Yes. Tell us whether your audience uses Android, iOS, or both, along with device features and distribution requirements. We review those needs before agreeing on platform coverage, the implementation approach, and release responsibilities.",
+      },
       {
         question: "Do I need designs before starting?",
         answer:
@@ -140,18 +150,18 @@ export const serviceDetails: ServiceDetail[] = [
     name: "SaaS development",
     title: "Custom SaaS Development Services | Sincerity",
     description:
-      "Custom SaaS development by Sincerity. Define a software product, design business workflows, develop dashboards and integrations, and plan ongoing improvements.",
+      "Custom SaaS and business software development: product discovery, MVP scope, dashboards, customer portals, workflows, APIs, and ongoing product improvements.",
     visual: "saas",
     headline: "Custom SaaS. Your workflow, made into software.",
     intro:
-      "Build a software platform around a specific business problem. We help turn your requirements into a considered product scope, useful workflows, and a clear development path.",
+      "Turn a product idea or an internal business process into custom software. From SaaS product discovery and an MVP to dashboards, portals, and integrations, define a platform around the people who will use it.",
     overviewTitle: "Build the product your workflow calls for.",
     overview:
       "Off-the-shelf tools do not fit every business process. A custom SaaS product can bring the agreed workflows into a platform shaped around your users and rules. The starting point is understanding the problem, the people involved, and the information they need. Together we can identify the core experience, account requirements, dashboards, integrations, and priorities for a first release. Additional functionality should follow a clear need rather than making the first version unnecessarily complicated.",
     includes: [
       {
-        title: "Product discovery and scope",
-        text: "Work through the business problem, user types, feature priorities, and the first set of workflows the platform needs to support.",
+        title: "Product discovery & MVP development",
+        text: "Work through the business problem, user types, feature priorities, and the minimum viable product: a focused first release that supports the most important workflow.",
       },
       {
         title: "Dashboards and business workflows",
@@ -177,6 +187,11 @@ export const serviceDetails: ServiceDetail[] = [
       "The first-release priorities and required integrations",
     ],
     questions: [
+      {
+        question: "What does SaaS MVP development include?",
+        answer:
+          "An MVP, or minimum viable product, is an agreed first version built around a clear user problem. We define the essential workflows, interface, data, account needs, and integrations for that version, then discuss what should follow after users can try it.",
+      },
       {
         question: "Can we begin with a smaller first version?",
         answer:
@@ -204,18 +219,18 @@ export const serviceDetails: ServiceDetail[] = [
     name: "Cloud & API integration",
     title: "Cloud & API Integration Services | Sincerity",
     description:
-      "Cloud and API integration services from Sincerity. Connect applications, databases, and business tools with clearly defined data workflows and hosting support.",
+      "Cloud and API integration services for business applications: third-party APIs, webhooks, database connections, data workflows, and cloud hosting support.",
     visual: "cloud-data",
     headline: "Connected systems. A clearer flow of information.",
     intro:
-      "Bring the right information to the right application. Discuss cloud-based systems, API connections, and data workflows that help your business tools work together.",
+      "Connect business applications through APIs, webhooks, and defined data workflows. Review third-party software connections, databases, and cloud hosting requirements so your systems can share the information the workflow needs.",
     overviewTitle: "Understand the connection before building it.",
     overview:
       "Integration work begins with the systems involved, the information they expose, and the rules for using it. We review the available APIs, account access requirements, data formats, and the workflow you want to support. A connection may need to pass an event between applications, retrieve information for a dashboard, or support a recurring data process. We define what should happen when data is missing or a connected service is unavailable, as well as the normal path.",
     includes: [
       {
-        title: "API integrations",
-        text: "Connect suitable third-party APIs and business applications according to their available interfaces and the requirements of your workflow.",
+        title: "Third-party APIs & webhooks",
+        text: "Connect suitable APIs and receive webhook events between business applications. Define authentication, data formats, validation, and error handling for the agreed workflow.",
       },
       {
         title: "Cloud applications and hosting support",
@@ -241,6 +256,12 @@ export const serviceDetails: ServiceDetail[] = [
       "Access requirements, exceptions, and operational responsibilities",
     ],
     questions: [
+      {
+        question:
+          "What is the difference between an API and a webhook integration?",
+        answer:
+          "An application commonly calls an API to request information or perform an action. A webhook sends an event to a configured address when something happens in the connected system. A business workflow may need both, with authentication and error handling designed around the available interfaces.",
+      },
       {
         question: "Can every application be integrated?",
         answer:
@@ -268,17 +289,17 @@ export const serviceDetails: ServiceDetail[] = [
     name: "Technical support",
     title: "Software Maintenance & Technical Support | Sincerity",
     description:
-      "Discuss software maintenance and technical support with Sincerity. Explore application troubleshooting, feature updates, technical review, and development support.",
+      "Software maintenance and application support for businesses. Discuss bug fixes, website and app maintenance, integration troubleshooting, and feature improvements.",
     visual: "support",
     headline: "Software support. Keep your next step clear.",
     intro:
-      "Maintain, troubleshoot, and improve the applications your business relies on. Tell us what needs attention and we can discuss a suitable support or development scope.",
+      "Keep improving the software your business relies on. Discuss website maintenance, mobile app maintenance, bug fixing, integration troubleshooting, or a planned sequence of feature updates with clear responsibilities.",
     overviewTitle: "Support that starts with the actual issue.",
     overview:
       "An application may need a bug fixed, a feature updated, an integration reviewed, or a clearer plan for future development. We start by understanding the current setup, the impact on users, and the work you need to complete. Existing documentation, reproducible steps, and the application’s technical context help define the next action. Ongoing support can then be discussed with clear responsibilities and priorities rather than an undefined promise to cover every possible issue.",
     includes: [
       {
-        title: "Application troubleshooting",
+        title: "Application troubleshooting & bug fixes",
         text: "Review the reported behaviour and technical context, investigate a reproducible issue, and discuss an appropriate fix or next step.",
       },
       {
@@ -306,6 +327,11 @@ export const serviceDetails: ServiceDetail[] = [
     ],
     questions: [
       {
+        question: "Can you maintain an existing website or mobile app?",
+        answer:
+          "We can review an existing website, web application, or mobile app and discuss maintenance work. The starting point is its current technical setup, source access, reported issues, dependencies, and the responsibilities of the people already maintaining it.",
+      },
+      {
         question: "Is this the right place for product support?",
         answer:
           "If you use a Sincerity product, the Customer support link in the footer opens a product-support enquiry. This page also covers enquiries about maintenance and development work for business applications.",
@@ -325,13 +351,13 @@ export const serviceDetails: ServiceDetail[] = [
   {
     path: "/services/whatsapp-integration/",
     name: "WhatsApp integration",
-    title: "WhatsApp Business Integration Services | Sincerity",
+    title: "WhatsApp Business API & Chatbot Integration | Sincerity",
     description:
-      "Explore WhatsApp business messaging integration with Sincerity and WACentral: application connections, webhooks, managed clients, phone routes, and chatbot flows.",
+      "WhatsApp Business API integration with Sincerity and WACentral. Explore Meta Cloud API configuration, webhooks, business clients, and visual chatbot flows.",
     visual: "cloud-data",
     headline: "WhatsApp integration. Connected to your workflow.",
     intro:
-      "Discuss how WhatsApp business messaging can connect with your application. Explore client workspaces, phone routes, webhooks, and chatbot routing through WACentral.",
+      "Connect WhatsApp Business API messaging to your application. Explore Meta Cloud API phone configuration, managed client workspaces, webhook integration, and visual chatbot flows through WACentral.",
     overviewTitle: "Connect the conversation to the software.",
     overview:
       "A useful messaging integration needs more than a send button. The business account setup, phone route, message flow, webhook destination, and application behaviour all need to fit together. Sincerity’s WACentral product provides a developer workspace for managed clients, phone routes, signed requests, and chatbot routing. We can walk through that workspace and discuss how your own application would connect. The scope depends on your business accounts, the required conversation flow, and the configuration available for your integration.",
@@ -345,7 +371,7 @@ export const serviceDetails: ServiceDetail[] = [
         text: "Explore how WACentral organises managed client workspaces, account details, and connected phone routes.",
       },
       {
-        title: "Chatbot routing and flows",
+        title: "WhatsApp chatbot integration",
         text: "Discuss the visual chatbot workspace and the server-side, SaaS, or tenant routing options relevant to your configuration.",
       },
       {
@@ -364,6 +390,11 @@ export const serviceDetails: ServiceDetail[] = [
       "The phone routes, clients, and chatbot behaviour you need",
     ],
     questions: [
+      {
+        question: "Can a WhatsApp chatbot connect to our business software?",
+        answer:
+          "We can review your conversation flow and application’s interfaces alongside WACentral’s webhook configuration and server-side, SaaS, or tenant chatbot routing. The connection and the actions a chatbot can perform depend on the agreed integration and the business systems involved.",
+      },
       {
         question: "Is WACentral a WhatsApp integration product?",
         answer:

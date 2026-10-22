@@ -31,16 +31,16 @@ export const seoPages: SeoPage[] = [
   })),
   {
     path: "/products/optimedicare/",
-    title: "OptiMediCare | Laboratory Management Software by Sincerity",
+    title: "Medical & Pathology Lab Management Software | OptiMediCare",
     description:
-      "OptiMediCare lab management software connects patient registration, test results, laboratory reports, billing, accounts, and WhatsApp report workflows.",
+      "OptiMediCare software for medical and pathology labs: blood test reports, configured health checkup packages, patient registration, billing, and accounts.",
     kind: "product",
   },
   {
     path: "/products/wacentral/",
-    title: "WACentral | WhatsApp Business Messaging & API Integration",
+    title: "WhatsApp Business API Integration & Chatbots | WACentral",
     description:
-      "Explore WACentral by Sincerity: WhatsApp messaging integrations, managed business clients, phone routes, webhooks, signed requests, and visual chatbot flows.",
+      "Connect WhatsApp Business API messaging to your software with WACentral: Meta Cloud API phone routes, managed clients, webhooks, and visual chatbot flows.",
     kind: "product",
   },
   {

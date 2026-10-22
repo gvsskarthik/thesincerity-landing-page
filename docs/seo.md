@@ -88,3 +88,9 @@ These references guided the implementation. Structured data supplies explicit in
 The user supplied `support@thesincerity.in` and `+919988661683`. These are now reflected in the public footer, email links, enquiry destination, privacy copy, and Organization/ContactPoint structured data. The new form destination requires the support mailbox’s existing FormSubmit activation/configuration; mocked tests do not establish real email receipt.
 
 The homepage uses solid pure white at the document, body, header, and main content levels. Technologies and Services are side by side above 640px and stack on narrow phones; the three product cards remain vertically stacked.
+
+## Expanded search-language review — 23 October 2026
+
+The content was reviewed by the actual job and audience for each offering. OptiMediCare now explicitly describes medical and pathology lab management, diagnostic centres, blood test report management, health checkup packages, and configured laboratory disciplines. WACentral and all six services received relevant commercial terminology and explanatory FAQs. Coverage is documented in `docs/search-intent-audit.md`, with source evidence and unsupported claims that were deliberately excluded. No keyword volume or ranking data was available, and no invented count or ranking is claimed.
+
+The build check now verifies that important laboratory topics appear in the visible pre-rendered body rather than only in metadata. The twelve-route structure, canonical behaviour, real contact details, and Search Console verification requirements remain in place.

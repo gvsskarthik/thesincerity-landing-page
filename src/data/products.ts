@@ -31,13 +31,13 @@ export const products: Product[] = [
   {
     name: "OptiMediCare",
     path: "/products/optimedicare/",
-    category: "Laboratory management software",
+    category: "Medical & pathology lab management software",
     status: "Available",
     description:
-      "Patients, tests, reports, and billing. One connected lab workspace.",
+      "Medical and pathology lab management software for patient registration, blood test reports, health checkup packages, and billing.",
     detail:
-      "OptiMediCare brings patient registration, test selection, result entry, reporting, billing, and accounts into one laboratory workspace. Track daily activity, review pending reports, and manage payments without jumping between separate tools.",
-    audience: "Medical laboratories",
+      "OptiMediCare is laboratory management software for medical laboratories, pathology labs, and diagnostic centres. Connect patient registration, your configured blood tests and health checkup packages, result entry, laboratory report preparation, billing, and accounts in one workspace.",
+    audience: "Medical laboratories, pathology labs, and diagnostic centres",
     image: optimedicateImage,
     theme: "lab",
     headline: "For the work that matters.",
@@ -48,16 +48,16 @@ export const products: Product[] = [
         text: "Register patient details, select individual tests or packages, and prepare the bill in one workflow.",
       },
       {
-        title: "Results & reporting.",
-        text: "Enter test values, review report status, and prepare reports for printing or WhatsApp.",
+        title: "Blood test & pathology reports.",
+        text: "Enter laboratory test results, review report status, and prepare blood test reports and other configured pathology reports for printing, PDF download, or WhatsApp.",
       },
       {
         title: "Billing & collections.",
         text: "Track bill amounts, payments, dues, discounts, and payment methods.",
       },
       {
-        title: "Your test catalogue.",
-        text: "Organise individual tests, test groups, and hospital-specific packages.",
+        title: "Tests & health checkup packages.",
+        text: "Organise individual tests, test groups, and hospital-specific packages. Build health checkup packages from the tests configured in your laboratory’s catalogue.",
       },
       {
         title: "Referrals & partner labs.",
@@ -136,6 +136,22 @@ export const products: Product[] = [
     ],
     questions: [
       {
+        question: "Is OptiMediCare for medical and pathology lab management?",
+        answer:
+          "Yes. It supports the administrative workflow of medical laboratories, pathology labs, and diagnostic centres: patient registration, configured tests and packages, result entry, lab reports, billing, payments, and accounts. Our team can review your laboratory’s workflow in a demonstration.",
+      },
+      {
+        question:
+          "Can we prepare blood test reports and health checkup packages?",
+        answer:
+          "Your laboratory can configure blood tests and other laboratory tests with its own parameters, units, and reference ranges. Staff enter the results and prepare reports through the report workspace. Related tests can be organised into groups or health checkup packages using the catalogue’s package functionality.",
+      },
+      {
+        question: "Does this website offer blood tests or medical advice?",
+        answer:
+          "Sincerity provides the OptiMediCare software. It does not provide blood testing, health checkups, or medical interpretation through this website. Your laboratory performs the tests, reviews the results, and is responsible for the information and reports it issues.",
+      },
+      {
         question: "Can reports use our laboratory’s branding?",
         answer:
           "You can configure the lab name and contact details, report print positions, text sizes, and heading options. A lab signature image can be used on downloaded and WhatsApp PDFs. Ask our team to review your report format during the walkthrough.",
@@ -170,12 +186,12 @@ export const products: Product[] = [
   {
     name: "WACentral",
     path: "/products/wacentral/",
-    category: "Messaging infrastructure",
+    category: "WhatsApp Business API integration",
     status: "Available",
     description:
       "WhatsApp messaging, clients, and chatbot flows. One developer workspace.",
     detail:
-      "WACentral connects WhatsApp business messaging with SaaS applications and managed business accounts. Its developer workspace brings client onboarding, phone routes, webhook configuration, integration credentials, and chatbot routing into one place.",
+      "WACentral connects WhatsApp Business API messaging with SaaS applications and managed business accounts. Its developer workspace brings client onboarding, Meta Cloud API phone routes, webhook configuration, HMAC-signed integration requests, and visual chatbot routing into one place.",
     audience: "Businesses and developers",
     image: wacentralImage,
     theme: "messaging",
@@ -234,6 +250,16 @@ export const products: Product[] = [
       },
     ],
     questions: [
+      {
+        question: "How does WACentral connect to the WhatsApp Business API?",
+        answer:
+          "The workspace includes Meta Cloud API configuration, connected phone routes, managed clients, HTTPS webhooks, and signed integration requests. Account access, permissions, phone setup, and the application’s message workflow need to be configured for your business.",
+      },
+      {
+        question: "Can developers manage more than one business client?",
+        answer:
+          "The SaaS developer workspace includes managed client onboarding and a client directory, with messaging configuration and phone routes for downstream business accounts. Ask for a walkthrough of the account structure and access requirements for your integration.",
+      },
       {
         question: "Can I connect my own application?",
         answer:

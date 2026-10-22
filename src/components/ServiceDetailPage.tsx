@@ -1,12 +1,14 @@
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import type { ServiceDetail } from "../data/serviceDetails";
-import ServiceVisual from "./ServiceVisual";
+import ServiceScene from "./ServiceScene";
+import { sceneForPath } from "../data/serviceScene";
+import AnimatedServiceIcon from "./AnimatedServiceIcon";
 import "./SeoPages.css";
 
 type Props = { service: ServiceDetail; onEnquire: (service: string) => void };
 export default function ServiceDetailPage({ service, onEnquire }: Props) {
   return (
-    <div className="service-detail-page">
+    <div className="service-detail-page premium-service-detail">
       <nav className="container breadcrumbs" aria-label="Breadcrumb">
         <a href="/">Sincerity</a>
         <span aria-hidden="true">/</span>
@@ -30,10 +32,15 @@ export default function ServiceDetailPage({ service, onEnquire }: Props) {
             <ArrowRight size={16} />
           </button>
         </div>
-        <ServiceVisual type={service.visual} />
+        <div className="detail-scene" data-reveal>
+          <ServiceScene type={sceneForPath(service.path)} />
+        </div>
       </section>
       <section className="service-detail-overview section-space">
-        <div className="container company-layout" data-reveal>
+        <div
+          className="container company-layout detail-overview-layout"
+          data-reveal
+        >
           <h2>{service.overviewTitle}</h2>
           <p>{service.overview}</p>
         </div>
@@ -56,7 +63,13 @@ export default function ServiceDetailPage({ service, onEnquire }: Props) {
         <div className="service-detail-features">
           {service.includes.map((item, index) => (
             <article key={item.title} data-reveal>
-              <span className="highlight-number">0{index + 1}</span>
+              <div className="detail-feature-mark">
+                <span className="highlight-number">0{index + 1}</span>
+                <AnimatedServiceIcon
+                  type={sceneForPath(service.path)}
+                  size={48}
+                />
+              </div>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </article>
