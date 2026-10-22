@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Maximize2, Minus, Plus, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Maximize2,
+  Minus,
+  Plus,
+  X,
+} from "lucide-react";
 import type { ProductScreen } from "../data/products";
+import "./ProductScreens.css";
 
 type Props = { name: string; screens: ProductScreen[] };
 
@@ -36,7 +45,10 @@ export default function ProductScreens({ name, screens }: Props) {
   const [active, setActive] = useState<ProductScreen | null>(null);
   const [zoomed, setZoomed] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
+  const viewingArea = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
+  const isOpen = active !== null;
+  const activeIndex = active ? screens.indexOf(active) : 0;
   const overview = screens[0];
   const lab = name === "OptiMediCare";
   const selectedScreens = (labels: string[]) =>
@@ -50,20 +62,28 @@ export default function ProductScreens({ name, screens }: Props) {
   const setup = lab ? selectedScreens(["Test catalogue", "Lab setup"]) : [];
 
   useEffect(() => {
-    if (!active) return;
+    if (!isOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
-      opener.current?.focus();
+      if (opener.current?.isConnected) opener.current.focus();
     };
-  }, [active]);
+  }, [isOpen]);
 
   function open(screen: ProductScreen, button: HTMLButtonElement) {
     opener.current = button;
     setActive(screen);
     setZoomed(false);
     dialog.current?.showModal();
+  }
+
+  function navigate(direction: number) {
+    setActive(
+      screens[(activeIndex + direction + screens.length) % screens.length],
+    );
+    setZoomed(false);
+    viewingArea.current?.scrollTo({ top: 0, left: 0 });
   }
 
   function frame(screen: ProductScreen, eager = false) {
@@ -87,6 +107,7 @@ export default function ProductScreens({ name, screens }: Props) {
           <button
             onClick={(event) => open(screen, event.currentTarget)}
             aria-label={`Enlarge ${screen.label} screenshot`}
+            aria-haspopup="dialog"
           >
             <Maximize2 size={14} />
             <span>Explore screen</span>
@@ -96,6 +117,7 @@ export default function ProductScreens({ name, screens }: Props) {
           className="application-image"
           onClick={(event) => open(screen, event.currentTarget)}
           aria-label={`View ${screen.label} screenshot in detail`}
+          aria-haspopup="dialog"
         >
           <img
             src={screen.src}
@@ -121,6 +143,7 @@ export default function ProductScreens({ name, screens }: Props) {
     <>
       <section
         className="product-stage container"
+        id="screens"
         aria-labelledby="stage-title"
       >
         <div className="stage-heading">
@@ -128,6 +151,47 @@ export default function ProductScreens({ name, screens }: Props) {
           <p>{overview.description}</p>
         </div>
         <div className="stage-surface">{frame(overview, true)}</div>
+        <div className="product-screen-index">
+          <div className="screen-index-heading">
+            <p>Explore the workspace</p>
+            <span>{screens.length} real application screens</span>
+          </div>
+          <div
+            className="screen-thumbnail-list"
+            role="group"
+            aria-label={`${name} screenshots`}
+          >
+            {screens.map((screen, index) => (
+              <button
+                className="screen-thumbnail"
+                key={screen.src}
+                onClick={(event) => open(screen, event.currentTarget)}
+                aria-haspopup="dialog"
+                aria-label={`Explore ${screen.label}, screen ${index + 1} of ${screens.length}`}
+              >
+                <span className="screen-thumbnail-image">
+                  <img
+                    src={screen.src}
+                    alt=""
+                    width={160}
+                    height={100}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span aria-hidden="true">
+                    <Maximize2 size={16} />
+                  </span>
+                </span>
+                <span className="screen-thumbnail-label">
+                  <span aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  {screen.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
         <p className="stage-footnote">
           A closer look at the real product. Select any screen to inspect the
           details.
@@ -246,7 +310,7 @@ export default function ProductScreens({ name, screens }: Props) {
         </div>
       </section>
       <dialog
-        className="screen-dialog"
+        className="screen-dialog screen-viewer"
         ref={dialog}
         aria-labelledby="screen-dialog-title"
         onClose={() => {
@@ -255,6 +319,13 @@ export default function ProductScreens({ name, screens }: Props) {
         }}
         onClick={(event) => {
           if (event.target === event.currentTarget) dialog.current?.close();
+        }}
+        onKeyDown={(event) => {
+          if (zoomed || event.altKey || event.ctrlKey || event.metaKey) return;
+          if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            event.preventDefault();
+            navigate(event.key === "ArrowLeft" ? -1 : 1);
+          }
         }}
       >
         <div className="screen-dialog-header">
@@ -293,13 +364,56 @@ export default function ProductScreens({ name, screens }: Props) {
           </div>
         </div>
         <div
+          ref={viewingArea}
           className={`screen-dialog-image ${zoomed ? "is-zoomed" : ""}`}
           tabIndex={0}
-          aria-label="Screenshot viewing area. Use arrow keys to scroll when zoomed."
+          aria-label={
+            zoomed
+              ? "Screenshot viewing area. Use arrow keys to scroll when zoomed."
+              : "Screenshot viewing area. Use left and right arrow keys to explore screens."
+          }
         >
           {active && (
-            <img src={active.src} alt={active.alt} width={1600} height={1000} />
+            <img
+              key={active.src}
+              src={active.src}
+              alt={active.alt}
+              width={1600}
+              height={1000}
+            />
           )}
+        </div>
+        <div className="screen-dialog-footer">
+          <button
+            className="screen-browse-button"
+            onClick={() => navigate(-1)}
+            aria-label="Previous screenshot"
+          >
+            <ArrowLeft size={18} />
+            <span>Previous</span>
+          </button>
+          <div
+            className="screen-dialog-caption"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <p>
+              <span>
+                {String(activeIndex + 1).padStart(2, "0")} /{" "}
+                {String(screens.length).padStart(2, "0")}
+              </span>
+              {active?.label}
+            </p>
+            <span>{active?.description}</span>
+          </div>
+          <button
+            className="screen-browse-button"
+            onClick={() => navigate(1)}
+            aria-label="Next screenshot"
+          >
+            <span>Next</span>
+            <ArrowRight size={18} />
+          </button>
         </div>
       </dialog>
     </>

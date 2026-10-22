@@ -1,4 +1,7 @@
 .service-scene {
+  --scene-ink: #304a31;
+  --scene-muted: #5d7254;
+  --scene-accent: #92ac83;
   position: relative;
   margin: 0;
   min-width: 0;
@@ -8,11 +11,7 @@
   overflow: hidden;
   isolation: isolate;
 }
-.service-scene svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
+.service-scene > svg { display: block; width: 100%; height: auto; }
 .service-scene figcaption {
   padding: 0 26px 24px;
   display: flex;
@@ -22,71 +21,20 @@
   font-size: 13px;
   line-height: 1.6;
 }
-.service-scene figcaption > span:first-child {
-  font-size: 8px;
-  letter-spacing: 0.16em;
-  color: #58694e;
-}
-.scene-concept-note {
-  font-size: 9px;
-  color: #58644f;
-}
+.scene-concept-note { font-size: 10px; color: #58644f; letter-spacing: .015em; }
 .service-scene.scene-dark {
+  --scene-ink: #e0ebd8;
+  --scene-muted: #bfd0b2;
+  --scene-accent: #9eb68a;
   background: #20362a;
   border-color: #4b6046;
 }
-.scene-dark figcaption {
-  color: #ccdac2;
-}
-.scene-dark figcaption > span:first-child,
-.scene-dark .scene-concept-note {
-  color: #abbf9f;
-}
-.is-revealed .scene-layer,
-.capability-panel .scene-layer {
-  animation: scene-assemble 0.85s cubic-bezier(0.18, 0.65, 0.3, 1) both;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.is-revealed .scene-device,
-.capability-panel .scene-device {
-  animation-delay: 0.13s;
-}
-.is-revealed .scene-badge,
-.capability-panel .scene-badge,
-.is-revealed .node-2 {
-  animation-delay: 0.23s;
-}
-.scene-connection {
-  animation: scene-connect 2.5s linear 2;
-}
-@keyframes scene-assemble {
-  from {
-    opacity: 0;
-    translate: 0 22px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-@keyframes scene-connect {
-  to {
-    stroke-dashoffset: -56;
-  }
-}
+.scene-dark figcaption { color: #d0ddc5; }
+.scene-dark .scene-concept-note { color: #b9cbaa; }
 @media (max-width: 540px) {
-  .service-scene {
-    border-radius: 14px;
-  }
-  .service-scene figcaption {
-    padding: 0 20px 20px;
-    font-size: 12px;
-  }
+  .service-scene { border-radius: 14px; }
+  .service-scene figcaption { padding: 0 20px 20px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .scene-layer,
-  .scene-connection {
-    animation: none !important;
-  }
+  .service-scene * { animation: none !important; transition: none !important; }
 }

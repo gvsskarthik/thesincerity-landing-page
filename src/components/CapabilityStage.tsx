@@ -21,7 +21,7 @@ export default function CapabilityStage() {
         </div>
         <p>
           Six disciplines.
-          <br />
+          <br />{" "}
           One considered approach.
         </p>
       </div>
@@ -45,7 +45,12 @@ export default function CapabilityStage() {
             </button>
           ))}
         </div>
-        <div className="capability-panel" id="capability-panel">
+        <div
+          className="capability-panel"
+          id="capability-panel"
+          role="region"
+          aria-label={`${service.name} illustration and details`}
+        >
           <div className="capability-scene" key={service.path}>
             <ServiceScene type={sceneForPath(service.path)} dark />
           </div>

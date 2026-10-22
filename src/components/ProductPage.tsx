@@ -39,6 +39,7 @@ export default function ProductPage({ product, onEnquire }: Props) {
             {beta && <span>Beta</span>}
           </a>
           <div className="product-anchor-links">
+            {product.screens && <a href="#screens">Screens</a>}
             {!beta && <a href="#workflow">Workflow</a>}
             <a href="#capabilities">Capabilities</a>
             <a href="#questions">Questions</a>

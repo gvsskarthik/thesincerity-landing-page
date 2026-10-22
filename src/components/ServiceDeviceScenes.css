@@ -1,0 +1,23 @@
+.device-scene { --device-ink: var(--scene-ink, #344a36); --device-muted: var(--scene-muted, #65735e); }
+.device-scene-label { fill: var(--device-muted); }
+.device-scene-guide { stroke: var(--scene-accent, #a0b394); opacity: .45; }
+.device-scene-panel { opacity: 1; }
+.scene-animate .device-scene-desktop,
+.scene-animate .device-scene-app-first { animation: device-scene-arrive 1s cubic-bezier(.2,.7,.2,1) both; }
+.scene-animate .device-scene-tablet,
+.scene-animate .device-scene-app-second { animation: device-scene-arrive 1.2s .12s cubic-bezier(.2,.7,.2,1) both; }
+.scene-animate .device-scene-web-phone,
+.scene-animate .device-scene-app-third { animation: device-scene-arrive 1.4s .24s cubic-bezier(.2,.7,.2,1) both; }
+.scene-animate .device-scene-web-content { animation: device-scene-clarify 1.2s .35s ease both; }
+.scene-animate .device-scene-app-arrow { animation: device-scene-clarify 1s .55s ease both; }
+.scene-animate .device-scene-app-arrow-last { animation-delay: .85s; }
+.scene-animate .device-scene-check { stroke-dasharray: 46; animation: device-scene-check 1.2s .75s ease both; }
+@keyframes device-scene-arrive { from { opacity: 0; translate: 0 15px; } to { opacity: 1; translate: 0 0; } }
+@keyframes device-scene-clarify { from { opacity: 0; } to { opacity: 1; } }
+@keyframes device-scene-check { from { stroke-dashoffset: 46; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .scene-animate .device-scene-panel,
+  .scene-animate .device-scene-web-content,
+  .scene-animate .device-scene-app-arrow,
+  .scene-animate .device-scene-check { animation: none; }
+}

@@ -1,0 +1,22 @@
+.workflow-scene { fill: none; }
+.workflow-scene-label { fill: var(--scene-muted, #61765a); }
+.scene-animate .workflow-scene-workspace,
+.scene-animate .workflow-scene-ticket { animation: workflow-scene-arrive .8s cubic-bezier(.2,.7,.2,1) both; }
+.scene-animate .workflow-scene-diagnose { animation: workflow-scene-arrive .9s .15s cubic-bezier(.2,.7,.2,1) both; }
+.scene-animate .workflow-scene-resolved { animation: workflow-scene-arrive 1s .35s cubic-bezier(.2,.7,.2,1) both; }
+.scene-animate .workflow-scene-column,
+.scene-animate .workflow-scene-step { animation: workflow-scene-clarify .65s .2s ease both; }
+.scene-animate .workflow-scene-column-1,
+.scene-animate .workflow-scene-step-1 { animation-delay: .45s; }
+.scene-animate .workflow-scene-column-2,
+.scene-animate .workflow-scene-step-2 { animation-delay: .7s; }
+.scene-animate .workflow-scene-diagnostic-result { animation: workflow-scene-clarify .7s .7s ease both; }
+.scene-animate .workflow-scene-check { stroke-dasharray: 44; animation: workflow-scene-check .9s .9s ease both; }
+.scene-animate .workflow-scene-route { stroke-dasharray: 5 6; animation: workflow-scene-route 2.4s ease both; }
+@keyframes workflow-scene-arrive { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes workflow-scene-clarify { from { opacity: .15; } to { opacity: 1; } }
+@keyframes workflow-scene-check { from { stroke-dashoffset: 44; } to { stroke-dashoffset: 0; } }
+@keyframes workflow-scene-route { from { stroke-dashoffset: 55; opacity: .2; } to { stroke-dashoffset: 0; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .workflow-scene * { animation: none !important; }
+}

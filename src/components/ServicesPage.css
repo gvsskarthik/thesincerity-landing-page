@@ -170,13 +170,18 @@
   align-self: start;
 }
 .capability-scene {
-  animation: capability-change 0.4s ease;
+  animation: capability-change 0.45s cubic-bezier(0.2, 0.65, 0.3, 1);
 }
 .capability-panel .service-scene {
   border: 0;
 }
 .capability-panel .service-scene figcaption {
-  display: none;
+  display: flex;
+  min-height: 82px;
+  padding: 0 22px 20px;
+  gap: 7px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 .capability-panel-copy {
   display: flex;
@@ -212,8 +217,8 @@
 }
 @keyframes capability-change {
   from {
-    opacity: 0.3;
-    translate: 0 10px;
+    opacity: 0.15;
+    translate: 0 8px;
   }
   to {
     opacity: 1;

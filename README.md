@@ -24,14 +24,15 @@ The production output is `dist/`. GitHub Actions builds and deploys `main` to Gi
 - `src/components/ExplorePage.tsx`: homepage, shared navigation/footer, and enquiry handling.
 - `src/data/products.ts`: product content, images, availability, and paths.
 - `src/components/ProductPage.tsx`: dedicated product presentation and FAQs.
-- `src/components/ProductScreens.tsx`: visible workflow screenshots and an accessible zoom viewer.
+- `src/components/ProductScreens.tsx`: visible workflow screenshots, indexed thumbnails, and an accessible viewer with zoom and keyboard browsing.
 - `public/product-screens/`: real application interface captures with synthetic demonstration data.
 - `src/seo/pages.ts`: canonical SEO route catalogue and truthful structured data.
 - `src/data/serviceDetails.ts`: dedicated service page content.
 - `src/components/CapabilityStage.tsx`: manually controlled service explorer.
 - `src/components/DeliveryStory.tsx`: scroll-driven delivery chapters.
 - `src/components/AnimatedServiceIcon.tsx`: six SVG service marks with finite, accessible motion.
-- `src/components/ServiceScene.tsx`: illustrative SVG interface/system scenes.
+- `src/components/ServiceScene.tsx`: shared service illustration frame, captions, and visibility-triggered motion.
+- `src/components/ServiceDeviceScenes.tsx`, `ServiceWorkflowScenes.tsx`, and `ServiceSystemScenes.tsx`: six distinct service-specific SVG compositions.
 - `src/components/LabUseCases.tsx`: medical/pathology lab audiences, report workflows, and configured checkup packages.
 - `scripts/prerender.mjs`: renders complete static HTML, metadata, and the sitemap.
 - `scripts/check-seo.mjs`: validates built metadata, internal links, schema, and the sitemap.
