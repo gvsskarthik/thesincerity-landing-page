@@ -288,38 +288,35 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
 
       {/* 2. Hero Section */}
       <section className="hero-section">
-        <div className="container hero-grid">
-          <div className="hero-media-col">
-            <div className="hero-brand">
-              <SincerityLogo size="var(--hero-logo-size)" />
-              <SincerityWordmark width="100%" className="hero-brand-wordmark" />
+        <div className="container">
+          <div className="hero-grid">
+            <div className="hero-media-col">
+              <div className="hero-brand">
+                <SincerityLogo size="var(--hero-logo-size)" />
+                <SincerityWordmark width="100%" className="hero-brand-wordmark" />
+              </div>
             </div>
-          </div>
 
-          <div className="hero-text-col">
-            <div className="tag-overline">TECHNOLOGY &middot; INNOVATION &middot; POSSIBILITIES</div>
-            <h1 className="hero-title">
-              Building a<br />
-              Smarter<br />
-              <span className="hero-title-accent">Tomorrow.</span>
-            </h1>
-            <p className="hero-subtitle">
-              We create products and provide technology services that make life and business simpler, smarter and more connected.
-            </p>
-            <div className="hero-buttons">
-              <a href="#products" className="btn-dark-pill btn-lg">
-                Explore Our Work <ArrowRight size={15} />
-              </a>
-              <button
-                type="button"
-                className="btn-video"
-                onClick={() => setVideoModalOpen(true)}
-              >
-                <span className="btn-video-icon">
-                  <Play size={13} fill="#071524" color="#071524" />
-                </span>
-                Watch Video
-              </button>
+            <div className="hero-text-col">
+              <h1 className="hero-title">
+                Technology.<br />
+                Built with purpose.
+              </h1>
+              <p className="hero-subtitle">
+                We build digital products and technology solutions for healthcare, business, and everyday life.
+              </p>
+              <div className="hero-buttons">
+                <a href="#products" className="btn-dark-pill btn-lg">
+                  Explore Our Products <ArrowRight size={15} />
+                </a>
+                <button
+                  type="button"
+                  className="btn-light-pill btn-lg"
+                  onClick={() => openDemoModal('General Demo & Inquiry')}
+                >
+                  Get in Touch
+                </button>
+              </div>
             </div>
           </div>
         </div>

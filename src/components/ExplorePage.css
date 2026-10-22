@@ -257,41 +257,32 @@
    2. Hero Section
    ========================================================================== */
 .hero-section {
-  padding: 72px 0;
+  padding: 48px 0 56px;
   position: relative;
-  overflow: hidden;
-  background: #ffffff;
+  background: #fafbfc;
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
-  gap: 80px;
-  min-height: 430px;
-}
-
-.tag-overline {
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  color: #64748b;
-  margin-bottom: 20px;
-  text-transform: uppercase;
+  gap: 56px;
+  padding: 60px 56px;
+  min-height: 400px;
+  background: #ffffff;
+  border: 1px solid #edf0f4;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px -20px rgba(7, 21, 36, 0.14), 0 4px 16px rgba(7, 21, 36, 0.03);
 }
 
 .hero-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 58px;
-  font-weight: 800;
-  line-height: 1.06;
+  font-size: clamp(36px, 3.7vw, 48px);
+  font-weight: 700;
+  line-height: 1.15;
   letter-spacing: -0.03em;
   color: #071524;
   margin-bottom: 22px;
-}
-
-.hero-title-accent {
-  color: #8fa0b5;
 }
 
 .hero-subtitle {
@@ -309,42 +300,6 @@
   flex-wrap: wrap;
 }
 
-.btn-video {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: none;
-  border: none;
-  font-size: 14.5px;
-  font-weight: 600;
-  color: #071524;
-  cursor: pointer;
-  padding: 8px 12px;
-  transition: opacity 0.2s ease;
-}
-
-.btn-video:hover {
-  opacity: 0.8;
-}
-
-.btn-video-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid #cbd5e1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.btn-video:hover .btn-video-icon {
-  transform: scale(1.05);
-  border-color: #94a3b8;
-}
-
 .hero-media-col {
   display: flex;
   justify-content: center;
@@ -353,13 +308,13 @@
 }
 
 .hero-brand {
-  --hero-logo-size: 330px;
+  --hero-logo-size: 230px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   width: 100%;
-  max-width: 420px;
+  max-width: 290px;
 }
 
 .hero-text-col {
@@ -1722,7 +1677,9 @@
 @media (max-width: 1024px) {
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 36px;
+    padding: 40px 32px;
+    min-height: 0;
     text-align: center;
   }
 
@@ -1739,8 +1696,8 @@
   }
 
   .hero-brand {
-    --hero-logo-size: 280px;
-    max-width: 360px;
+    --hero-logo-size: 200px;
+    max-width: 260px;
   }
 
   .cards-scroll-grid {
@@ -1826,9 +1783,23 @@
 }
 
 @media (max-width: 480px) {
+  .hero-section {
+    padding: 24px 0 36px;
+  }
+
+  .hero-grid {
+    padding: 32px 20px;
+    border-radius: 22px;
+    gap: 28px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+  }
+
   .hero-brand {
-    --hero-logo-size: 230px;
-    max-width: 290px;
+    --hero-logo-size: 170px;
+    max-width: 220px;
     gap: 8px;
   }
 
