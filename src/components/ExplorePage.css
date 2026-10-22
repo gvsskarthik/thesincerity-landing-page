@@ -340,6 +340,17 @@ h2 span {
 .product-number {
   opacity: 1;
 }
+.product-artwork {
+  display: block;
+  width: 100%;
+  max-width: 170px;
+  height: 150px;
+  min-height: 0;
+  flex: 1;
+  align-self: center;
+  object-fit: contain;
+  margin-block: 8px;
+}
 .product-symbol {
   width: 76px;
   height: 76px;

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import SincerityLogo from "./SincerityLogo";
 import SincerityWordmark from "./SincerityWordmark";
+import optimedicateIcon from "../assets/optimedicate-icon.png";
 import "./ExplorePage.css";
 
 type Product = {
@@ -23,6 +24,7 @@ type Product = {
   detail: string;
   audience: string;
   icon: typeof Microscope;
+  image?: string;
   theme: string;
 };
 
@@ -36,6 +38,7 @@ const products: Product[] = [
       "Optimedicate (SSDC) is our medical laboratory management product. Speak with our team to see the product in action and discuss how it fits your laboratory’s workflow.",
     audience: "For medical laboratories",
     icon: Microscope,
+    image: optimedicateIcon,
     theme: "lab",
   },
   {
@@ -425,9 +428,21 @@ export default function ExplorePage() {
                         <span>{product.category}</span>
                         <span className="product-number">0{index + 1}</span>
                       </div>
-                      <div className="product-symbol">
-                        <Icon size={44} strokeWidth={1.35} />
-                      </div>
+                      {product.image ? (
+                        <img
+                          className="product-artwork"
+                          src={product.image}
+                          alt=""
+                          width={500}
+                          height={500}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div className="product-symbol">
+                          <Icon size={44} strokeWidth={1.35} />
+                        </div>
+                      )}
                       <div className="product-identity-bottom">
                         <span>{product.name}</span>
                         <ChevronRight size={22} strokeWidth={1.3} />
