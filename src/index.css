@@ -6,7 +6,7 @@
     "Segoe UI",
     sans-serif;
   color: #171817;
-  background: #f7f7f3;
+  background: #f9f9f6;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -56,7 +56,7 @@ button:disabled {
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 100px;
+  scroll-padding-top: 160px;
 }
 @media (prefers-reduced-motion: reduce) {
   html {

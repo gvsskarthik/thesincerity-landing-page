@@ -1,98 +1,184 @@
-import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Plus } from "lucide-react";
 import ProductScreens from "./ProductScreens";
 import type { Product } from "../data/products";
 
 type Props = { product: Product; onEnquire: () => void };
 
 export default function ProductPage({ product, onEnquire }: Props) {
+  const lab = product.theme === "lab";
+  const beta = product.status === "Beta";
+  const steps = lab
+    ? [
+        { title: "Register", text: "Patients, tests, and packages" },
+        { title: "Process", text: "Result entry and report status" },
+        { title: "Report", text: "Report views, print, and sharing" },
+        { title: "Reconcile", text: "Payments, dues, and accounts" },
+      ]
+    : [
+        { title: "Connect", text: "Application and phone routes" },
+        { title: "Configure", text: "Clients and webhook destination" },
+        { title: "Route", text: "Conversation and chatbot flows" },
+        { title: "Review", text: "Messaging activity and logs" },
+      ];
   return (
     <div className={`product-page product-page-${product.theme}`}>
-      <div className="container product-subnav">
-        <a className="back-link" href="/#technologies">
-          <ArrowLeft size={15} />
-          All products
-        </a>
-        <span>{product.name}</span>
-        <button className="text-link" onClick={onEnquire}>
-          {product.status === "Beta"
-            ? "Enquire about access"
-            : "Request a demo"}
-          <ArrowRight size={15} />
-        </button>
+      <div className="product-nav-wrap">
+        <nav
+          className="container product-subnav"
+          aria-label={`${product.name} navigation`}
+        >
+          <a className="product-nav-name" href="#product-top">
+            {product.name}
+            {beta && <span>Beta</span>}
+          </a>
+          <div className="product-anchor-links">
+            {!beta && <a href="#workflow">Workflow</a>}
+            <a href="#capabilities">Capabilities</a>
+            <a href="#questions">Questions</a>
+          </div>
+          <button className="product-nav-cta" onClick={onEnquire}>
+            {beta ? "Enquire about access" : "Request a demo"}
+            <ArrowRight size={14} />
+          </button>
+        </nav>
       </div>
       <section
-        className="product-page-hero container"
+        className="product-editorial-hero container"
+        id="product-top"
         aria-labelledby="product-title"
       >
-        <div className="product-page-copy">
-          <p className="eyebrow">SINCERITY TECHNOLOGIES / {product.category}</p>
-          <h1 id="product-title">
-            {product.name}
-            <span>{product.headline}</span>
-          </h1>
-          <p className="product-page-description">{product.description}</p>
-          <div className="product-page-actions">
-            {" "}
-            <button className="button button-dark" onClick={onEnquire}>
-              {product.status === "Beta"
-                ? "Explore beta access"
-                : "Arrange a walkthrough"}
-              <ArrowRight size={16} />
-            </button>
-            {product.appUrl && (
-              <a
-                className="text-link"
-                href={product.appUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open {product.name}
-                <ArrowRight size={16} />
-              </a>
-            )}
+        <div className="product-identity">
+          <img src={product.image} alt="" width={64} height={64} />
+          <div>
+            <p>{product.name}</p>
+            <span>
+              {product.category} {beta ? "· Beta" : "by Sincerity"}
+            </span>
           </div>
-          <p className="availability">
-            <span
-              className={
-                product.status === "Beta"
-                  ? "availability-dot beta-dot"
-                  : "availability-dot"
-              }
+        </div>
+        <h1 id="product-title">
+          {lab ? (
+            <>
+              Your lab.
+              <br />
+              <span>Working together.</span>
+            </>
+          ) : beta ? (
+            <>
+              Closer conversations.
+              <br />
+              <span>New possibilities.</span>
+            </>
+          ) : (
+            <>
+              One gateway.
+              <br />
+              <span>Every conversation.</span>
+            </>
+          )}
+        </h1>
+        <p className="product-hero-lead">{product.description}</p>
+        <div className="product-page-actions">
+          <button className="button button-dark" onClick={onEnquire}>
+            {beta ? "Explore beta access" : "Arrange a walkthrough"}
+            <ArrowRight size={16} />
+          </button>
+          {product.appUrl && (
+            <a
+              className="text-link"
+              href={product.appUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open {product.name}
+              <ArrowRight size={16} />
+            </a>
+          )}
+        </div>
+        {beta && (
+          <div className="beta-art">
+            <img
+              src={product.image}
+              alt="WA Connect product illustration"
+              width={500}
+              height={500}
             />
-            {product.status === "Beta"
-              ? "Currently in beta"
-              : "Available for product enquiries"}
-          </p>
-        </div>
-        <div className="product-page-art">
-          <img
-            src={product.image}
-            alt={`${product.name} product illustration`}
-            width={500}
-            height={500}
-            fetchPriority="high"
-          />
-        </div>
+          </div>
+        )}
       </section>
       {product.screens && (
         <ProductScreens name={product.name} screens={product.screens} />
       )}
+      {!beta && (
+        <section
+          className="connected-section section-space"
+          aria-labelledby="connected-title"
+        >
+          <div className="container">
+            <div className="connected-heading">
+              <p className="eyebrow">
+                {lab
+                  ? "ONE CONNECTED LAB WORKFLOW"
+                  : "THE INTEGRATION, EXPLAINED"}
+              </p>
+              <h2 id="connected-title">
+                {lab ? (
+                  <>
+                    Less switching.
+                    <br />
+                    <span>More of the whole picture.</span>
+                  </>
+                ) : (
+                  <>
+                    From your application.
+                    <br />
+                    <span>To your customer.</span>
+                  </>
+                )}
+              </h2>
+              <p>{product.detail}</p>
+            </div>
+            <ol className="workflow-path">
+              {steps.map((step, index) => (
+                <li key={step.title}>
+                  <span className="path-node">0{index + 1}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </li>
+              ))}
+            </ol>
+            {!lab && (
+              <div className="integration-note">
+                <Check size={20} />
+                <p>
+                  <strong>Built for your integration.</strong> Configure an
+                  HTTPS webhook destination and use HMAC-authenticated requests.
+                  Phone routes, clients, and chatbot routing are managed in the
+                  developer workspace.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
       <section
         className="product-overview section-space"
-        id="overview"
+        id="capabilities"
         aria-labelledby="overview-title"
       >
         <div className="container">
-          <div className="product-overview-heading">
-            <p className="eyebrow">THE PRODUCT, CONSIDERED</p>
-            <h2 id="overview-title">
-              {product.screens ? "Built around real work." : "A clear purpose."}
-              <br />
-              <span>
-                {product.screens ? "Connected in one place." : "A closer look."}
-              </span>
-            </h2>
-            <p>{product.detail}</p>
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">THE DETAILS THAT MAKE A DIFFERENCE</p>
+              <h2 id="overview-title">
+                {beta ? "A new conversation." : "Consider the possibilities."}
+              </h2>
+            </div>
+            <p className="section-intro">
+              {beta
+                ? product.detail
+                : `Tools for ${product.audience.toLowerCase()}, connected in ${product.name}.`}
+            </p>
           </div>
           <div className="product-highlights">
             {product.highlights.map((highlight, index) => (
@@ -106,40 +192,27 @@ export default function ProductPage({ product, onEnquire }: Props) {
         </div>
       </section>
       <section
-        className="product-walkthrough section-space"
-        aria-labelledby="walkthrough-title"
-      >
-        <div className="container walkthrough-layout">
-          <div>
-            <p className="eyebrow">EXPLORE WITH SINCERITY</p>
-            <h2 id="walkthrough-title">
-              See how it fits
-              <br />
-              <span>your business.</span>
-            </h2>
-          </div>
-          <div>
-            <p>
-              Get a closer look at {product.name} with our team. Tell us what
-              you need, ask your questions, and discuss the next step.
-            </p>
-            <button className="button button-dark" onClick={onEnquire}>
-              {product.status === "Beta"
-                ? "Enquire about WA Connect"
-                : "Request a live walkthrough"}
-              <ArrowRight size={16} />
-            </button>
-          </div>
-        </div>
-      </section>
-      <section
         className="product-faq section-space"
+        id="questions"
         aria-labelledby="faq-title"
       >
         <div className="container faq-layout">
           <div>
-            <p className="eyebrow">A FEW USEFUL DETAILS</p>
-            <h2 id="faq-title">Good questions.</h2>
+            <p className="eyebrow">BEFORE YOU GET STARTED</p>
+            <h2 id="faq-title">
+              A little more
+              <br />
+              <span>clarity.</span>
+            </h2>
+            <p className="faq-intro">
+              Have a specific workflow in mind?
+              <br />
+              Let’s talk it through.
+            </p>
+            <button className="text-link" onClick={onEnquire}>
+              Ask our team
+              <ArrowRight size={16} />
+            </button>
           </div>
           <div className="faq-list">
             {product.questions?.map((item) => (
@@ -158,7 +231,7 @@ export default function ProductPage({ product, onEnquire }: Props) {
               </summary>
               <p>
                 {product.name} is for {product.audience.toLowerCase()}. Contact
-                us to discuss whether it fits your requirements.
+                us to discuss how it fits your requirements.
               </p>
             </details>
             <details>
@@ -167,7 +240,7 @@ export default function ProductPage({ product, onEnquire }: Props) {
                 <Plus size={18} />
               </summary>
               <p>
-                {product.status === "Beta"
+                {beta
                   ? "WA Connect is currently in beta. Our team can explain the current capabilities and discuss access."
                   : `${product.name} is available for product enquiries and demonstrations. Speak with us about onboarding and your specific requirements.`}
               </p>
@@ -178,7 +251,7 @@ export default function ProductPage({ product, onEnquire }: Props) {
                 <Plus size={18} />
               </summary>
               <p>
-                Use the enquiry button to reach our team, or email{" "}
+                Arrange a walkthrough with our team or email{" "}
                 <a href="mailto:contact@thesincerity.in">
                   contact@thesincerity.in
                 </a>
@@ -186,6 +259,27 @@ export default function ProductPage({ product, onEnquire }: Props) {
               </p>
             </details>
           </div>
+        </div>
+      </section>
+      <section
+        className="product-walkthrough container"
+        aria-labelledby="walkthrough-title"
+      >
+        <div className="walkthrough-panel">
+          <img src={product.image} alt="" width={100} height={100} />
+          <p className="eyebrow">YOUR NEXT STEP</p>
+          <h2 id="walkthrough-title">
+            {beta ? "Explore what’s next." : "See it with your team."}
+          </h2>
+          <p>
+            Bring your questions. Explore your workflow.
+            <br />
+            Discover whether {product.name} is right for you.
+          </p>
+          <button className="button button-dark" onClick={onEnquire}>
+            {beta ? "Enquire about WA Connect" : "Request a live walkthrough"}
+            <ArrowRight size={16} />
+          </button>
         </div>
       </section>
       <div className="container product-return">

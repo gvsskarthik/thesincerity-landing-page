@@ -128,7 +128,8 @@ export const products: Product[] = [
     path: "/products/wacentral/",
     category: "Messaging infrastructure",
     status: "Available",
-    description: "A connection between your software and your customers.",
+    description:
+      "WhatsApp messaging, clients, and chatbot flows. One developer workspace.",
     detail:
       "WACentral connects WhatsApp business messaging with SaaS applications and managed business accounts. Its developer workspace brings client onboarding, phone routes, webhook configuration, integration credentials, and chatbot routing into one place.",
     audience: "Businesses and developers",

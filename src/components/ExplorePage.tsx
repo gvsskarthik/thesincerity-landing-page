@@ -364,14 +364,14 @@ export default function ExplorePage() {
                   <div>
                     <p className="eyebrow">SINCERITY TECHNOLOGIES</p>
                     <h2 id="technologies-title">
-                      Our thinking.
+                      Products with purpose.
                       <br />
-                      <span>In your hands.</span>
+                      <span>Built for real work.</span>
                     </h2>
                   </div>
                   <p className="section-intro">
-                    Purposeful software. Considered in every detail. Discover
-                    the product that fits your world.
+                    A connected laboratory. Business messaging. New
+                    conversations. Find the software that fits the way you work.
                   </p>
                 </div>
                 <div className="product-grid" id="products">
