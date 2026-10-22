@@ -56,3 +56,22 @@ WACentral:
 - `backend/src/middleware/integrationAuth.ts`: HMAC-signed integration request verification.
 
 Feature descriptions reflect source/UI inspection, not an end-to-end test of production delivery or integrations. No performance, uptime, or customer-count claims were added.
+
+## Expanded OptiMediCare review — 22 October 2026
+
+The marketing page was checked again against all laboratory navigation areas, rather than treating the dashboard as the entire product. The additional review covered patient registration and visits, result entry, report viewing and printing, bills and payment records, accounts and due patients, export views, lab-to-lab work, individual tests and parameters, groups and hospital packages, referring doctors, lab identity and signatures, print preferences, password/authenticator settings, and WhatsApp connection settings. Source/UI inspection establishes what is present; it does not assert production delivery performance or clinical correctness.
+
+| Area             | Additional source evidence                                                           | Website explanation                                                                                           |
+| ---------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| Result entry     | `home/sub-tasks/pt/enter-values.tsx`                                                 | Selected tests, result fields, units, configured reference ranges, out-of-range highlighting, pending entries |
+| Catalogue        | `5-tests.tsx`, `test/new-tests.tsx`, `test/new-group.tsx`, `test/hospital_tests.tsx` | Tests, groups, packages, shortcuts, categories, parameters, prices, active status                             |
+| Doctors          | `6-doctor.tsx`, `dr/new-doctor.tsx`                                                  | Doctor profiles, report display names, referral rates and amounts                                             |
+| Accounts         | `4-accounts.tsx`, `4-accounts-due.tsx`, `export.tsx`, `8-bills.tsx`                  | Payments, dues, date/doctor filters, account entries and exports                                              |
+| External work    | `8-lab-to-lab.tsx`                                                                   | Partner laboratory charges and referral/commission entries                                                    |
+| Report identity  | `7-settings.tsx`, `pt/reports.tsx`                                                   | Lab contact details, report formatting, print positions, signature image on downloaded/WhatsApp PDFs          |
+| Account settings | `7-settings.tsx`                                                                     | Password and configurable authenticator protection, without certification claims                              |
+| WhatsApp         | `7-settings-whatsapp.tsx`, `pt/reports.tsx`                                          | Connection setup and report-sharing workflow, with configuration requirements made explicit                   |
+
+Three additional original-interface screenshots were captured through the same isolated, read-only preview: `omc-results.webp`, `omc-tests.webp`, and `omc-settings.webp`. The report-entry screen uses a synthetic patient and blank result fields with explicitly illustrative units/reference text. No real patient information or clinical results are used. All 15 additional intercepted application API requests were GET; no save, send, export, credential configuration, or other write action was performed.
+
+The page now presents registration → result entry → reporting, followed by daily operations and lab setup. Twelve capability explanations are grouped under four clear topics rather than one undifferentiated feature list. The screenshots remain enlargeable, and the page uses restrained scroll entrance animations with a reduced-motion alternative.

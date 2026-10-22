@@ -6,26 +6,11 @@ import SincerityWordmark from "./SincerityWordmark";
 import { products } from "../data/products";
 import type { Product } from "../data/products";
 import ProductPage from "./ProductPage";
+import ServicesPage from "./ServicesPage";
+import { services } from "../data/services";
+import useScrollReveal from "../hooks/useScrollReveal";
 import "./ExplorePage.css";
-
-const services = [
-  {
-    title: "Websites & applications",
-    text: "Web and mobile applications shaped around the way your business works.",
-  },
-  {
-    title: "Custom SaaS development",
-    text: "Turn a business idea or internal workflow into a dedicated software platform.",
-  },
-  {
-    title: "Cloud & data systems",
-    text: "Connect your applications, manage your data, and support your cloud infrastructure.",
-  },
-  {
-    title: "Technical support",
-    text: "Ongoing development, maintenance, and guidance for your technology.",
-  },
-];
+import "./Refinements.css";
 
 const enquiryTopics = {
   careers: {
@@ -57,11 +42,15 @@ type Enquiry =
   | { kind: "business"; service?: string; topic?: keyof typeof enquiryTopics };
 
 export default function ExplorePage() {
+  useScrollReveal();
+  const isServicesPage =
+    window.location.pathname.replace(/\/?$/, "/") === "/services/";
   const [menuOpen, setMenuOpen] = useState(false);
   const currentProduct = products.find(
     (product) => product.path === window.location.pathname.replace(/\/?$/, "/"),
   );
-  const homeHref = (anchor: string) => (currentProduct ? `/${anchor}` : anchor);
+  const homeHref = (anchor: string) =>
+    currentProduct || isServicesPage ? `/${anchor}` : anchor;
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -211,7 +200,10 @@ export default function ExplorePage() {
   };
 
   return (
-    <div className="site-shell" id="top">
+    <div
+      className={`site-shell ${!currentProduct && !isServicesPage ? "home-page" : ""}`}
+      id="top"
+    >
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -228,7 +220,7 @@ export default function ExplorePage() {
           </a>
           <nav className="desktop-nav" aria-label="Main navigation">
             <a href={homeHref("#technologies")}>Technologies</a>
-            <a href={homeHref("#services")}>Services</a>
+            <a href="/services/">Services</a>
             <a href={homeHref("#company")}>Company</a>
           </nav>
           <div className="header-actions">
@@ -262,7 +254,7 @@ export default function ExplorePage() {
           >
             Technologies <ArrowRight size={17} />
           </a>
-          <a href={homeHref("#services")} onClick={() => setMenuOpen(false)}>
+          <a href="/services/" onClick={() => setMenuOpen(false)}>
             Services <ArrowRight size={17} />
           </a>
           <a href={homeHref("#company")} onClick={() => setMenuOpen(false)}>
@@ -280,7 +272,11 @@ export default function ExplorePage() {
       </header>
 
       <main id="main">
-        {currentProduct ? (
+        {isServicesPage ? (
+          <ServicesPage
+            onEnquire={(service) => openEnquiry({ kind: "business", service })}
+          />
+        ) : currentProduct ? (
           <ProductPage
             product={currentProduct}
             onEnquire={() =>
@@ -316,14 +312,18 @@ export default function ExplorePage() {
                       >
                         Explore Products <ArrowRight size={16} />
                       </a>
-                      <a className="text-link" href={homeHref("#services")}>
+                      <a className="text-link" href="/services/">
                         Explore Services <ArrowRight size={16} />
                       </a>
                     </div>
                   </div>
                 </div>
                 <nav className="division-cards" aria-label="Explore Sincerity">
-                  <a className="division-card" href={homeHref("#technologies")}>
+                  <a
+                    className="division-card"
+                    data-reveal
+                    href={homeHref("#technologies")}
+                  >
                     <span className="division-number" aria-hidden="true">
                       01
                     </span>
@@ -335,7 +335,7 @@ export default function ExplorePage() {
                       </span>
                     </div>
                   </a>
-                  <a className="division-card" href={homeHref("#services")}>
+                  <a className="division-card" data-reveal href="/services/">
                     <span className="division-number" aria-hidden="true">
                       02
                     </span>
@@ -378,6 +378,7 @@ export default function ExplorePage() {
                   {products.map((product, index) => (
                     <a
                       className={`product-card showcase-${product.theme}`}
+                      data-reveal
                       href={product.path}
                       key={product.name}
                       aria-label={`Explore ${product.name}`}
@@ -443,33 +444,29 @@ export default function ExplorePage() {
                     businesses to turn their requirements into practical
                     technology.
                   </p>
-                  <button
-                    className="button button-dark"
-                    onClick={() => openEnquiry({ kind: "business" })}
-                  >
-                    Discuss your project <ArrowRight size={16} />
-                  </button>
+                  <a className="button button-dark" href="/services/">
+                    Explore our services <ArrowRight size={16} />
+                  </a>
                 </div>
                 <div className="service-list">
                   {services.map((service, index) => (
-                    <article className="service-row" key={service.title}>
+                    <article
+                      className="service-row"
+                      data-reveal
+                      key={service.title}
+                    >
                       <span className="service-index">0{index + 1}</span>
                       <div>
                         <h3>{service.title}</h3>
                         <p>{service.text}</p>
                       </div>
-                      <button
+                      <a
                         className="service-action"
-                        aria-label={`Enquire about ${service.title}`}
-                        onClick={() =>
-                          openEnquiry({
-                            kind: "business",
-                            service: service.title,
-                          })
-                        }
+                        href={`/services/#${service.id}`}
+                        aria-label={`Explore ${service.title}`}
                       >
                         <ArrowRight size={20} />
-                      </button>
+                      </a>
                     </article>
                   ))}
                 </div>
@@ -516,7 +513,7 @@ export default function ExplorePage() {
               aria-labelledby="contact-title"
             >
               <div className="container">
-                <div className="contact-panel">
+                <div className="contact-panel" data-reveal>
                   <div>
                     <p className="eyebrow">LET’S START A CONVERSATION</p>
                     <h2 id="contact-title">What would you like to build?</h2>
@@ -580,34 +577,10 @@ export default function ExplorePage() {
             </nav>
             <nav className="footer-column" aria-label="Business services">
               <h3>Services</h3>
-              <button
-                onClick={() =>
-                  openEnquiry({ kind: "business", service: "Web development" })
-                }
-              >
-                Web development
-              </button>
-              <button
-                onClick={() =>
-                  openEnquiry({ kind: "business", service: "App development" })
-                }
-              >
-                App development
-              </button>
-              <button
-                onClick={() =>
-                  openEnquiry({ kind: "business", service: "SaaS development" })
-                }
-              >
-                SaaS development
-              </button>
-              <button
-                onClick={() =>
-                  openEnquiry({ kind: "business", service: "Data management" })
-                }
-              >
-                Data management
-              </button>
+              <a href="/services/#web-apps">Web development</a>
+              <a href="/services/#web-apps">App development</a>
+              <a href="/services/#saas">SaaS development</a>
+              <a href="/services/#cloud-data">Data management</a>
               <button
                 onClick={() =>
                   openEnquiry({

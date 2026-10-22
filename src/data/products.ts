@@ -109,8 +109,52 @@ export const products: Product[] = [
         src: "/product-screens/omc-accounts.webp",
         alt: "OptiMediCare accounts screen with demonstration revenue, dues, referral totals, filters, and an accounts table.",
       },
+      {
+        label: "Result entry",
+        title: "The results. In their right place.",
+        description:
+          "Open the patient’s selected tests, enter result values, and review the configured units and reference ranges. The report workspace highlights values outside those ranges and shows results still awaiting entry.",
+        src: "/product-screens/omc-results.webp",
+        alt: "OptiMediCare result-entry workspace with a demonstration patient, selected test rows, configured reference details, and result entry controls.",
+      },
+      {
+        label: "Test catalogue",
+        title: "Your tests. Your lab’s catalogue.",
+        description:
+          "Organise individual tests, groups, and hospital-specific packages. Review categories, shortcuts, configured normal values, prices, and active status.",
+        src: "/product-screens/omc-tests.webp",
+        alt: "OptiMediCare test catalogue showing demonstration tests, categories, shortcuts, prices, and catalogue controls.",
+      },
+      {
+        label: "Lab setup",
+        title: "A report that belongs to your lab.",
+        description:
+          "Manage your lab profile and report identity. The settings workspace also includes print-position preferences, password settings, authenticator-app protection, and WhatsApp setup.",
+        src: "/product-screens/omc-settings.webp",
+        alt: "OptiMediCare settings workspace showing the demonstration lab profile and navigation for print preferences and account settings.",
+      },
     ],
     questions: [
+      {
+        question: "Can reports use our laboratory’s branding?",
+        answer:
+          "You can configure the lab name and contact details, report print positions, text sizes, and heading options. A lab signature image can be used on downloaded and WhatsApp PDFs. Ask our team to review your report format during the walkthrough.",
+      },
+      {
+        question: "How are reference ranges used?",
+        answer:
+          "The test catalogue supports configured units and reference ranges, including parameter-level ranges. Result entry uses those settings to display reference details and highlight values outside the configured ranges. Your laboratory remains responsible for configuring and reviewing its test information and reports.",
+      },
+      {
+        question: "What is needed for WhatsApp reporting?",
+        answer:
+          "The application includes WhatsApp setup and report-sharing workflows. Availability depends on the lab’s completed connection and account configuration. Our team can walk through the setup and requirements with you.",
+      },
+      {
+        question: "Can we track dues and external lab work?",
+        answer:
+          "Yes. Accounts includes due-patient views, date and doctor filters, and export options. The lab-to-lab workflow records tests, external laboratory charges, and referral or commission entries.",
+      },
       {
         question: "Can I manage tests and packages?",
         answer:

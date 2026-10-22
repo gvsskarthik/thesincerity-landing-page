@@ -1,5 +1,6 @@
 import { ArrowLeft, ArrowRight, Check, Plus } from "lucide-react";
 import ProductScreens from "./ProductScreens";
+import LabCapabilities from "./LabCapabilities";
 import type { Product } from "../data/products";
 
 type Props = { product: Product; onEnquire: () => void };
@@ -106,10 +107,39 @@ export default function ProductPage({ product, onEnquire }: Props) {
           </div>
         )}
       </section>
+      {lab && (
+        <div className="container">
+          <div className="lab-workflow-intro" data-reveal>
+            <p>
+              Made for medical laboratories.
+              <br />
+              Follow one connected patient visit.
+            </p>
+            <ol>
+              <li>
+                <span>01</span>
+                <a href="#lab-registration">Register &amp; bill</a>
+              </li>
+              <li>
+                <span>02</span>
+                <a href="#lab-result-entry">Enter results</a>
+              </li>
+              <li>
+                <span>03</span>
+                <a href="#lab-reports">Prepare reports</a>
+              </li>
+              <li>
+                <span>04</span>
+                <a href="#lab-operations">Review accounts</a>
+              </li>
+            </ol>
+          </div>
+        </div>
+      )}
       {product.screens && (
         <ProductScreens name={product.name} screens={product.screens} />
       )}
-      {!beta && (
+      {!beta && !lab && (
         <section
           className="connected-section section-space"
           aria-labelledby="connected-title"
@@ -161,36 +191,40 @@ export default function ProductPage({ product, onEnquire }: Props) {
           </div>
         </section>
       )}
-      <section
-        className="product-overview section-space"
-        id="capabilities"
-        aria-labelledby="overview-title"
-      >
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">THE DETAILS THAT MAKE A DIFFERENCE</p>
-              <h2 id="overview-title">
-                {beta ? "A new conversation." : "Consider the possibilities."}
-              </h2>
+      {lab ? (
+        <LabCapabilities />
+      ) : (
+        <section
+          className="product-overview section-space"
+          id="capabilities"
+          aria-labelledby="overview-title"
+        >
+          <div className="container">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">THE DETAILS THAT MAKE A DIFFERENCE</p>
+                <h2 id="overview-title">
+                  {beta ? "A new conversation." : "Consider the possibilities."}
+                </h2>
+              </div>
+              <p className="section-intro">
+                {beta
+                  ? product.detail
+                  : `Tools for ${product.audience.toLowerCase()}, connected in ${product.name}.`}
+              </p>
             </div>
-            <p className="section-intro">
-              {beta
-                ? product.detail
-                : `Tools for ${product.audience.toLowerCase()}, connected in ${product.name}.`}
-            </p>
+            <div className="product-highlights" data-reveal>
+              {product.highlights.map((highlight, index) => (
+                <article key={highlight.title}>
+                  <span className="highlight-number">0{index + 1}</span>
+                  <h3>{highlight.title}</h3>
+                  <p>{highlight.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="product-highlights">
-            {product.highlights.map((highlight, index) => (
-              <article key={highlight.title}>
-                <span className="highlight-number">0{index + 1}</span>
-                <h3>{highlight.title}</h3>
-                <p>{highlight.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
       <section
         className="product-faq section-space"
         id="questions"
@@ -265,7 +299,7 @@ export default function ProductPage({ product, onEnquire }: Props) {
         className="product-walkthrough container"
         aria-labelledby="walkthrough-title"
       >
-        <div className="walkthrough-panel">
+        <div className="walkthrough-panel" data-reveal>
           <img src={product.image} alt="" width={100} height={100} />
           <p className="eyebrow">YOUR NEXT STEP</p>
           <h2 id="walkthrough-title">

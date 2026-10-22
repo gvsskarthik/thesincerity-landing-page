@@ -1,0 +1,192 @@
+/* Homepage refinements are scoped; product page colours retain their identity. */
+.home-page {
+  background: #fff;
+  min-height: 100dvh;
+}
+.home-page .site-header {
+  background: rgba(255, 255, 255, 0.95);
+}
+.home-page .division-cards {
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.home-page .division-card {
+  min-height: 0;
+  padding: 30px 38px;
+  align-items: center;
+}
+.home-page .division-copy {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 40px;
+  width: 100%;
+}
+.home-page .division-copy h2 {
+  grid-column: 1;
+  font-size: 25px;
+}
+.home-page .division-copy p {
+  grid-column: 1;
+  max-width: 560px;
+}
+.home-page .division-action {
+  grid-column: 2;
+  grid-row: 1/3;
+  align-self: center;
+  padding: 0;
+  margin: 0;
+  min-height: 44px;
+}
+.home-page .product-grid {
+  grid-template-columns: 1fr;
+  gap: 26px;
+}
+.home-page .product-card,
+.home-page .product-card:last-child {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  min-height: 430px;
+  text-align: left;
+}
+.home-page .showcase-copy,
+.home-page .product-card:last-child .showcase-copy {
+  padding: 56px 60px 64px;
+}
+.home-page .showcase-category {
+  justify-content: flex-start;
+  min-height: 0;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.home-page .showcase-copy h3 {
+  font-size: clamp(36px, 4vw, 54px);
+}
+.home-page .showcase-description {
+  font-size: 17px;
+  line-height: 1.75;
+  max-width: 390px;
+  min-height: 0;
+  margin-top: 20px;
+}
+.home-page .showcase-action {
+  font-size: 14px;
+  margin-top: 26px;
+}
+.home-page .showcase-art,
+.home-page .product-card:last-child .showcase-art {
+  padding: 40px 56px;
+}
+.home-page .showcase-art img {
+  width: min(100%, 310px);
+  height: 310px;
+}
+.home-page .showcase-index {
+  left: 60px;
+  bottom: 24px;
+}
+.home-page .showcase-connect {
+  background: #eeeaf5;
+}
+.home-page .showcase-messaging .showcase-art {
+  grid-column: 1;
+  grid-row: 1;
+}
+.home-page .showcase-messaging .showcase-copy {
+  grid-column: 2;
+  grid-row: 1;
+  padding-left: 24px;
+}
+.home-page .services-section {
+  background: #fff;
+}
+.service-action {
+  text-decoration: none;
+}
+[data-reveal].is-revealed {
+  animation: section-arrive 0.75s cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+@keyframes section-arrive {
+  from {
+    opacity: 0.25;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 1000px) {
+  .home-page .showcase-copy,
+  .home-page .product-card:last-child .showcase-copy {
+    padding: 44px 36px 60px;
+  }
+  .home-page .showcase-art,
+  .home-page .product-card:last-child .showcase-art {
+    padding: 36px 28px;
+  }
+  .home-page .showcase-art img {
+    height: 260px;
+  }
+  .home-page .showcase-index {
+    left: 36px;
+  }
+  .home-page .product-card,
+  .home-page .product-card:last-child {
+    min-height: 380px;
+  }
+}
+@media (max-width: 640px) {
+  .home-page .division-card {
+    padding: 26px;
+  }
+  .home-page .division-copy {
+    display: flex;
+  }
+  .home-page .division-copy h2 {
+    font-size: 23px;
+  }
+  .home-page .division-action {
+    align-self: flex-start;
+    margin-top: 18px;
+    min-height: 24px;
+  }
+  .home-page .product-card,
+  .home-page .product-card:last-child {
+    display: flex;
+    min-height: 0;
+  }
+  .home-page .showcase-copy,
+  .home-page .product-card:last-child .showcase-copy {
+    padding: 32px 28px 0;
+  }
+  .home-page .showcase-copy h3 {
+    font-size: 38px;
+  }
+  .home-page .showcase-description {
+    font-size: 16px;
+    margin-top: 16px;
+  }
+  .home-page .showcase-category {
+    margin-bottom: 20px;
+  }
+  .home-page .showcase-action {
+    margin-top: 20px;
+  }
+  .home-page .showcase-art,
+  .home-page .product-card:last-child .showcase-art {
+    padding: 30px 32px 58px;
+  }
+  .home-page .showcase-art img {
+    height: 230px;
+    width: 230px;
+  }
+  .home-page .showcase-index {
+    left: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal].is-revealed {
+    animation: none;
+  }
+}

@@ -6,6 +6,14 @@ const template = await readFile(
 );
 const pages = [
   {
+    slug: "services",
+    path: "services",
+    name: "Sincerity Services",
+    title: "Sincerity Services — Websites, Applications & Custom Software",
+    description:
+      "Explore Sincerity Services: websites and mobile applications, custom SaaS development, cloud and data integrations, and ongoing technical support.",
+  },
+  {
     slug: "optimedicare",
     name: "OptiMediCare",
     description:
@@ -25,8 +33,9 @@ const pages = [
   },
 ];
 for (const page of pages) {
-  const url = `https://thesincerity.in/products/${page.slug}/`;
-  const title = `${page.name} — Sincerity Technologies`;
+  const path = page.path || `products/${page.slug}`;
+  const url = `https://thesincerity.in/${path}/`;
+  const title = page.title || `${page.name} — Sincerity Technologies`;
   const html = template
     .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
     .replace(
@@ -42,11 +51,11 @@ for (const page of pages) {
       `$1${page.description}$2`,
     )
     .replaceAll("https://thesincerity.in/", url);
-  const directory = new URL(`../dist/products/${page.slug}/`, import.meta.url);
+  const directory = new URL(`../dist/${path}/`, import.meta.url);
   await mkdir(directory, { recursive: true });
   await writeFile(new URL("index.html", directory), html);
 }
-console.log("Built dedicated product entry pages.");
+console.log("Built dedicated product and services entry pages.");
 
 // Keep previously published links working after correcting the product name.
 const legacyDirectory = new URL(

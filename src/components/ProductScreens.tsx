@@ -5,6 +5,11 @@ import type { ProductScreen } from "../data/products";
 type Props = { name: string; screens: ProductScreen[] };
 
 const notes: Record<string, string[]> = {
+  "Result entry": [
+    "Selected tests and result-entry fields",
+    "Units and configured reference ranges",
+    "Out-of-range highlighting and pending-entry status",
+  ],
   Registration: [
     "Patient details and test selection",
     "Packages, referrals, and external lab charges",
@@ -33,9 +38,16 @@ export default function ProductScreens({ name, screens }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
   const overview = screens[0];
-  const stories =
-    name === "OptiMediCare" ? [screens[2], screens[3]] : screens.slice(1);
-  const secondary = name === "OptiMediCare" ? [screens[1], screens[4]] : [];
+  const lab = name === "OptiMediCare";
+  const selectedScreens = (labels: string[]) =>
+    labels.flatMap((label) =>
+      screens.filter((screen) => screen.label === label),
+    );
+  const stories = lab
+    ? selectedScreens(["Registration", "Result entry", "Reports"])
+    : screens.slice(1);
+  const secondary = lab ? selectedScreens(["Patients", "Accounts"]) : [];
+  const setup = lab ? selectedScreens(["Test catalogue", "Lab setup"]) : [];
 
   useEffect(() => {
     if (!active) return;
@@ -143,7 +155,16 @@ export default function ProductScreens({ name, screens }: Props) {
           </div>
           <div className="workflow-stories">
             {stories.map((screen, index) => (
-              <article className="workflow-story" key={screen.src}>
+              <article
+                className="workflow-story"
+                id={
+                  lab
+                    ? `lab-${screen.label.toLowerCase().replaceAll(" ", "-")}`
+                    : undefined
+                }
+                data-reveal
+                key={screen.src}
+              >
                 <div className="workflow-copy">
                   <p className="eyebrow">
                     <span className="chapter-number">0{index + 1}</span>
@@ -162,9 +183,28 @@ export default function ProductScreens({ name, screens }: Props) {
             ))}
           </div>
           {secondary.length > 0 && (
+            <div
+              className="lab-screen-group-heading"
+              id="lab-operations"
+              data-reveal
+            >
+              <p className="eyebrow">MANAGE THE DAY</p>
+              <h3>
+                The patient work.
+                <br />
+                The business behind it.
+              </h3>
+              <p>
+                Find patient visits and report status, then review the
+                collections, dues, and account entries from the same lab
+                workspace.
+              </p>
+            </div>
+          )}
+          {secondary.length > 0 && (
             <div className="secondary-screens">
               {secondary.map((screen) => (
-                <article key={screen.src}>
+                <article data-reveal key={screen.src}>
                   <div className="secondary-copy">
                     <p className="eyebrow">{screen.label}</p>
                     <h3>{screen.title}</h3>
@@ -174,6 +214,34 @@ export default function ProductScreens({ name, screens }: Props) {
                 </article>
               ))}
             </div>
+          )}
+          {setup.length > 0 && (
+            <>
+              <div
+                className="lab-screen-group-heading"
+                id="lab-setup"
+                data-reveal
+              >
+                <p className="eyebrow">SET UP YOUR LAB</p>
+                <h3>Your catalogue. Your report identity.</h3>
+                <p>
+                  Keep your tests organised and configure the lab details and
+                  report preferences your team relies on.
+                </p>
+              </div>
+              <div className="secondary-screens">
+                {setup.map((screen) => (
+                  <article key={screen.src} data-reveal>
+                    <div className="secondary-copy">
+                      <p className="eyebrow">{screen.label}</p>
+                      <h3>{screen.title}</h3>
+                      <p>{screen.description}</p>
+                    </div>
+                    {frame(screen)}
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
