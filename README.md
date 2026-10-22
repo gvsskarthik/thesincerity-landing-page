@@ -1,32 +1,35 @@
-# React + TypeScript + Vite
+# Sincerity website
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The public homepage for Sincerity (OPC) Private Limited, with Sincerity Technologies products, business services, company information, and enquiries.
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Use Node.js 22 and npm:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+npm ci
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+```sh
+npm run build
+npm run lint
+npm run preview
+```
+
+The production output is `dist/`. GitHub Actions builds and deploys `main` to GitHub Pages using the domain in `public/CNAME`. The former `/explore/` address redirects to the homepage.
+
+## Content
+
+- `src/components/ExplorePage.tsx`: products, services, page sections, and enquiry handling.
+- `src/components/ExplorePage.css`: responsive page and dialog styles.
+- `src/index.css`: global styles and motion preferences.
+- `index.html`: metadata and font loading.
+
+Products currently retain the previously published availability labels: Optimedicate and WACentral are available, and WA Connect is in beta. Update the product list when availability changes. Product panels use typography and icons; no screenshots or customer evidence are fabricated.
+
+## Enquiries
+
+Product and business enquiries use the existing FormSubmit endpoint for `contact@thesincerity.in`. Submission requires both a successful HTTP response and an explicit successful JSON result. Failures retain the entered information, allow retry, and offer an email alternative. Requests time out after 15 seconds and are cancelled when the dialog closes. Contact details are not stored in local storage.
+
+FormSubmit delivery depends on the mailbox's FormSubmit configuration and activation. Browser checks intercept submission requests; they do not verify actual email receipt or send test enquiries.

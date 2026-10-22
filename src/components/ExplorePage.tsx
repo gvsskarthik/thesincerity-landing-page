@@ -1,1170 +1,748 @@
-import React, { useState } from 'react';
-import './ExplorePage.css';
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import {
+  ArrowDown,
   ArrowRight,
-  Play,
-  X as CloseIcon,
-  Target,
-  Lightbulb,
-  Box,
-  Database,
-  Headphones,
-  TrendingUp,
-  Cpu,
-  Cloud,
-  Radio,
-  Code,
-  Server,
-  ShieldCheck,
+  Check,
   CheckCircle2,
+  ChevronRight,
   Loader2,
-  Sparkles,
-} from 'lucide-react';
+  Menu,
+  MessageCircle,
+  Microscope,
+  X,
+} from "lucide-react";
+import SincerityLogo from "./SincerityLogo";
+import SincerityWordmark from "./SincerityWordmark";
+import "./ExplorePage.css";
 
-import laptopImg from '../assets/p2_laptop.png';
-import phoneWACentralImg from '../assets/p2_phone_wacentral.png';
-import dualPhonesImg from '../assets/p2_dual_phones.png';
-import phoneSinkAppImg from '../assets/p2_phone_sinkapp.png';
-import cloudServersImg from '../assets/p2_cloud_servers.png';
-import iconAiImg from '../assets/p2_icon_ai.png';
-import iconCloudImg from '../assets/p2_icon_cloud.png';
-import iconIotImg from '../assets/p2_icon_iot.png';
-import iotDeviceImg from '../assets/p2_iot_device.png';
-import logoM4SpaceBlackSrc from '../assets/sincerity_logo_m4_space_black_v11.png';
-import SincerityLogo from './SincerityLogo';
-import SincerityWordmark from './SincerityWordmark';
+type Product = {
+  name: string;
+  category: string;
+  status: string;
+  description: string;
+  detail: string;
+  audience: string;
+  icon: typeof Microscope;
+  theme: string;
+};
 
-interface ExplorePageProps {
-  onBackToSplash?: () => void;
-}
+const products: Product[] = [
+  {
+    name: "Optimedicate",
+    category: "LAB MANAGEMENT",
+    status: "Available",
+    description: "Software for the everyday work of medical laboratories.",
+    detail:
+      "Optimedicate (SSDC) is our medical laboratory management product. Speak with our team to see the product in action and discuss how it fits your laboratory’s workflow.",
+    audience: "For medical laboratories",
+    icon: Microscope,
+    theme: "lab",
+  },
+  {
+    name: "WACentral",
+    category: "BUSINESS MESSAGING",
+    status: "Available",
+    description: "Connect WhatsApp messaging to your business software.",
+    detail:
+      "WACentral is our WhatsApp API gateway. Request a walkthrough to explore business messaging integration and discuss your requirements with our team.",
+    audience: "For businesses and developers",
+    icon: MessageCircle,
+    theme: "messaging",
+  },
+  {
+    name: "WA Connect",
+    category: "COMMUNICATION",
+    status: "Beta",
+    description: "A simpler way to bring your business conversations together.",
+    detail:
+      "WA Connect is our business communication product, currently in beta. Contact us to learn about its current capabilities and enquire about beta access.",
+    audience: "For business communication",
+    icon: MessageCircle,
+    theme: "connect",
+  },
+];
 
-export const ExplorePage: React.FC<ExplorePageProps> = ({ onBackToSplash }) => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('All');
-  const [demoModalOpen, setDemoModalOpen] = useState(false);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
+const services = [
+  {
+    title: "Websites & applications",
+    text: "Web and mobile applications shaped around the way your business works.",
+  },
+  {
+    title: "Custom SaaS development",
+    text: "Turn a business idea or internal workflow into a dedicated software platform.",
+  },
+  {
+    title: "Cloud & data systems",
+    text: "Connect your applications, manage your data, and support your cloud infrastructure.",
+  },
+  {
+    title: "Technical support",
+    text: "Ongoing development, maintenance, and guidance for your technology.",
+  },
+];
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    product: 'Optimedicate (SSDC)',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+const copyrightYear = new Date().getFullYear();
 
-  const openDemoModal = (productName?: string) => {
-    const prod = productName || 'Optimedicate (SSDC)';
-    setFormData((prev) => ({ ...prev, product: prod }));
-    setIsSuccess(false);
-    setDemoModalOpen(true);
+type Enquiry =
+  | { kind: "product"; product: Product }
+  | { kind: "business"; service?: string };
+
+export default function ExplorePage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [detail, setDetail] = useState<Product | null>(null);
+  const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const dialog = useRef<HTMLDialogElement>(null);
+  const pendingRequest = useRef<AbortController | null>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const modalOpen = Boolean(detail || enquiry);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const element = dialog.current;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    element?.showModal();
+    document.body.style.overflow = "hidden";
+    const keepFocusInDialog = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !element) return;
+      const controls = Array.from(
+        element.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input:not([disabled]):not([tabindex="-1"]), textarea:not([disabled])',
+        ),
+      ).filter((control) => control.getClientRects().length > 0);
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (!first || !last) return;
+      if (
+        event.shiftKey &&
+        (document.activeElement === first ||
+          document.activeElement === element.querySelector("h2"))
+      ) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    element?.addEventListener("keydown", keepFocusInDialog);
+    return () => {
+      element?.removeEventListener("keydown", keepFocusInDialog);
+      element?.close();
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [modalOpen]);
+
+  useEffect(() => {
+    const element = dialog.current;
+    if (!element?.open) return;
+    const target =
+      element.querySelector<HTMLElement>('input:not([tabindex="-1"])') ||
+      element.querySelector<HTMLElement>("h2");
+    target?.focus();
+  }, [detail, enquiry, sent]);
+
+  useEffect(() => () => pendingRequest.current?.abort(), []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [menuOpen]);
+
+  const closeDialog = () => {
+    pendingRequest.current?.abort();
+    pendingRequest.current = null;
+    setSending(false);
+    setDetail(null);
+    setEnquiry(null);
   };
 
-  const handleSubmitDemo = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const openEnquiry = (next: Enquiry) => {
+    setDetail(null);
+    setError("");
+    setSent(false);
+    setEnquiry(next);
+  };
 
-    const payload = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      product: formData.product,
-      message: formData.message || 'Requested live product demo',
-      _subject: `🚀 New Demo Request: ${formData.product} from ${formData.name}`,
-    };
-
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (sending) return;
+    const form = new FormData(event.currentTarget);
+    const controller = new AbortController();
+    pendingRequest.current = controller;
+    const timeout = window.setTimeout(() => controller.abort(), 15000);
+    setSending(true);
+    setError("");
     try {
-      try {
-        const stored = JSON.parse(localStorage.getItem('sincerity_demo_leads') || '[]');
-        stored.push({ ...payload, date: new Date().toISOString() });
-        localStorage.setItem('sincerity_demo_leads', JSON.stringify(stored));
-      } catch (e) {
-        // ignore
-      }
-
-      await fetch('https://formsubmit.co/ajax/contact@thesincerity.in', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+      const response = await fetch(
+        "https://formsubmit.co/ajax/contact@thesincerity.in",
+        {
+          method: "POST",
+          signal: controller.signal,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: form.get("name"),
+            email: form.get("email"),
+            company: form.get("company"),
+            message: form.get("message"),
+            product:
+              enquiry?.kind === "product"
+                ? enquiry.product.name
+                : enquiry?.service || "Business enquiry",
+            _subject:
+              enquiry?.kind === "product"
+                ? `Product enquiry: ${enquiry.product.name}`
+                : "Sincerity business enquiry",
+            _honey: form.get("website"),
+          }),
         },
-        body: JSON.stringify(payload),
-      });
-
-      setIsSuccess(true);
-    } catch (err) {
-      setIsSuccess(true);
+      );
+      if (!response.ok) throw new Error("Submission failed");
+      const data: { success?: boolean | string } = await response.json();
+      if (data.success !== true && data.success !== "true")
+        throw new Error("Submission not confirmed");
+      if (pendingRequest.current === controller) setSent(true);
+    } catch {
+      if (pendingRequest.current === controller)
+        setError(
+          "We couldn’t confirm your message was sent. Please try again, or email contact@thesincerity.in.",
+        );
     } finally {
-      setIsSubmitting(false);
+      window.clearTimeout(timeout);
+      if (pendingRequest.current === controller) {
+        setSending(false);
+        pendingRequest.current = null;
+      }
     }
   };
 
-  const tabs = [
-    'All',
-    'Products',
-    'AI & Research',
-    'Cloud',
-    'IoT',
-  ];
-
-  const devProjects = [
-    {
-      id: 'optimedicate',
-      title: 'Optimedicate (SSDC)',
-      subtitle: 'Medical Lab Management System',
-      category: 'Products',
-      badge: 'Live',
-      badgeClass: 'badge-live',
-      img: laptopImg,
-    },
-    {
-      id: 'wacentral',
-      title: 'WACentral',
-      subtitle: 'WhatsApp API Gateway',
-      category: 'Products',
-      badge: 'Live',
-      badgeClass: 'badge-live',
-      img: phoneWACentralImg,
-    },
-    {
-      id: 'waconnect',
-      title: 'WA Connect',
-      subtitle: 'Business on WhatsApp',
-      category: 'Products',
-      badge: 'Beta',
-      badgeClass: 'badge-beta',
-      img: dualPhonesImg,
-    },
-    {
-      id: 'iotdevices',
-      title: 'IoT Lab Devices',
-      subtitle: 'Smart Monitoring Systems',
-      category: 'IoT',
-      badge: 'In Development',
-      badgeClass: 'badge-dev',
-      img: iotDeviceImg,
-    },
-  ];
-
-  const filteredProjects =
-    activeTab === 'All'
-      ? devProjects
-      : devProjects.filter((p) => {
-          if (activeTab === 'Products') return p.category === 'Products';
-          if (activeTab === 'IoT') return p.category === 'IoT';
-          return true;
-        });
-
   return (
-    <div className="explore-page-wrapper">
-      {/* 1. Header / Navbar */}
+    <div className="site-shell" id="top">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <header className="site-header">
-        <div className="header-inner">
-          {/* Logo brand */}
-          <div
-            className="brand-logo"
-            onClick={onBackToSplash}
-            title="Return to Home"
-            role="button"
-            tabIndex={0}
+        <div className="container header-inner">
+          <a
+            className="brand"
+            href="#top"
+            aria-label="Sincerity home"
+            onClick={() => setMenuOpen(false)}
           >
-            <img
-              src={logoM4SpaceBlackSrc}
-              alt="Sincerity Logo"
-              className="brand-emblem"
-              width={34}
-              height={32}
-            />
-            <div className="brand-wordmark-container">
-              <SincerityWordmark width={140} />
-            </div>
-          </div>
-
-          {/* Desktop Nav Links */}
-          <nav className="desktop-nav">
-            <a href="#technologies" className="nav-link">Technologies</a>
-            <a href="#services" className="nav-link">Services</a>
-            <a href="#products" className="nav-link">Products</a>
-            <a href="#about" className="nav-link">About</a>
+            <SincerityLogo size={34} />
+            <SincerityWordmark width={138} />
+          </a>
+          <nav className="desktop-nav" aria-label="Main navigation">
+            <a href="#technologies">Technologies</a>
+            <a href="#services">Services</a>
+            <a href="#company">Company</a>
           </nav>
-
-          {/* Right Action */}
           <div className="header-actions">
             <button
-              type="button"
-              className="btn-dark-pill"
-              onClick={() => openDemoModal('General Demo & Inquiry')}
+              className="button button-dark header-contact"
+              onClick={() => openEnquiry({ kind: "business" })}
             >
-              Get in Touch <ArrowRight size={14} className="ml-1" />
+              Let’s talk <ArrowRight size={15} />
             </button>
             <button
-              type="button"
-              className="menu-toggle-btn"
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              aria-label="Toggle menu"
-              title="Menu"
+              className="menu-toggle"
+              ref={menuButton}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+              aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              <div className="menu-icon-bars">
-                <span className="bar-line" />
-                <span className="bar-line" />
-              </div>
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
-
-        {/* Sliding Executive Navigation Drawer */}
-        {drawerOpen && (
-          <div className="nav-drawer-backdrop" onClick={() => setDrawerOpen(false)}>
-            <div className="nav-drawer-card" onClick={(e) => e.stopPropagation()}>
-              <div className="drawer-header">
-                <div className="drawer-brand">
-                  <img src={logoM4SpaceBlackSrc} alt="Sincerity" width={28} height={26} />
-                  <span className="drawer-brand-title">Sincerity Directory</span>
-                </div>
-                <button
-                  type="button"
-                  className="modal-close-btn"
-                  onClick={() => setDrawerOpen(false)}
-                >
-                  <CloseIcon size={18} />
-                </button>
-              </div>
-
-              <div className="drawer-links-group">
-                <a href="#technologies" onClick={() => setDrawerOpen(false)}>Technologies</a>
-                <a href="#services" onClick={() => setDrawerOpen(false)}>Services</a>
-                <a href="#products" onClick={() => setDrawerOpen(false)}>Products</a>
-                <a href="#tech-domains" onClick={() => setDrawerOpen(false)}>Technology Domains</a>
-                <a href="#roadmap" onClick={() => setDrawerOpen(false)}>Roadmap &amp; Research</a>
-                <a href="#about" onClick={() => setDrawerOpen(false)}>Why Sincerity</a>
-                <a href="#contact" onClick={() => setDrawerOpen(false)}>Contact &amp; Location</a>
-              </div>
-
-              <div className="drawer-footer-actions">
-                <button
-                  type="button"
-                  className="btn-dark-pill w-full"
-                  onClick={() => {
-                    setDrawerOpen(false);
-                    openDemoModal('General Demo & Inquiry');
-                  }}
-                >
-                  Get in Touch <ArrowRight size={14} className="ml-1" />
-                </button>
-                {onBackToSplash && (
-                  <button
-                    type="button"
-                    className="btn-light-pill w-full mt-2"
-                    onClick={() => {
-                      setDrawerOpen(false);
-                      onBackToSplash();
-                    }}
-                  >
-                    Return to Splash Screen
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        <nav
+          id="mobile-navigation"
+          className="mobile-nav"
+          aria-label="Mobile navigation"
+          hidden={!menuOpen}
+        >
+          <a href="#technologies" onClick={() => setMenuOpen(false)}>
+            Technologies <ArrowRight size={17} />
+          </a>
+          <a href="#services" onClick={() => setMenuOpen(false)}>
+            Services <ArrowRight size={17} />
+          </a>
+          <a href="#company" onClick={() => setMenuOpen(false)}>
+            Company <ArrowRight size={17} />
+          </a>
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              openEnquiry({ kind: "business" });
+            }}
+          >
+            Contact Sincerity <ArrowRight size={17} />
+          </button>
+        </nav>
       </header>
 
-      {/* 2. Hero Section */}
-      <section className="hero-section">
-        <div className="container">
-          <div className="hero-grid">
-            <div className="hero-media-col">
-              <div className="hero-brand">
-                <SincerityLogo size="var(--hero-logo-size)" />
-                <SincerityWordmark width="100%" className="hero-brand-wordmark" />
-              </div>
-            </div>
-
-            <div className="hero-text-col">
-              <h1 className="hero-title">
-                Technology.<br />
-                Built with purpose.
-              </h1>
-              <p className="hero-subtitle">
-                We research, design, and build products across software, AI, and connected devices.
-              </p>
-              <div className="hero-buttons">
-                <a href="#products" className="btn-dark-pill btn-lg">
-                  Explore Our Products <ArrowRight size={15} />
-                </a>
-                <button
-                  type="button"
-                  className="btn-light-pill btn-lg"
-                  onClick={() => openDemoModal('General Demo & Inquiry')}
-                >
-                  Get in Touch
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Stats Strip */}
-      <section className="stats-section">
-        <div className="container stats-grid">
-          <div className="stat-item">
-            <div className="stat-number">3+</div>
-            <div className="stat-label">Software Products</div>
-          </div>
-          <div className="stat-divider" />
-          <div className="stat-item">
-            <div className="stat-number">3</div>
-            <div className="stat-label">Technology Domains</div>
-          </div>
-          <div className="stat-divider" />
-          <div className="stat-item">
-            <div className="stat-number">&infin;</div>
-            <div className="stat-label">Future Possibilities</div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Dual Highlight Cards: Technologies & Services */}
-      <section id="technologies" className="dual-cards-section">
-        <div className="container dual-cards-grid">
-          {/* Card 1: Technologies */}
-          <div className="feature-highlight-card">
-            <div className="f-card-content">
-              <div className="f-card-num">01 &mdash;&mdash;</div>
-              <h2 className="f-card-title">Technologies</h2>
-              <p className="f-card-desc">
-                Explore our proprietary platforms, multi-domain research, and advanced software ecosystems.
-              </p>
-              <a href="#tech-domains" className="f-card-action-btn">
-                <span>Explore Technologies</span>
-                <ArrowRight size={14} className="f-btn-arrow" />
-              </a>
-            </div>
-            <div className="f-card-visual">
-              <div className="f-capsule-widget">
-                <div className="widget-header">
-                  <div className="widget-header-left">
-                    <span className="widget-pulse-dot blue" />
-                    <span className="widget-heading">TECH DOMAINS</span>
-                  </div>
-                  <span className="widget-pill blue">Active Stack</span>
-                </div>
-                <div className="widget-items-grid">
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Artificial Intelligence')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon blue"><Cpu size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">AI & Machine Learning</span>
-                      <span className="widget-domain-sub">Neural Research & Models</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Cloud & SaaS')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon sky"><Cloud size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">Cloud & SaaS Systems</span>
-                      <span className="widget-domain-sub">Distributed Architecture</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('IoT Lab Devices')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon purple"><Radio size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">IoT & Embedded Edge</span>
-                      <span className="widget-domain-sub">Smart Hardware Telemetry</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Services */}
-          <div id="services" className="feature-highlight-card">
-            <div className="f-card-content">
-              <div className="f-card-num">02 &mdash;&mdash;</div>
-              <h2 className="f-card-title">Services</h2>
-              <p className="f-card-desc">
-                End-to-end software engineering, high-volume cloud systems, and dedicated technical teams.
-              </p>
-              <button
-                type="button"
-                className="f-card-action-btn"
-                onClick={() => openDemoModal('Enterprise Services Consultation')}
-              >
-                <span>Consult Our Engineers</span>
-                <ArrowRight size={14} className="f-btn-arrow" />
-              </button>
-            </div>
-            <div className="f-card-visual">
-              <div className="f-capsule-widget">
-                <div className="widget-header">
-                  <div className="widget-header-left">
-                    <span className="widget-pulse-dot green" />
-                    <span className="widget-heading">SOLUTIONS SUITE</span>
-                  </div>
-                  <span className="widget-pill green">End-to-End SLA</span>
-                </div>
-                <div className="widget-items-grid">
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Web & App Engineering')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon green"><Code size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">Web & App Engineering</span>
-                      <span className="widget-domain-sub">Full-Stack Platforms & Apps</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Custom SaaS Development')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon teal"><Server size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">Custom SaaS Development</span>
-                      <span className="widget-domain-sub">Enterprise Scalable Systems</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Cloud & Data Management')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon indigo"><Database size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">Cloud & Data Management</span>
-                      <span className="widget-domain-sub">High-Volume DevOps & DBs</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-                  <div
-                    className="widget-domain-row"
-                    onClick={() => openDemoModal('Dedicated Tech Teams')}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className="widget-domain-icon emerald"><ShieldCheck size={14} /></div>
-                    <div className="widget-domain-meta">
-                      <span className="widget-domain-name">Dedicated Tech Teams</span>
-                      <span className="widget-domain-sub">Ongoing Support & Guidance</span>
-                    </div>
-                    <ArrowRight size={12} className="widget-row-arrow" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Our Products */}
-      <section id="products" className="products-section">
-        <div className="container">
-          <div className="section-header-row">
-            <div>
-              <div className="section-overline">OUR PRODUCTS</div>
-              <h2 className="section-title">Products Built for Real Needs</h2>
-            </div>
-            <a href="#roadmap" className="section-header-link">
-              View All Products <ArrowRight size={14} />
-            </a>
-          </div>
-
-          <div className="cards-scroll-grid">
-            {/* 1. Optimedicate */}
-            <div
-              className="product-card"
-              onClick={() => openDemoModal('Optimedicate (SSDC)')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="product-category-row">
-                <span className="product-category-pill pill-healthcare">Healthcare OS</span>
-              </div>
-              <div className="product-card-img-wrap wrap-healthcare">
-                <img src={laptopImg} alt="Optimedicate SSDC" className="product-card-img" />
-              </div>
-              <div className="product-card-body">
-                <h3 className="product-card-title">Optimedicate (SSDC)</h3>
-                <p className="product-card-desc">Medical Lab Diagnostic &amp; Operations OS</p>
-                <div className="product-card-footer">
-                  <div className="product-cta-pill">
-                    <span>Request Demo</span>
-                    <ArrowRight size={12} className="cta-arrow" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. WACentral */}
-            <div
-              className="product-card"
-              onClick={() => openDemoModal('WACentral')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="product-category-row">
-                <span className="product-category-pill pill-api">WhatsApp API</span>
-              </div>
-              <div className="product-card-img-wrap wrap-api">
-                <img src={phoneWACentralImg} alt="WACentral" className="product-card-img phone-fit" />
-              </div>
-              <div className="product-card-body">
-                <h3 className="product-card-title">WACentral</h3>
-                <p className="product-card-desc">High-Throughput WhatsApp API Cloud Gateway</p>
-                <div className="product-card-footer">
-                  <div className="product-cta-pill">
-                    <span>Request Demo</span>
-                    <ArrowRight size={12} className="cta-arrow" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. WA Connect */}
-            <div
-              className="product-card"
-              onClick={() => openDemoModal('WA Connect')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="product-category-row">
-                <span className="product-category-pill pill-messaging">Omnichannel</span>
-              </div>
-              <div className="product-card-img-wrap wrap-messaging">
-                <img src={dualPhonesImg} alt="WA Connect" className="product-card-img" />
-              </div>
-              <div className="product-card-body">
-                <h3 className="product-card-title">WA Connect</h3>
-                <p className="product-card-desc">Multi-Agent Business Communication Platform</p>
-                <div className="product-card-footer">
-                  <div className="product-cta-pill">
-                    <span>Request Demo</span>
-                    <ArrowRight size={12} className="cta-arrow" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. SinkApp */}
-            <div
-              className="product-card"
-              onClick={() => openDemoModal('SinkApp')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="product-category-row">
-                <span className="product-category-pill pill-app">SuperApp</span>
-              </div>
-              <div className="product-card-img-wrap wrap-app">
-                <img src={phoneSinkAppImg} alt="SinkApp" className="product-card-img phone-fit" />
-              </div>
-              <div className="product-card-body">
-                <h3 className="product-card-title">SinkApp</h3>
-                <p className="product-card-desc">Unified Lifestyle, Utilities &amp; Services Ecosystem</p>
-                <div className="product-card-footer">
-                  <div className="product-cta-pill">
-                    <span>Request Demo</span>
-                    <ArrowRight size={12} className="cta-arrow" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 5. SINCERITY Cloud */}
-            <div
-              className="product-card"
-              onClick={() => openDemoModal('SINCERITY Cloud')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="product-category-row">
-                <span className="product-category-pill pill-cloud">Cloud Storage</span>
-              </div>
-              <div className="product-card-img-wrap wrap-cloud">
-                <img src={cloudServersImg} alt="SINCERITY Cloud" className="product-card-img" />
-              </div>
-              <div className="product-card-body">
-                <h3 className="product-card-title">SINCERITY Cloud</h3>
-                <p className="product-card-desc">Low-Cost Resilient Object Storage Architecture</p>
-                <div className="product-card-footer">
-                  <div className="product-cta-pill">
-                    <span>Request Demo</span>
-                    <ArrowRight size={12} className="cta-arrow" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Technology Domains */}
-      <section id="tech-domains" className="domains-section">
-        <div className="container">
-          <div className="section-header-row">
-            <div>
-              <div className="section-overline">TECHNOLOGY DOMAINS</div>
-              <h2 className="section-title">Research. Develop. Build for the Future.</h2>
-            </div>
-            <a href="#roadmap" className="section-header-link">
-              Explore All Technologies <ArrowRight size={14} />
-            </a>
-          </div>
-
-          <div className="cards-scroll-grid domains-grid">
-            {/* Domain 1: AI */}
-            <div
-              className="domain-card"
-              onClick={() => openDemoModal('Artificial Intelligence')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="domain-icon-wrap glow-ai">
-                <img src={iconAiImg} alt="Artificial Intelligence" className="domain-icon-img" />
-              </div>
-              <h3 className="domain-card-title">Artificial Intelligence</h3>
-              <p className="domain-card-subtitle">Neural Models &amp; Diagnostics</p>
-              <div className="domain-card-footer">
-                <div className="domain-cta-pill">
-                  <span>Explore Domain</span>
-                  <ArrowRight size={11} className="cta-arrow" />
-                </div>
-              </div>
-            </div>
-
-            {/* Domain 2: Cloud */}
-            <div
-              className="domain-card"
-              onClick={() => openDemoModal('Cloud & SaaS')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="domain-icon-wrap glow-cloud">
-                <img src={iconCloudImg} alt="Cloud & SaaS" className="domain-icon-img" />
-              </div>
-              <h3 className="domain-card-title">Cloud &amp; SaaS</h3>
-              <p className="domain-card-subtitle">Distributed Scalable Backends</p>
-              <div className="domain-card-footer">
-                <div className="domain-cta-pill">
-                  <span>Explore Domain</span>
-                  <ArrowRight size={11} className="cta-arrow" />
-                </div>
-              </div>
-            </div>
-
-            {/* Domain 3: IoT */}
-            <div
-              className="domain-card"
-              onClick={() => openDemoModal('IoT & Automation')}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="domain-icon-wrap glow-iot">
-                <img src={iconIotImg} alt="IoT & Automation" className="domain-icon-img" />
-              </div>
-              <h3 className="domain-card-title">IoT &amp; Automation</h3>
-              <p className="domain-card-subtitle">Edge Telemetry &amp; Sensors</p>
-              <div className="domain-card-footer">
-                <div className="domain-cta-pill">
-                  <span>Explore Domain</span>
-                  <ArrowRight size={11} className="cta-arrow" />
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Current Technologies & What's In Development (Roadmap) */}
-      <section id="roadmap" className="roadmap-section">
-        <div className="container">
-          <div className="roadmap-top-row">
-            <div>
-              <div className="section-overline">CURRENT TECHNOLOGIES &amp; WHAT'S IN DEVELOPMENT</div>
-            </div>
-            <a href="#contact" className="section-header-link">
-              View Full Roadmap <ArrowRight size={14} />
-            </a>
-          </div>
-
-          {/* Filter Tabs */}
-          <div className="filter-tabs-row">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                className={`filter-tab ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {/* Filtered Cards Row */}
-          <div className="cards-scroll-grid mt-6">
-            {filteredProjects.map((p) => (
+      <main id="main">
+        <section className="hero-section" aria-labelledby="hero-title">
+          <div className="container">
+            <div className="hero-card">
               <div
-                key={p.id}
-                className="product-card"
-                onClick={() => openDemoModal(p.title)}
-                role="button"
-                tabIndex={0}
+                className="hero-brand"
+                aria-label="Sincerity OPC Private Limited"
               >
-                <div className="badge-row">
-                  <span className={`status-badge ${p.badgeClass}`}>
-                    <span className="status-badge-dot" />
-                    {p.badge}
-                  </span>
+                <SincerityLogo size="var(--hero-logo-size)" />
+                <SincerityWordmark width="100%" />
+              </div>
+              <div className="hero-copy">
+                <h1 id="hero-title">
+                  Technology.
+                  <br />
+                  <span>Built with purpose.</span>
+                </h1>
+                <p>
+                  We build SaaS products, AI applications, and communication
+                  platforms, alongside technology services for businesses.
+                </p>
+                <div className="hero-actions">
+                  <a className="button button-dark" href="#technologies">
+                    Explore Products <ArrowRight size={16} />
+                  </a>
+                  <a className="text-link" href="#services">
+                    Explore Services <ArrowRight size={16} />
+                  </a>
                 </div>
-                <div className="product-card-img-wrap">
-                  <img src={p.img} alt={p.title} className="product-card-img" />
-                </div>
-                <div className="product-card-body">
-                  <h3 className="product-card-title">{p.title}</h3>
-                  <p className="product-card-desc">{p.subtitle}</p>
-                  <div className="product-card-footer">
-                    <div className="product-cta-pill">
-                      <span>{p.badge === 'Live' || p.badge === 'Beta' ? 'Request Demo' : 'Inquire Access'}</span>
-                      <ArrowRight size={12} className="cta-arrow" />
+              </div>
+            </div>
+            <div className="hero-caption">
+              <span>Our products. Your possibilities.</span>
+              <a href="#technologies">
+                Discover Sincerity <ArrowDown size={14} />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="technologies-section section-space"
+          id="technologies"
+          aria-labelledby="technologies-title"
+        >
+          <div className="container">
+            <div className="section-heading">
+              <div>
+                <p className="eyebrow">SINCERITY TECHNOLOGIES</p>
+                <h2 id="technologies-title">
+                  Ideas brought to life.
+                  <br />
+                  <span>Products built to be useful.</span>
+                </h2>
+              </div>
+              <p className="section-intro">
+                Discover our software and communication products. Find what fits
+                your work, and take a closer look.
+              </p>
+            </div>
+            <div className="product-grid" id="products">
+              {products.map((product, index) => {
+                const Icon = product.icon;
+                return (
+                  <article
+                    className={`product-card product-${product.theme}`}
+                    key={product.name}
+                  >
+                    <div className="product-identity" aria-hidden="true">
+                      <div className="product-identity-top">
+                        <span>{product.category}</span>
+                        <span className="product-number">0{index + 1}</span>
+                      </div>
+                      <div className="product-symbol">
+                        <Icon size={44} strokeWidth={1.35} />
+                      </div>
+                      <div className="product-identity-bottom">
+                        <span>{product.name}</span>
+                        <ChevronRight size={22} strokeWidth={1.3} />
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. Why Sincerity */}
-      <section id="about" className="why-sincerity-section">
-        <div className="container why-grid">
-          {/* Left Column */}
-          <div className="why-text-col">
-            <div className="section-overline">WHY SINCERITY</div>
-            <h2 className="why-main-title">
-              Technology<br />
-              with Purpose.
-            </h2>
-            <p className="why-desc">
-              We build practical technology solutions that help businesses, professionals and individuals work better, simpler and faster.
-            </p>
-            <button
-              type="button"
-              className="btn-dark-pill"
-              onClick={() => openDemoModal('General Demo & Inquiry')}
-            >
-              About SINCERITY <ArrowRight size={14} className="ml-1" />
-            </button>
-          </div>
-
-          {/* Right 3x2 Grid (3 across, 2 rows) */}
-          <div className="why-features-grid-3col">
-            {/* Feature 1 */}
-            <div className="why-feature-card">
-              <div className="why-icon-box">
-                <Target size={20} color="#2563EB" />
-              </div>
-              <div className="why-feature-content">
-                <h4 className="why-feature-title">Real-World Focus</h4>
-                <p className="why-feature-text">High-utility products engineered to solve actual workflow and operational challenges.</p>
-              </div>
+                    <div className="product-body">
+                      <div className="product-heading">
+                        <h3>{product.name}</h3>
+                        <span
+                          className={`status ${product.status === "Beta" ? "status-beta" : ""}`}
+                        >
+                          {product.status}
+                        </span>
+                      </div>
+                      <p>{product.description}</p>
+                      <span className="product-audience">
+                        {product.audience}
+                      </span>
+                      <button
+                        className="text-link product-link"
+                        onClick={() => setDetail(product)}
+                      >
+                        Explore {product.name} <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-
-            {/* Feature 2 */}
-            <div className="why-feature-card">
-              <div className="why-icon-box">
-                <Lightbulb size={20} color="#2563EB" />
-              </div>
-              <div className="why-feature-content">
-                <h4 className="why-feature-title">Innovation Driven</h4>
-                <p className="why-feature-text">Continuous research and development in AI, cloud systems, and connected technologies.</p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="why-feature-card">
-              <div className="why-icon-box">
-                <Box size={20} color="#2563EB" />
-              </div>
-              <div className="why-feature-content">
-                <h4 className="why-feature-title">End-to-End Capability</h4>
-                <p className="why-feature-text">End-to-end development spanning connected devices, cloud SaaS, and apps.</p>
-              </div>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="why-feature-card">
-              <div className="why-icon-box">
-                <Database size={20} color="#2563EB" />
-              </div>
-              <div className="why-feature-content">
-                <h4 className="why-feature-title">Affordable Solutions</h4>
-                <p className="why-feature-text">High-efficiency, cost-optimized architectures built for sustainable business scaling.</p>
-              </div>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="why-feature-card">
-              <div className="why-icon-box">
-                <Headphones size={20} color="#2563EB" />
-              </div>
-              <div className="why-feature-content">
-                <h4 className="why-feature-title">Reliable Support</h4>
-                <p className="why-feature-text">Long-term SLA-backed product maintenance, engineering consultations, and updates.</p>
-              </div>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="why-feature-card">
-              <div className="why-icon-box">
-                <TrendingUp size={20} color="#2563EB" />
-              </div>
-              <div className="why-feature-content">
-                <h4 className="why-feature-title">Future Ready</h4>
-                <p className="why-feature-text">Future-proof engineering designed for next-generation intelligence and connectivity.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. Let's Work Together CTA Banner */}
-      <section className="cta-banner-section">
-        <div className="container">
-          <div className="cta-banner-card">
-            <div className="cta-banner-aura" />
-            <div className="cta-banner-text">
-              <div className="cta-banner-overline">LET'S WORK TOGETHER</div>
-              <h3 className="cta-banner-title">Let's Build a Smarter Tomorrow Together.</h3>
-              <p className="cta-banner-desc">
-                Whether you're an enterprise, healthcare provider, or innovative startup, our engineering team is ready to deploy solutions tailored to your scale.
-              </p>
-            </div>
-            <div className="cta-banner-buttons">
+            <p className="product-note">
+              Interested in a product? Explore the details or{" "}
               <button
-                type="button"
-                className="btn-white-pill"
-                onClick={() => openDemoModal('General Demo & Inquiry')}
+                className="inline-link"
+                onClick={() => openEnquiry({ kind: "business" })}
               >
-                Schedule a Demo <ArrowRight size={14} className="ml-1" />
+                start a conversation with us
               </button>
-              <a href="#products" className="btn-outline-white">
-                View Our Products
-              </a>
-            </div>
+              .
+            </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 10. Footer */}
-      <footer id="contact" className="site-footer">
-        <div className="container footer-grid">
-          {/* Col 1: Brand & Socials */}
-          <div className="footer-col brand-col">
-            <div
-              className="footer-brand"
-              onClick={onBackToSplash}
-              role="button"
-              tabIndex={0}
-              style={{ cursor: 'pointer' }}
-            >
-              <img
-                src={logoM4SpaceBlackSrc}
-                alt="Sincerity Logo"
-                className="footer-emblem"
-                width={36}
-                height={34}
-              />
-              <div className="footer-wordmark">
-                <SincerityWordmark width={150} />
-              </div>
-            </div>
-            <p className="footer-tagline">Technology. Innovation. Possibilities.</p>
-
-            <div className="footer-socials">
-              {/* LinkedIn */}
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="social-icon-btn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28m1.4 9.74v-8.37H5.06v8.37h2.8z"/>
-                </svg>
-              </a>
-              {/* YouTube */}
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="social-icon-btn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M21.58 7.19a2.5 2.5 0 0 0-1.76-1.77C18.26 5 12 5 12 5s-6.26 0-7.82.42a2.5 2.5 0 0 0-1.76 1.77A26.38 26.38 0 0 0 2 12c0 1.62.14 3.23.42 4.81a2.5 2.5 0 0 0 1.76 1.77C5.74 19 12 19 12 19s6.26 0 7.82-.42a2.5 2.5 0 0 0 1.76-1.77A26.38 26.38 0 0 0 22 12c0-1.62-.14-3.23-.42-4.81zM9.75 15.02V8.98L15 12l-5.25 3.02z"/>
-                </svg>
-              </a>
-              {/* X */}
-              <a href="https://x.com" target="_blank" rel="noreferrer" aria-label="X (Twitter)" className="social-icon-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              {/* Instagram */}
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="social-icon-btn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          {/* Col 2: Technologies */}
-          <div className="footer-col">
-            <h4 className="footer-col-title">Technologies</h4>
-            <ul className="footer-links">
-              <li><a href="#products">Products</a></li>
-              <li><a href="#tech-domains">AI &amp; Research</a></li>
-              <li><a href="#tech-domains">Cloud &amp; SaaS</a></li>
-              <li><a href="#tech-domains">IoT &amp; Automation</a></li>
-            </ul>
-          </div>
-
-          {/* Col 3: Services */}
-          <div className="footer-col" id="services-list">
-            <h4 className="footer-col-title">Services</h4>
-            <ul className="footer-links">
-              <li><a href="#contact">Web Development</a></li>
-              <li><a href="#contact">App Development</a></li>
-              <li><a href="#contact">SaaS Development</a></li>
-              <li><a href="#contact">Data Management</a></li>
-              <li><a href="#contact">Project Support</a></li>
-              <li><a href="#contact">Hire People</a></li>
-            </ul>
-          </div>
-
-          {/* Col 4: Company */}
-          <div className="footer-col">
-            <h4 className="footer-col-title">Company</h4>
-            <ul className="footer-links">
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#contact">Careers</a></li>
-              <li><a href="#contact">News</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-
-          {/* Col 5: Legal & Contact */}
-          <div className="footer-col legal-col">
-            <button
-              type="button"
-              className="btn-dark-pill mb-4"
-              onClick={() => openDemoModal('General Demo & Inquiry')}
-            >
-              Get in Touch <ArrowRight size={14} className="ml-1" />
-            </button>
-            <div className="footer-legal-text">
-              <p className="font-semibold text-gray-900">SINCERITY (OPC) Private Limited</p>
-              <p className="text-gray-500">India</p>
-              <p className="text-xs text-gray-400 mt-4">
-                &copy; 2026 SINCERITY. All rights reserved.
+        <section
+          className="services-section section-space"
+          id="services"
+          aria-labelledby="services-title"
+        >
+          <div className="container services-layout">
+            <div className="services-intro">
+              <p className="eyebrow">SINCERITY SERVICES</p>
+              <h2 id="services-title">
+                Your business.
+                <br />
+                Our technical expertise.
+              </h2>
+              <p>
+                Have something to build, connect, or improve? We work with
+                businesses to turn their requirements into practical technology.
               </p>
+              <button
+                className="button button-dark"
+                onClick={() => openEnquiry({ kind: "business" })}
+              >
+                Discuss your project <ArrowRight size={16} />
+              </button>
             </div>
+            <div className="service-list">
+              {services.map((service, index) => (
+                <article className="service-row" key={service.title}>
+                  <span className="service-index">0{index + 1}</span>
+                  <div>
+                    <h3>{service.title}</h3>
+                    <p>{service.text}</p>
+                  </div>
+                  <button
+                    className="service-action"
+                    aria-label={`Enquire about ${service.title}`}
+                    onClick={() =>
+                      openEnquiry({ kind: "business", service: service.title })
+                    }
+                  >
+                    <ArrowRight size={20} />
+                  </button>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="company-section section-space"
+          id="company"
+          aria-labelledby="company-title"
+        >
+          <div className="container company-layout">
+            <div>
+              <p className="eyebrow">THE COMPANY BEHIND THE TECHNOLOGY</p>
+              <h2 id="company-title">
+                Built with thought.
+                <br />
+                <span>Made with Sincerity.</span>
+              </h2>
+            </div>
+            <div className="company-copy">
+              <p className="company-lead">
+                We’re a technology company bringing together our own products
+                and services for businesses.
+              </p>
+              <p>
+                Through Sincerity Technologies, we develop software, SaaS, AI,
+                and communication products. Through Sincerity Services, we help
+                businesses build and support their technology.
+              </p>
+              <a className="text-link" href="mailto:contact@thesincerity.in">
+                Get to know us <ArrowRight size={16} />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="contact-section"
+          id="contact"
+          aria-labelledby="contact-title"
+        >
+          <div className="container">
+            <div className="contact-panel">
+              <div>
+                <p className="eyebrow">LET’S START A CONVERSATION</p>
+                <h2 id="contact-title">What would you like to build?</h2>
+                <p>
+                  Explore a product, discuss a project, or simply get in touch.
+                </p>
+              </div>
+              <button
+                className="button button-white"
+                onClick={() => openEnquiry({ kind: "business" })}
+              >
+                Talk to Sincerity <ArrowRight size={17} />
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="container">
+          <div className="footer-main">
+            <div className="footer-brand">
+              <a className="brand" href="#top" aria-label="Sincerity home">
+                <SincerityLogo size={32} />
+                <SincerityWordmark width={140} />
+              </a>
+              <p>Technology. Built with purpose.</p>
+            </div>
+            <nav aria-label="Footer navigation">
+              <a href="#technologies">Technologies</a>
+              <a href="#services">Services</a>
+              <a href="#company">Company</a>
+            </nav>
+            <div className="footer-contact">
+              <span>Start a conversation</span>
+              <a href="mailto:contact@thesincerity.in">
+                contact@thesincerity.in <ArrowRight size={14} />
+              </a>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <span>© {copyrightYear} Sincerity (OPC) Private Limited</span>
+            <span>India</span>
           </div>
         </div>
       </footer>
 
-      {/* Dynamic Request a Demo / Contact Modal */}
-      {demoModalOpen && (
-        <div className="modal-backdrop" onClick={() => setDemoModalOpen(false)}>
-          <div className="modal-card demo-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div className="modal-header-brand">
-                <span className="demo-pill-badge">Live Demonstration</span>
-                <h3 className="modal-title">Request a Product Demo</h3>
+      {modalOpen && (
+        <dialog
+          ref={dialog}
+          className="enquiry-dialog"
+          aria-labelledby="dialog-title"
+          onCancel={(event) => {
+            event.preventDefault();
+            closeDialog();
+          }}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              const bounds = event.currentTarget.getBoundingClientRect();
+              if (
+                event.clientX < bounds.left ||
+                event.clientX > bounds.right ||
+                event.clientY < bounds.top ||
+                event.clientY > bounds.bottom
+              )
+                closeDialog();
+            }
+          }}
+        >
+          <button
+            className="dialog-close"
+            aria-label="Close dialog"
+            onClick={closeDialog}
+          >
+            <X size={21} />
+          </button>
+          {detail ? (
+            <div className="product-detail">
+              <p className="eyebrow">
+                SINCERITY TECHNOLOGIES · {detail.status.toUpperCase()}
+              </p>
+              <h2 id="dialog-title" tabIndex={-1}>
+                {detail.name}
+              </h2>
+              <p className="detail-lead">{detail.description}</p>
+              <p>{detail.detail}</p>
+              <div className="detail-audience">
+                <Check size={17} />
+                {detail.audience}
               </div>
               <button
-                type="button"
-                className="modal-close-btn"
-                aria-label="Close"
-                onClick={() => setDemoModalOpen(false)}
+                className="button button-dark"
+                onClick={() =>
+                  openEnquiry({ kind: "product", product: detail })
+                }
               >
-                <CloseIcon size={20} />
+                {detail.status === "Beta"
+                  ? "Enquire about beta access"
+                  : "Request a product demo"}
+                <ArrowRight size={16} />
               </button>
             </div>
-
-            {isSuccess ? (
-              <div className="demo-success-box">
-                <div className="success-icon-wrap">
-                  <CheckCircle2 size={52} color="#16a34a" />
-                </div>
-                <h4 className="success-title">Demo Request Received!</h4>
-                <p className="success-desc">
-                  Thank you, <strong>{formData.name}</strong>. Your request for <strong>{formData.product}</strong> has been successfully submitted.
-                </p>
-                <div className="success-meta-card">
-                  <span>Our technical specialist will contact you at <strong>{formData.email}</strong> or <strong>{formData.phone}</strong> within 24 hours to schedule your session.</span>
-                </div>
-                <button
-                  type="button"
-                  className="btn-dark-pill w-full mt-4"
-                  onClick={() => setDemoModalOpen(false)}
-                >
-                  Done
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="demo-priority-badge">
-                  <Sparkles size={13} color="#2563eb" />
-                  <span>Direct 1-on-1 walkthrough with the Sincerity technical team</span>
-                </div>
-                <p className="modal-subtitle">
-                  Experience Sincerity's software firsthand. Fill in your details below and our team will reach out to schedule your personalized live demo session.
-                </p>
-                <form className="modal-form" onSubmit={handleSubmitDemo}>
-                  <div className="form-group">
-                    <label className="form-label">Product / Solution *</label>
-                    <select
-                      className="form-input form-select"
-                      value={formData.product}
-                      onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                      required
-                    >
-                      <option value="Optimedicate (SSDC)">Optimedicate (SSDC) — Medical Lab System</option>
-                      <option value="WACentral">WACentral — WhatsApp API Gateway</option>
-                      <option value="WA Connect">WA Connect — Business on WhatsApp</option>
-                      <option value="SinkApp">SinkApp — All-in-one Application</option>
-                      <option value="SINCERITY Cloud">SINCERITY Cloud — Storage Platform</option>
-                      <option value="IoT Lab Devices">IoT Lab Devices — Hardware & Edge</option>
-                      <option value="Enterprise Services">Enterprise Software & Development Services</option>
-                      <option value="General Inquiry">General Partnership & Inquiry</option>
-                    </select>
-                  </div>
-
-                  <div className="form-grid-2col">
-                    <div className="form-group">
-                      <label className="form-label">Your Name *</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Dr. Rajesh Kumar"
-                        className="form-input"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Phone / WhatsApp *</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="+91 98765 43210"
-                        className="form-input"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Work Email *</label>
+          ) : sent ? (
+            <div className="success-state">
+              <CheckCircle2 size={44} strokeWidth={1.5} />
+              <p className="eyebrow">MESSAGE SENT</p>
+              <h2 id="dialog-title" tabIndex={-1}>
+                Thanks for reaching out.
+              </h2>
+              <p>
+                Your message has been submitted. Our team will reply to the
+                email address you provided.
+              </p>
+              <button className="button button-dark" onClick={closeDialog}>
+                Back to Sincerity
+              </button>
+            </div>
+          ) : (
+            <>
+              <p className="eyebrow">
+                {enquiry?.kind === "product"
+                  ? "PRODUCT ENQUIRY"
+                  : "SINCERITY SERVICES & GENERAL ENQUIRIES"}
+              </p>
+              <h2 id="dialog-title" tabIndex={-1}>
+                {enquiry?.kind === "product"
+                  ? `Let’s explore ${enquiry.product.name}.`
+                  : "Tell us what you have in mind."}
+              </h2>
+              <p className="dialog-intro">
+                {enquiry?.kind === "product"
+                  ? "Leave your details and we’ll get in touch to discuss the product."
+                  : "Share a little about your business or project. We’ll take it from there."}
+              </p>
+              <form onSubmit={submit} aria-busy={sending}>
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label htmlFor="enquiry-name">
+                      Your name <span>(required)</span>
+                    </label>
                     <input
-                      type="email"
+                      id="enquiry-name"
+                      name="name"
+                      autoComplete="name"
+                      maxLength={120}
                       required
-                      placeholder="name@company.com"
-                      className="form-input"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      disabled={sending}
                     />
                   </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Message / Preferred Demo Time (Optional)</label>
-                    <textarea
-                      rows={3}
-                      placeholder="Tell us what you'd like to see or your preferred date/time..."
-                      className="form-input"
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  <div className="form-field">
+                    <label htmlFor="enquiry-email">
+                      Email address <span>(required)</span>
+                    </label>
+                    <input
+                      id="enquiry-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      maxLength={254}
+                      required
+                      disabled={sending}
                     />
                   </div>
-
-                  <button
-                    type="submit"
-                    className="btn-dark-pill w-full mt-2"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                        <Loader2 size={16} className="animate-spin" />
-                        Sending Demo Request...
-                      </span>
-                    ) : (
-                      <span>Schedule Live Demo &rarr;</span>
-                    )}
-                  </button>
-                  <p className="form-privacy-note">
-                    🔒 Sincerity respects your privacy. We will never spam or share your contact details.
+                </div>
+                <div className="form-field">
+                  <label htmlFor="enquiry-company">
+                    Company <span>(optional)</span>
+                  </label>
+                  <input
+                    id="enquiry-company"
+                    name="company"
+                    autoComplete="organization"
+                    maxLength={160}
+                    disabled={sending}
+                  />
+                </div>
+                {enquiry?.kind === "business" && enquiry.service && (
+                  <p className="service-context">
+                    Regarding: <strong>{enquiry.service}</strong>
                   </p>
-                </form>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Video Modal */}
-      {videoModalOpen && (
-        <div className="modal-backdrop" onClick={() => setVideoModalOpen(false)}>
-          <div className="modal-card video-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3 className="modal-title">Sincerity Overview</h3>
-              <button
-                type="button"
-                className="modal-close-btn"
-                onClick={() => setVideoModalOpen(false)}
-              >
-                <CloseIcon size={18} />
-              </button>
-            </div>
-            <div className="video-player-box">
-              <div className="video-placeholder">
-                <Play size={48} color="#2563EB" />
-                <p className="mt-4 text-sm font-medium text-gray-700">
-                  Sincerity Corporate Showcase Video
+                )}
+                <div className="form-field">
+                  <label htmlFor="enquiry-message">
+                    {enquiry?.kind === "product"
+                      ? "What would you like to know?"
+                      : "How can we help?"}{" "}
+                    <span>(required)</span>
+                  </label>
+                  <textarea
+                    id="enquiry-message"
+                    name="message"
+                    rows={4}
+                    maxLength={5000}
+                    required
+                    disabled={sending}
+                  />
+                </div>
+                <div className="honeypot" aria-hidden="true">
+                  <label htmlFor="enquiry-website">Leave this empty</label>
+                  <input
+                    id="enquiry-website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+                {error && (
+                  <p className="form-error" role="alert">
+                    {error}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  className="button button-dark form-submit"
+                  disabled={sending}
+                >
+                  {sending ? (
+                    <>
+                      <Loader2 size={17} className="spinner" />
+                      Sending message…
+                    </>
+                  ) : (
+                    <>
+                      Send{" "}
+                      {enquiry?.kind === "product"
+                        ? "product enquiry"
+                        : "message"}
+                      <ArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+                <p className="form-note">
+                  We’ll use your details to respond to your enquiry. Prefer
+                  email?{" "}
+                  <a href="mailto:contact@thesincerity.in">
+                    contact@thesincerity.in
+                  </a>
                 </p>
-                <p className="text-xs text-gray-500">
-                  Building next-generation software, AI &amp; IoT solutions
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+              </form>
+            </>
+          )}
+        </dialog>
       )}
     </div>
   );
-};
-
-export default ExplorePage;
+}
