@@ -1,69 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import {
-  ArrowRight,
-  Check,
-  CheckCircle2,
-  ChevronRight,
-  Loader2,
-  Menu,
-  MessageCircle,
-  Microscope,
-  X,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, Loader2, Menu, X } from "lucide-react";
 import SincerityLogo from "./SincerityLogo";
 import SincerityWordmark from "./SincerityWordmark";
-import optimedicateIcon from "../assets/optimedicate-icon.png";
+import { products } from "../data/products";
+import type { Product } from "../data/products";
+import ProductPage from "./ProductPage";
 import "./ExplorePage.css";
-
-type Product = {
-  name: string;
-  category: string;
-  status: string;
-  description: string;
-  detail: string;
-  audience: string;
-  icon: typeof Microscope;
-  image?: string;
-  theme: string;
-};
-
-const products: Product[] = [
-  {
-    name: "Optimedicate",
-    category: "LAB MANAGEMENT",
-    status: "Available",
-    description: "Software for the everyday work of medical laboratories.",
-    detail:
-      "Optimedicate (SSDC) is our medical laboratory management product. Speak with our team to see the product in action and discuss how it fits your laboratory’s workflow.",
-    audience: "For medical laboratories",
-    icon: Microscope,
-    image: optimedicateIcon,
-    theme: "lab",
-  },
-  {
-    name: "WACentral",
-    category: "BUSINESS MESSAGING",
-    status: "Available",
-    description: "Connect WhatsApp messaging to your business software.",
-    detail:
-      "WACentral is our WhatsApp API gateway. Request a walkthrough to explore business messaging integration and discuss your requirements with our team.",
-    audience: "For businesses and developers",
-    icon: MessageCircle,
-    theme: "messaging",
-  },
-  {
-    name: "WA Connect",
-    category: "COMMUNICATION",
-    status: "Beta",
-    description: "A simpler way to bring your business conversations together.",
-    detail:
-      "WA Connect is our business communication product, currently in beta. Contact us to learn about its current capabilities and enquire about beta access.",
-    audience: "For business communication",
-    icon: MessageCircle,
-    theme: "connect",
-  },
-];
 
 const services = [
   {
@@ -115,7 +58,10 @@ type Enquiry =
 
 export default function ExplorePage() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [detail, setDetail] = useState<Product | null>(null);
+  const currentProduct = products.find(
+    (product) => product.path === window.location.pathname.replace(/\/?$/, "/"),
+  );
+  const homeHref = (anchor: string) => (currentProduct ? `/${anchor}` : anchor);
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -123,7 +69,7 @@ export default function ExplorePage() {
   const dialog = useRef<HTMLDialogElement>(null);
   const pendingRequest = useRef<AbortController | null>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
-  const modalOpen = Boolean(detail || enquiry);
+  const modalOpen = Boolean(enquiry);
   const enquiryTopic =
     enquiry?.kind === "business" && enquiry.topic
       ? enquiryTopics[enquiry.topic]
@@ -174,7 +120,7 @@ export default function ExplorePage() {
       element.querySelector<HTMLElement>('input:not([tabindex="-1"])') ||
       element.querySelector<HTMLElement>("h2");
     target?.focus();
-  }, [detail, enquiry, sent]);
+  }, [enquiry, sent]);
 
   useEffect(() => () => pendingRequest.current?.abort(), []);
 
@@ -194,12 +140,10 @@ export default function ExplorePage() {
     pendingRequest.current?.abort();
     pendingRequest.current = null;
     setSending(false);
-    setDetail(null);
     setEnquiry(null);
   };
 
   const openEnquiry = (next: Enquiry) => {
-    setDetail(null);
     setError("");
     setSent(false);
     setEnquiry(next);
@@ -275,7 +219,7 @@ export default function ExplorePage() {
         <div className="container header-inner">
           <a
             className="brand"
-            href="#top"
+            href={homeHref("#top")}
             aria-label="Sincerity home"
             onClick={() => setMenuOpen(false)}
           >
@@ -283,9 +227,9 @@ export default function ExplorePage() {
             <SincerityWordmark width={138} />
           </a>
           <nav className="desktop-nav" aria-label="Main navigation">
-            <a href="#technologies">Technologies</a>
-            <a href="#services">Services</a>
-            <a href="#company">Company</a>
+            <a href={homeHref("#technologies")}>Technologies</a>
+            <a href={homeHref("#services")}>Services</a>
+            <a href={homeHref("#company")}>Company</a>
           </nav>
           <div className="header-actions">
             <button
@@ -312,13 +256,16 @@ export default function ExplorePage() {
           aria-label="Mobile navigation"
           hidden={!menuOpen}
         >
-          <a href="#technologies" onClick={() => setMenuOpen(false)}>
+          <a
+            href={homeHref("#technologies")}
+            onClick={() => setMenuOpen(false)}
+          >
             Technologies <ArrowRight size={17} />
           </a>
-          <a href="#services" onClick={() => setMenuOpen(false)}>
+          <a href={homeHref("#services")} onClick={() => setMenuOpen(false)}>
             Services <ArrowRight size={17} />
           </a>
-          <a href="#company" onClick={() => setMenuOpen(false)}>
+          <a href={homeHref("#company")} onClick={() => setMenuOpen(false)}>
             Company <ArrowRight size={17} />
           </a>
           <button
@@ -333,104 +280,124 @@ export default function ExplorePage() {
       </header>
 
       <main id="main">
-        <section className="hero-section" aria-labelledby="hero-title">
-          <div className="container">
-            <div className="hero-card">
-              <div
-                className="hero-brand"
-                aria-label="Sincerity OPC Private Limited"
-              >
-                <SincerityLogo size="var(--hero-logo-size)" />
-                <SincerityWordmark width="100%" />
-              </div>
-              <div className="hero-copy">
-                <h1 id="hero-title">
-                  Technology.
-                  <br />
-                  <span>Built with purpose.</span>
-                </h1>
-                <p>
-                  We build SaaS products, AI applications, and communication
-                  platforms, alongside technology services for businesses.
-                </p>
-                <div className="hero-actions">
-                  <a className="button button-dark" href="#technologies">
-                    Explore Products <ArrowRight size={16} />
-                  </a>
-                  <a className="text-link" href="#services">
-                    Explore Services <ArrowRight size={16} />
-                  </a>
-                </div>
-              </div>
-            </div>
-            <nav className="division-cards" aria-label="Explore Sincerity">
-              <a className="division-card" href="#technologies">
-                <span className="division-number" aria-hidden="true">
-                  01
-                </span>
-                <div className="division-copy">
-                  <h2>Sincerity Technologies</h2>
-                  <p>Explore our SaaS, AI, and communication products.</p>
-                  <span className="division-action">
-                    Explore Technologies <ArrowRight size={16} />
-                  </span>
-                </div>
-              </a>
-              <a className="division-card" href="#services">
-                <span className="division-number" aria-hidden="true">
-                  02
-                </span>
-                <div className="division-copy">
-                  <h2>Sincerity Services</h2>
-                  <p>
-                    Technology services to help your business build, connect,
-                    and grow.
-                  </p>
-                  <span className="division-action">
-                    Explore Services <ArrowRight size={16} />
-                  </span>
-                </div>
-              </a>
-            </nav>
-          </div>
-        </section>
-
-        <section
-          className="technologies-section section-space"
-          id="technologies"
-          aria-labelledby="technologies-title"
-        >
-          <div className="container">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">SINCERITY TECHNOLOGIES</p>
-                <h2 id="technologies-title">
-                  Ideas brought to life.
-                  <br />
-                  <span>Products built to be useful.</span>
-                </h2>
-              </div>
-              <p className="section-intro">
-                Discover our software and communication products. Find what fits
-                your work, and take a closer look.
-              </p>
-            </div>
-            <div className="product-grid" id="products">
-              {products.map((product, index) => {
-                const Icon = product.icon;
-                return (
-                  <article
-                    className={`product-card product-${product.theme}`}
-                    key={product.name}
+        {currentProduct ? (
+          <ProductPage
+            product={currentProduct}
+            onEnquire={() =>
+              openEnquiry({ kind: "product", product: currentProduct })
+            }
+          />
+        ) : (
+          <>
+            <section className="hero-section" aria-labelledby="hero-title">
+              <div className="container">
+                <div className="hero-card">
+                  <div
+                    className="hero-brand"
+                    aria-label="Sincerity OPC Private Limited"
                   >
-                    <div className="product-identity" aria-hidden="true">
-                      <div className="product-identity-top">
-                        <span>{product.category}</span>
-                        <span className="product-number">0{index + 1}</span>
+                    <SincerityLogo size="var(--hero-logo-size)" />
+                    <SincerityWordmark width="100%" />
+                  </div>
+                  <div className="hero-copy">
+                    <h1 id="hero-title">
+                      Technology.
+                      <br />
+                      <span>Built with purpose.</span>
+                    </h1>
+                    <p>
+                      We build SaaS products, AI applications, and communication
+                      platforms, alongside technology services for businesses.
+                    </p>
+                    <div className="hero-actions">
+                      <a
+                        className="button button-dark"
+                        href={homeHref("#technologies")}
+                      >
+                        Explore Products <ArrowRight size={16} />
+                      </a>
+                      <a className="text-link" href={homeHref("#services")}>
+                        Explore Services <ArrowRight size={16} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <nav className="division-cards" aria-label="Explore Sincerity">
+                  <a className="division-card" href={homeHref("#technologies")}>
+                    <span className="division-number" aria-hidden="true">
+                      01
+                    </span>
+                    <div className="division-copy">
+                      <h2>Sincerity Technologies</h2>
+                      <p>Explore our SaaS, AI, and communication products.</p>
+                      <span className="division-action">
+                        Explore Technologies <ArrowRight size={16} />
+                      </span>
+                    </div>
+                  </a>
+                  <a className="division-card" href={homeHref("#services")}>
+                    <span className="division-number" aria-hidden="true">
+                      02
+                    </span>
+                    <div className="division-copy">
+                      <h2>Sincerity Services</h2>
+                      <p>
+                        Technology services to help your business build,
+                        connect, and grow.
+                      </p>
+                      <span className="division-action">
+                        Explore Services <ArrowRight size={16} />
+                      </span>
+                    </div>
+                  </a>
+                </nav>
+              </div>
+            </section>
+
+            <section
+              className="technologies-section section-space"
+              id="technologies"
+              aria-labelledby="technologies-title"
+            >
+              <div className="container">
+                <div className="section-heading">
+                  <div>
+                    <p className="eyebrow">SINCERITY TECHNOLOGIES</p>
+                    <h2 id="technologies-title">
+                      Our thinking.
+                      <br />
+                      <span>In your hands.</span>
+                    </h2>
+                  </div>
+                  <p className="section-intro">
+                    Purposeful software. Considered in every detail. Discover
+                    the product that fits your world.
+                  </p>
+                </div>
+                <div className="product-grid" id="products">
+                  {products.map((product, index) => (
+                    <a
+                      className={`product-card showcase-${product.theme}`}
+                      href={product.path}
+                      key={product.name}
+                      aria-label={`Explore ${product.name}`}
+                    >
+                      <div className="showcase-copy">
+                        <p className="showcase-category">
+                          {product.category}
+                          <span>{product.status}</span>
+                        </p>
+                        <h3>{product.name}</h3>
+                        <p className="showcase-description">
+                          {product.description}
+                        </p>
+                        <span className="showcase-action">
+                          Explore {product.name}
+                          <ArrowRight size={17} />
+                        </span>
                       </div>
-                      {product.image ? (
+                      <div className="showcase-art" aria-hidden="true">
                         <img
-                          className="product-artwork"
                           src={product.image}
                           alt=""
                           width={500}
@@ -438,161 +405,148 @@ export default function ExplorePage() {
                           loading="lazy"
                           decoding="async"
                         />
-                      ) : (
-                        <div className="product-symbol">
-                          <Icon size={44} strokeWidth={1.35} />
-                        </div>
-                      )}
-                      <div className="product-identity-bottom">
-                        <span>{product.name}</span>
-                        <ChevronRight size={22} strokeWidth={1.3} />
                       </div>
-                    </div>
-                    <div className="product-body">
-                      <div className="product-heading">
-                        <h3>{product.name}</h3>
-                        <span
-                          className={`status ${product.status === "Beta" ? "status-beta" : ""}`}
-                        >
-                          {product.status}
-                        </span>
-                      </div>
-                      <p>{product.description}</p>
-                      <span className="product-audience">
-                        {product.audience}
+                      <span className="showcase-index" aria-hidden="true">
+                        0{index + 1} / SINCERITY TECHNOLOGIES
                       </span>
-                      <button
-                        className="text-link product-link"
-                        onClick={() => setDetail(product)}
-                      >
-                        Explore {product.name} <ArrowRight size={16} />
-                      </button>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-            <p className="product-note">
-              Interested in a product? Explore the details or{" "}
-              <button
-                className="inline-link"
-                onClick={() => openEnquiry({ kind: "business" })}
-              >
-                start a conversation with us
-              </button>
-              .
-            </p>
-          </div>
-        </section>
-
-        <section
-          className="services-section section-space"
-          id="services"
-          aria-labelledby="services-title"
-        >
-          <div className="container services-layout">
-            <div className="services-intro">
-              <p className="eyebrow">SINCERITY SERVICES</p>
-              <h2 id="services-title">
-                Your business.
-                <br />
-                Our technical expertise.
-              </h2>
-              <p>
-                Have something to build, connect, or improve? We work with
-                businesses to turn their requirements into practical technology.
-              </p>
-              <button
-                className="button button-dark"
-                onClick={() => openEnquiry({ kind: "business" })}
-              >
-                Discuss your project <ArrowRight size={16} />
-              </button>
-            </div>
-            <div className="service-list">
-              {services.map((service, index) => (
-                <article className="service-row" key={service.title}>
-                  <span className="service-index">0{index + 1}</span>
-                  <div>
-                    <h3>{service.title}</h3>
-                    <p>{service.text}</p>
-                  </div>
+                    </a>
+                  ))}
+                </div>
+                <p className="product-note">
+                  Interested in a product? Explore the details or{" "}
                   <button
-                    className="service-action"
-                    aria-label={`Enquire about ${service.title}`}
-                    onClick={() =>
-                      openEnquiry({ kind: "business", service: service.title })
-                    }
+                    className="inline-link"
+                    onClick={() => openEnquiry({ kind: "business" })}
                   >
-                    <ArrowRight size={20} />
+                    start a conversation with us
                   </button>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section
-          className="company-section section-space"
-          id="company"
-          aria-labelledby="company-title"
-        >
-          <div className="container company-layout">
-            <div>
-              <p className="eyebrow">THE COMPANY BEHIND THE TECHNOLOGY</p>
-              <h2 id="company-title">
-                Built with thought.
-                <br />
-                <span>Made with Sincerity.</span>
-              </h2>
-            </div>
-            <div className="company-copy">
-              <p className="company-lead">
-                We’re a technology company bringing together our own products
-                and services for businesses.
-              </p>
-              <p>
-                Through Sincerity Technologies, we develop software, SaaS, AI,
-                and communication products. Through Sincerity Services, we help
-                businesses build and support their technology.
-              </p>
-              <a className="text-link" href="mailto:contact@thesincerity.in">
-                Get to know us <ArrowRight size={16} />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section
-          className="contact-section"
-          id="contact"
-          aria-labelledby="contact-title"
-        >
-          <div className="container">
-            <div className="contact-panel">
-              <div>
-                <p className="eyebrow">LET’S START A CONVERSATION</p>
-                <h2 id="contact-title">What would you like to build?</h2>
-                <p>
-                  Explore a product, discuss a project, or simply get in touch.
+                  .
                 </p>
               </div>
-              <button
-                className="button button-white"
-                onClick={() => openEnquiry({ kind: "business" })}
-              >
-                Talk to Sincerity <ArrowRight size={17} />
-              </button>
-            </div>
-          </div>
-        </section>
+            </section>
+
+            <section
+              className="services-section section-space"
+              id="services"
+              aria-labelledby="services-title"
+            >
+              <div className="container services-layout">
+                <div className="services-intro">
+                  <p className="eyebrow">SINCERITY SERVICES</p>
+                  <h2 id="services-title">
+                    A good idea.
+                    <br />
+                    The right expertise.
+                  </h2>
+                  <p>
+                    Have something to build, connect, or improve? We work with
+                    businesses to turn their requirements into practical
+                    technology.
+                  </p>
+                  <button
+                    className="button button-dark"
+                    onClick={() => openEnquiry({ kind: "business" })}
+                  >
+                    Discuss your project <ArrowRight size={16} />
+                  </button>
+                </div>
+                <div className="service-list">
+                  {services.map((service, index) => (
+                    <article className="service-row" key={service.title}>
+                      <span className="service-index">0{index + 1}</span>
+                      <div>
+                        <h3>{service.title}</h3>
+                        <p>{service.text}</p>
+                      </div>
+                      <button
+                        className="service-action"
+                        aria-label={`Enquire about ${service.title}`}
+                        onClick={() =>
+                          openEnquiry({
+                            kind: "business",
+                            service: service.title,
+                          })
+                        }
+                      >
+                        <ArrowRight size={20} />
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section
+              className="company-section section-space"
+              id="company"
+              aria-labelledby="company-title"
+            >
+              <div className="container company-layout">
+                <div>
+                  <p className="eyebrow">THE COMPANY BEHIND THE TECHNOLOGY</p>
+                  <h2 id="company-title">
+                    Thoughtfully built.
+                    <br />
+                    <span>Distinctly Sincerity.</span>
+                  </h2>
+                </div>
+                <div className="company-copy">
+                  <p className="company-lead">
+                    We’re a technology company bringing together our own
+                    products and services for businesses.
+                  </p>
+                  <p>
+                    Through Sincerity Technologies, we develop software, SaaS,
+                    AI, and communication products. Through Sincerity Services,
+                    we help businesses build and support their technology.
+                  </p>
+                  <a
+                    className="text-link"
+                    href="mailto:contact@thesincerity.in"
+                  >
+                    Get to know us <ArrowRight size={16} />
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            <section
+              className="contact-section"
+              id="contact"
+              aria-labelledby="contact-title"
+            >
+              <div className="container">
+                <div className="contact-panel">
+                  <div>
+                    <p className="eyebrow">LET’S START A CONVERSATION</p>
+                    <h2 id="contact-title">What would you like to build?</h2>
+                    <p>
+                      Explore a product, discuss a project, or simply get in
+                      touch.
+                    </p>
+                  </div>
+                  <button
+                    className="button button-white"
+                    onClick={() => openEnquiry({ kind: "business" })}
+                  >
+                    Talk to Sincerity <ArrowRight size={17} />
+                  </button>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
       </main>
 
       <footer className="site-footer">
         <div className="container">
           <div className="footer-main">
             <div className="footer-brand">
-              <a className="brand" href="#top" aria-label="Sincerity home">
+              <a
+                className="brand"
+                href={homeHref("#top")}
+                aria-label="Sincerity home"
+              >
                 <SincerityLogo size={32} />
                 <SincerityWordmark width={140} />
               </a>
@@ -603,11 +557,11 @@ export default function ExplorePage() {
               aria-label="Products and technologies"
             >
               <h3>Technologies</h3>
-              <a href="#technologies">Our products</a>
+              <a href={homeHref("#technologies")}>Our products</a>
               {products.map((product) => (
-                <button key={product.name} onClick={() => setDetail(product)}>
+                <a key={product.name} href={product.path}>
                   {product.name}
-                </button>
+                </a>
               ))}
               <button
                 onClick={() =>
@@ -679,7 +633,7 @@ export default function ExplorePage() {
             </nav>
             <nav className="footer-column" aria-label="Company and help">
               <h3>Company &amp; help</h3>
-              <a href="#company">About Sincerity</a>
+              <a href={homeHref("#company")}>About Sincerity</a>
               <button
                 onClick={() =>
                   openEnquiry({
@@ -764,33 +718,7 @@ export default function ExplorePage() {
           >
             <X size={21} />
           </button>
-          {detail ? (
-            <div className="product-detail">
-              <p className="eyebrow">
-                SINCERITY TECHNOLOGIES · {detail.status.toUpperCase()}
-              </p>
-              <h2 id="dialog-title" tabIndex={-1}>
-                {detail.name}
-              </h2>
-              <p className="detail-lead">{detail.description}</p>
-              <p>{detail.detail}</p>
-              <div className="detail-audience">
-                <Check size={17} />
-                {detail.audience}
-              </div>
-              <button
-                className="button button-dark"
-                onClick={() =>
-                  openEnquiry({ kind: "product", product: detail })
-                }
-              >
-                {detail.status === "Beta"
-                  ? "Enquire about beta access"
-                  : "Request a product demo"}
-                <ArrowRight size={16} />
-              </button>
-            </div>
-          ) : sent ? (
+          {sent ? (
             <div className="success-state">
               <CheckCircle2 size={44} strokeWidth={1.5} />
               <p className="eyebrow">MESSAGE SENT</p>

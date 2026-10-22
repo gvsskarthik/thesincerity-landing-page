@@ -1,5 +1,5 @@
-import React from 'react';
-import logoM4SpaceBlackSrc from '../assets/sincerity_logo_m4_space_black_v11.png';
+import React from "react";
+import logoM4SpaceBlackSrc from "../assets/sincerity-logo-display.webp";
 
 interface SincerityLogoProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: number | string;
@@ -7,7 +7,7 @@ interface SincerityLogoProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const SincerityLogo: React.FC<SincerityLogoProps> = ({
   size = 320,
-  className = '',
+  className = "",
   style,
   ...props
 }) => {
@@ -15,13 +15,13 @@ export const SincerityLogo: React.FC<SincerityLogoProps> = ({
     <div
       className={className}
       style={{
-        width: typeof size === 'number' ? `${size}px` : size,
-        maxWidth: '100%',
-        aspectRatio: '390 / 364',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: typeof size === "number" ? `${size}px` : size,
+        maxWidth: "100%",
+        aspectRatio: "390 / 364",
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         ...style,
       }}
       {...props}
@@ -34,12 +34,12 @@ export const SincerityLogo: React.FC<SincerityLogoProps> = ({
         loading="eager"
         decoding="sync"
         style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-          display: 'block',
-          userSelect: 'none',
-          pointerEvents: 'none',
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          userSelect: "none",
+          pointerEvents: "none",
         }}
       />
     </div>
