@@ -31,7 +31,7 @@ export const products: Product[] = [
   {
     name: "OptiMediCare",
     path: "/products/optimedicare/",
-    category: "Laboratory software",
+    category: "Laboratory management software",
     status: "Available",
     description:
       "Patients, tests, reports, and billing. One connected lab workspace.",

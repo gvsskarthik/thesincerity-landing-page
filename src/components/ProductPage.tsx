@@ -23,6 +23,11 @@ export default function ProductPage({ product, onEnquire }: Props) {
       ];
   return (
     <div className={`product-page product-page-${product.theme}`}>
+      <nav className="container breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Sincerity</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{product.name}</span>
+      </nav>
       <div className="product-nav-wrap">
         <nav
           className="container product-subnav"
@@ -286,8 +291,8 @@ export default function ProductPage({ product, onEnquire }: Props) {
               </summary>
               <p>
                 Arrange a walkthrough with our team or email{" "}
-                <a href="mailto:contact@thesincerity.in">
-                  contact@thesincerity.in
+                <a href="mailto:support@thesincerity.in">
+                  support@thesincerity.in
                 </a>
                 .
               </p>

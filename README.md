@@ -24,21 +24,30 @@ The production output is `dist/`. GitHub Actions builds and deploys `main` to Gi
 - `src/components/ExplorePage.tsx`: homepage, shared navigation/footer, and enquiry handling.
 - `src/data/products.ts`: product content, images, availability, and paths.
 - `src/components/ProductPage.tsx`: dedicated product presentation and FAQs.
-- `src/components/ProductScreens.tsx`: accessible screenshot selector and full-size image links.
+- `src/components/ProductScreens.tsx`: visible workflow screenshots and an accessible zoom viewer.
 - `public/product-screens/`: real application interface captures with synthetic demonstration data.
-- `scripts/build-product-pages.mjs`: generates static GitHub Pages entry points and metadata for each product.
+- `src/seo/pages.ts`: canonical SEO route catalogue and truthful structured data.
+- `src/data/serviceDetails.ts`: dedicated service page content.
+- `scripts/prerender.mjs`: renders complete static HTML, metadata, and the sitemap.
+- `scripts/check-seo.mjs`: validates built metadata, internal links, schema, and the sitemap.
 - `src/components/ExplorePage.css`: responsive page and dialog styles.
 - `src/index.css`: global styles and motion preferences.
 - `index.html`: metadata and font loading.
 
-Products currently retain the previously published availability labels: OptiMediCare and WACentral are available, and WA Connect is in beta. Update the product list when availability changes. Product panels use the supplied Optimedicate illustration and matching generated artwork for the messaging products. Original assets are preserved; display assets use WebP for smaller downloads. OptiMediCare and WACentral have real interface screenshots, captured from their existing application builds with synthetic demonstration data. No production patient/customer data or credentials were used. See `docs/product-review.md` for provenance. Videos can be added when available.
+Products currently retain the previously published availability labels: OptiMediCare and WACentral are available, and WA Connect is in beta. Update the product list when availability changes. Product panels use the supplied OptiMediCare illustration and matching generated artwork for the messaging products. Original assets are preserved; display assets use WebP for smaller downloads. OptiMediCare and WACentral have real interface screenshots, captured from their existing application builds with synthetic demonstration data. No production patient/customer data or credentials were used. See `docs/product-review.md` for provenance. Videos can be added when available.
 
-Dedicated pages: `/products/optimedicare/`, `/products/wacentral/`, and `/products/wa-connect/`. These work as direct entry URLs, including browser reloads. Previously published `/products/optimedicate/` links redirect to the correctly named OptiMediCare page. When adding a product, update `src/data/products.ts`, the build entry list, and both sitemaps.
+Dedicated pages: `/products/optimedicare/`, `/products/wacentral/`, and `/products/wa-connect/`. These work as direct entry URLs, including browser reloads. Previously published `/products/optimedicate/` links redirect to the correctly named OptiMediCare page. When adding a product, update `src/data/products.ts`, the SEO route catalogue; the sitemap is generated automatically.
 
 Artwork provenance and generation prompts are documented in `docs/artwork.md`.
 
 ## Enquiries
 
-Product and business enquiries use the existing FormSubmit endpoint for `contact@thesincerity.in`. Submission requires both a successful HTTP response and an explicit successful JSON result. Failures retain the entered information, allow retry, and offer an email alternative. Requests time out after 15 seconds and are cancelled when the dialog closes. Contact details are not stored in local storage.
+Product and business enquiries use the existing FormSubmit endpoint for `support@thesincerity.in`. Submission requires both a successful HTTP response and an explicit successful JSON result. Failures retain the entered information, allow retry, and offer an email alternative. Requests time out after 15 seconds and are cancelled when the dialog closes. Contact details are not stored in local storage.
 
 FormSubmit delivery depends on the mailbox's FormSubmit configuration and activation. Browser checks intercept submission requests; they do not verify actual email receipt or send test enquiries.
+
+## SEO and contact details
+
+The build pre-renders twelve indexable pages and a noindex 404; interactive pages hydrate in the browser. Run `npm run check:seo` to recheck the built output. See `docs/seo.md` for search topic mapping, Google Search Console verification and sitemap submission, and host-specific redirect rules.
+
+Sincerity services target businesses in India and international clients. The public contact is `support@thesincerity.in`, telephone `+919988661683`. Forms use the corresponding FormSubmit destination; delivery requires that mailbox’s FormSubmit configuration/activation. No real test enquiries were sent.

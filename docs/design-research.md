@@ -68,6 +68,6 @@ Production build and lint; browser checks at 320, 390, 540, 768, 820, 1024, 1280
 
 ## Follow-up refinements
 
-The homepage background is now pure white as requested. Both division cards and all product cards stack vertically at every width; product cards retain distinct backgrounds (blue, deep green, and soft violet). The dedicated `/services/` page explains all four service areas with code-native concept illustrations, relevant icons, the project process, FAQs, and contextual enquiry actions. These illustrations are explicitly labelled concepts, not delivered projects or product screenshots.
+The homepage background is now pure white as requested. Technologies and Services sit side by side on wider screens and stack on phones. Product cards stack vertically at every width and retain distinct backgrounds (blue, deep green, and soft violet). The dedicated `/services/` page explains all four service areas with code-native concept illustrations, relevant icons, the project process, FAQs, and contextual enquiry actions. These illustrations are explicitly labelled concepts, not delivered projects or product screenshots.
 
 Scroll entrance animations progressively enhance homepage cards, services chapters, and product workflows. Content is visible before animation support is detected, each entrance runs once, and `prefers-reduced-motion` disables the effect. No animation library or external tracking dependency was added.

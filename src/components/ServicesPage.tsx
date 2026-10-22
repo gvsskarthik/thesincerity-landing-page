@@ -1,5 +1,6 @@
 import { ArrowRight, Plus } from "lucide-react";
 import { services } from "../data/services";
+import { serviceDetails } from "../data/serviceDetails";
 import ServiceVisual from "./ServiceVisual";
 import "./ServicesPage.css";
 
@@ -8,6 +9,11 @@ type Props = { onEnquire: (service?: string) => void };
 export default function ServicesPage({ onEnquire }: Props) {
   return (
     <div className="services-page">
+      <nav className="container breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Sincerity</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Services</span>
+      </nav>
       <section
         className="services-hero container"
         aria-labelledby="services-page-title"
@@ -22,7 +28,7 @@ export default function ServicesPage({ onEnquire }: Props) {
           <p className="services-hero-lead">
             Websites. Applications. Custom software. Connected systems.
             <br />
-            Technology shaped around your business.
+            Technology shaped around your business, wherever you work.
           </p>
           <button className="button button-dark" onClick={() => onEnquire()}>
             Discuss your project
@@ -51,6 +57,11 @@ export default function ServicesPage({ onEnquire }: Props) {
           </div>
         </div>
       </section>
+      <p className="container international-note">
+        For businesses in India and international clients. Tell us your
+        location, working hours, and project requirements so we can agree on a
+        practical way to collaborate.
+      </p>
       <nav
         className="service-jump-nav container"
         aria-label="Explore our services"
@@ -86,6 +97,16 @@ export default function ServicesPage({ onEnquire }: Props) {
                 ))}
               </ul>
               <p className="service-outcome">{service.outcome}</p>
+              <div className="service-learn-links">
+                {serviceDetails
+                  .filter((detail) => detail.visual === service.id)
+                  .map((detail) => (
+                    <a key={detail.path} href={detail.path}>
+                      Explore {detail.name.toLowerCase()}
+                      <ArrowRight size={14} />
+                    </a>
+                  ))}
+              </div>
               <button
                 className="text-link"
                 onClick={() => onEnquire(service.title)}

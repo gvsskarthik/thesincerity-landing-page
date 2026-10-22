@@ -7,6 +7,8 @@ import { products } from "../data/products";
 import type { Product } from "../data/products";
 import ProductPage from "./ProductPage";
 import ServicesPage from "./ServicesPage";
+import ServiceDetailPage from "./ServiceDetailPage";
+import { serviceDetails } from "../data/serviceDetails";
 import { services } from "../data/services";
 import useScrollReveal from "../hooks/useScrollReveal";
 import "./ExplorePage.css";
@@ -41,16 +43,18 @@ type Enquiry =
   | { kind: "product"; product: Product }
   | { kind: "business"; service?: string; topic?: keyof typeof enquiryTopics };
 
-export default function ExplorePage() {
+export default function ExplorePage({ pathname = "/" }: { pathname?: string }) {
   useScrollReveal();
-  const isServicesPage =
-    window.location.pathname.replace(/\/?$/, "/") === "/services/";
+  const isServicesPage = pathname.replace(/\/?$/, "/") === "/services/";
+  const currentService = serviceDetails.find(
+    (service) => service.path === pathname.replace(/\/?$/, "/"),
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const currentProduct = products.find(
-    (product) => product.path === window.location.pathname.replace(/\/?$/, "/"),
+    (product) => product.path === pathname.replace(/\/?$/, "/"),
   );
   const homeHref = (anchor: string) =>
-    currentProduct || isServicesPage ? `/${anchor}` : anchor;
+    currentProduct || isServicesPage || currentService ? `/${anchor}` : anchor;
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -149,7 +153,7 @@ export default function ExplorePage() {
     setError("");
     try {
       const response = await fetch(
-        "https://formsubmit.co/ajax/contact@thesincerity.in",
+        "https://formsubmit.co/ajax/support@thesincerity.in",
         {
           method: "POST",
           signal: controller.signal,
@@ -188,7 +192,7 @@ export default function ExplorePage() {
     } catch {
       if (pendingRequest.current === controller)
         setError(
-          "We couldn’t confirm your message was sent. Please try again, or email contact@thesincerity.in.",
+          "We couldn’t confirm your message was sent. Please try again, or email support@thesincerity.in.",
         );
     } finally {
       window.clearTimeout(timeout);
@@ -201,7 +205,7 @@ export default function ExplorePage() {
 
   return (
     <div
-      className={`site-shell ${!currentProduct && !isServicesPage ? "home-page" : ""}`}
+      className={`site-shell ${!currentProduct && !isServicesPage && !currentService ? "home-page" : ""}`}
       id="top"
     >
       <a className="skip-link" href="#main">
@@ -272,7 +276,12 @@ export default function ExplorePage() {
       </header>
 
       <main id="main">
-        {isServicesPage ? (
+        {currentService ? (
+          <ServiceDetailPage
+            service={currentService}
+            onEnquire={(service) => openEnquiry({ kind: "business", service })}
+          />
+        ) : isServicesPage ? (
           <ServicesPage
             onEnquire={(service) => openEnquiry({ kind: "business", service })}
           />
@@ -489,7 +498,7 @@ export default function ExplorePage() {
                 </div>
                 <div className="company-copy">
                   <p className="company-lead">
-                    We’re a technology company bringing together our own
+                    Sincerity is a technology company bringing together its own
                     products and services for businesses.
                   </p>
                   <p>
@@ -499,7 +508,7 @@ export default function ExplorePage() {
                   </p>
                   <a
                     className="text-link"
-                    href="mailto:contact@thesincerity.in"
+                    href="mailto:support@thesincerity.in"
                   >
                     Get to know us <ArrowRight size={16} />
                   </a>
@@ -577,10 +586,12 @@ export default function ExplorePage() {
             </nav>
             <nav className="footer-column" aria-label="Business services">
               <h3>Services</h3>
-              <a href="/services/#web-apps">Web development</a>
-              <a href="/services/#web-apps">App development</a>
-              <a href="/services/#saas">SaaS development</a>
-              <a href="/services/#cloud-data">Data management</a>
+              <a href="/services/whatsapp-integration/">WhatsApp integration</a>
+              <a href="/services/technical-support/">Software maintenance</a>
+              <a href="/services/web-development/">Web development</a>
+              <a href="/services/app-development/">App development</a>
+              <a href="/services/saas-development/">SaaS development</a>
+              <a href="/services/cloud-and-api-integration/">Data management</a>
               <button
                 onClick={() =>
                   openEnquiry({
@@ -647,8 +658,11 @@ export default function ExplorePage() {
             </nav>
             <div className="footer-contact">
               <span>Start a conversation</span>
-              <a href="mailto:contact@thesincerity.in">
-                contact@thesincerity.in <ArrowRight size={14} />
+              <a href="mailto:support@thesincerity.in">
+                support@thesincerity.in <ArrowRight size={14} />
+              </a>
+              <a href="tel:+919988661683">
+                +91 99886 61683 <ArrowRight size={14} />
               </a>
             </div>
           </div>
@@ -837,8 +851,8 @@ export default function ExplorePage() {
                 <p className="form-note">
                   We’ll use your details to respond to your enquiry. Prefer
                   email?{" "}
-                  <a href="mailto:contact@thesincerity.in">
-                    contact@thesincerity.in
+                  <a href="mailto:support@thesincerity.in">
+                    support@thesincerity.in
                   </a>
                 </p>
               </form>
